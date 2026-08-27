@@ -53,12 +53,10 @@
     }
     .vms-header-right { display: flex; align-items: center; gap: 16px; }
     .header-meta { font-size: 13px; color: #c7d0dc; }
-    .btn-back {
-      font-size: 13px; color: #c7d0dc; text-decoration: none; font-weight: 500;
-    }
+    .btn-back { font-size: 13px; color: #c7d0dc; text-decoration: none; font-weight: 500; }
     .btn-back:hover { color: #fff; }
 
-    /* ── Notice banner ── */
+    /* ── Notice bar ── */
     .notice-bar {
       margin: 0; padding: 10px 24px;
       background: var(--amber-soft); color: #7c4a00;
@@ -72,11 +70,8 @@
       padding: 20px 24px;
     }
     .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 18px;
-      text-align: center;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 18px; text-align: center;
     }
     .stat-num {
       font-size: 28px; font-weight: 700; color: var(--accent);
@@ -87,129 +82,135 @@
       text-transform: uppercase; letter-spacing: .04em;
     }
 
-    /* ── Main ── */
-    .vms-main { padding: 0 24px 48px; display: flex; flex-direction: column; gap: 20px; }
+    /* ── Page body ── */
+    .page-body { padding: 0 24px 48px; }
 
-    /* ── Panel ── */
-    .panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 22px;
-    }
-    .panel-title { margin: 0 0 4px; font-size: 16px; font-weight: 700; }
-    .panel-sub {
-      margin: 0 0 14px; font-size: 13px;
-      color: var(--ink-soft); line-height: 1.5;
-    }
-
-    /* ── Filters row ── */
+    /* ── Filters ── */
     .filters {
       display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
     }
     .filters input[type="text"] {
-      flex: 1; min-width: 200px;
-      padding: 8px 12px;
-      border: 1px solid var(--border-strong);
-      border-radius: 6px;
-      font-size: 13px; font-family: inherit; color: var(--ink);
-      outline: none;
+      flex: 1; min-width: 200px; padding: 9px 12px;
+      border: 1px solid var(--border-strong); border-radius: 6px;
+      font-size: 13px; font-family: inherit; color: var(--ink); outline: none;
     }
     .filters input[type="text"]:focus { border-color: var(--accent); }
     .filters select {
-      padding: 8px 10px;
-      border: 1px solid var(--border-strong);
-      border-radius: 6px;
+      padding: 9px 10px; border: 1px solid var(--border-strong); border-radius: 6px;
       font-size: 13px; font-family: inherit; color: var(--ink);
       background: var(--surface); outline: none; cursor: pointer;
     }
     .btn-reset {
-      padding: 8px 14px;
-      border: 1px solid var(--border-strong);
-      border-radius: 6px;
-      background: var(--surface);
-      font-size: 13px; font-family: inherit; color: var(--ink-soft);
-      cursor: pointer;
+      padding: 9px 14px; border: 1px solid var(--border-strong); border-radius: 6px;
+      background: var(--surface); font-size: 13px; font-family: inherit;
+      color: var(--ink-soft); cursor: pointer;
     }
     .btn-reset:hover { background: var(--bg); }
     .result-count { font-size: 12px; color: var(--ink-mute); margin-left: auto; white-space: nowrap; }
 
-    /* ── Table ── */
-    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
-    .vms-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .vms-table th {
-      text-align: left; padding: 10px 12px; background: var(--bg);
-      color: var(--ink-soft); font-weight: 600; font-size: 11px;
-      text-transform: uppercase; letter-spacing: .03em;
-      border-bottom: 1px solid var(--border);
-      position: sticky; top: 0;
+    /* ── Cards ── */
+    .vendor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
     }
-    .vms-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .vms-table tbody tr { cursor: pointer; }
-    .vms-table tbody tr:hover { background: var(--accent-soft); }
-    .vms-table tbody tr.is-selected { background: var(--accent-soft); font-weight: 600; }
-    .vms-table tbody tr:last-child td { border-bottom: none; }
-
-    /* ── Badges ── */
+    .vendor-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px; cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .vendor-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 12px rgba(0,119,182,.12);
+    }
+    .vc-name {
+      font-weight: 600; font-size: 14px; color: var(--ink);
+      margin-bottom: 4px; line-height: 1.35;
+    }
+    .vc-location {
+      font-size: 12px; color: var(--ink-soft); margin-bottom: 10px;
+    }
+    .vc-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
     .badge {
-      display: inline-block;
-      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px;
-      letter-spacing: .02em; margin-right: 3px; white-space: nowrap;
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+      letter-spacing: .02em; white-space: nowrap;
     }
     .badge-green { background: var(--green-soft); color: var(--green); border: 1px solid #b5dcc2; }
     .badge-blue  { background: var(--accent-soft); color: var(--accent-dark); border: 1px solid #b3d5ec; }
-    .badge-amber { background: var(--amber-soft);  color: var(--amber);       border: 1px solid #e0c070; }
+    .badge-amber { background: var(--amber-soft); color: var(--amber); border: 1px solid #e0c070; }
     .badge-gray  { background: #f0f1f3; color: var(--ink-soft); border: 1px solid var(--border); }
 
-    /* ── Detail panel ── */
-    .detail-panel {
-      display: none;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 22px;
-    }
-    .detail-panel.open { display: block; }
-    .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .detail-name { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
-    .detail-sub  { font-size: 13px; color: var(--ink-soft); margin: 0; }
-    .btn-close-detail {
-      background: none; border: none; font-size: 20px; color: var(--ink-mute);
-      cursor: pointer; padding: 4px; line-height: 1; flex-shrink: 0;
-    }
-    .btn-close-detail:hover { color: var(--ink); }
+    .vc-meta { font-size: 12px; color: var(--ink-mute); line-height: 1.6; }
+    .vc-specs { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
 
-    .detail-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .empty-state {
+      grid-column: 1/-1; text-align: center;
+      padding: 60px 20px; color: var(--ink-mute); font-size: 14px;
+    }
 
-    .detail-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .detail-section-title {
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 300;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .18s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--surface); border-radius: 14px;
+      width: 100%; max-width: 600px; max-height: 88vh;
+      overflow-y: auto; padding: 28px 32px;
+      position: relative;
+      transform: translateY(16px); transition: transform .18s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal-close {
+      position: absolute; top: 14px; right: 18px;
+      background: none; border: none; font-size: 24px; line-height: 1;
+      color: var(--ink-mute); cursor: pointer; padding: 4px;
+    }
+    .modal-close:hover { color: var(--ink); }
+
+    .modal-name {
+      font-size: 20px; font-weight: 700; margin: 0 0 4px; padding-right: 32px;
+    }
+    .modal-address { font-size: 13px; color: var(--ink-soft); margin: 0 0 14px; }
+    .modal-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+
+    .modal-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+    .modal-section-title {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--ink-mute); margin: 0 0 10px;
+      letter-spacing: .06em; color: var(--ink-mute); margin: 0 0 12px;
     }
-    .detail-rows { display: flex; flex-direction: column; gap: 8px; }
-    .detail-row { display: flex; flex-direction: column; gap: 2px; }
-    .detail-row-label { font-size: 11px; color: var(--ink-mute); }
-    .detail-row-val { font-size: 13px; color: var(--ink); font-weight: 500; }
-    .detail-row-val a { color: var(--accent); text-decoration: none; }
-    .detail-row-val a:hover { text-decoration: underline; }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; margin-bottom: 4px; }
+    .mrow { display: flex; flex-direction: column; gap: 2px; }
+    .mrow-label { font-size: 11px; color: var(--ink-mute); }
+    .mrow-val   { font-size: 13px; font-weight: 500; color: var(--ink); }
+    .mrow-val a { color: var(--accent); text-decoration: none; }
+    .mrow-val a:hover { text-decoration: underline; }
     .val-good { color: var(--green); }
     .val-warn { color: var(--amber); }
 
-    .specs-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .specs-list { display: flex; flex-wrap: wrap; gap: 6px; }
     .spec-chip {
       background: var(--accent-soft); color: var(--accent-dark);
       font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 999px;
     }
 
-    .empty-row td { text-align: center; color: var(--ink-mute); padding: 24px; }
-
     @media (max-width: 900px) {
-      .scoreboard { grid-template-columns: repeat(2, 1fr); }
-      .detail-sections { grid-template-columns: 1fr; }
+      .scoreboard { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 600px) {
       .scoreboard { grid-template-columns: 1fr 1fr; }
+      .modal-grid { grid-template-columns: 1fr; }
+      .modal { padding: 20px; }
     }
   </style>
 </head>
@@ -228,97 +229,50 @@
 </header>
 
 <p class="notice-bar">
-  ⏳ <strong>Data request pending:</strong> A formal request for the full GOED ESB certified business
-  directory (~990 statewide firms) has been submitted. Once received, all ESB-certified vendors will
-  be imported. Currently showing <strong>46 NDOT NUCP-certified vendors</strong>.
+  ⏳ <strong>More vendors coming:</strong> A formal request for the full GOED ESB certified business
+  directory (~990 statewide firms) has been submitted. Currently showing
+  <strong>46 NDOT NUCP-certified vendors</strong>.
 </p>
 
-<!-- Scoreboard -->
 <div class="scoreboard">
-  <div class="stat-card">
-    <div class="stat-num" id="statTotal">—</div>
-    <div class="stat-label">Total vendors</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num" id="statEsb">—</div>
-    <div class="stat-label">ESB certified</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num" id="statDbe">—</div>
-    <div class="stat-label">DBE certified</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num" id="statWbe">—</div>
-    <div class="stat-label">Women-owned</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num" id="statLicActive">—</div>
-    <div class="stat-label">Active NSCB license</div>
-  </div>
+  <div class="stat-card"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total vendors</div></div>
+  <div class="stat-card"><div class="stat-num" id="statEsb">—</div><div class="stat-label">ESB certified</div></div>
+  <div class="stat-card"><div class="stat-num" id="statDbe">—</div><div class="stat-label">DBE certified</div></div>
+  <div class="stat-card"><div class="stat-num" id="statWbe">—</div><div class="stat-label">Women-owned</div></div>
+  <div class="stat-card"><div class="stat-num" id="statLic">—</div><div class="stat-label">Active NSCB license</div></div>
 </div>
 
-<main class="vms-main">
+<div class="page-body">
+  <div class="filters">
+    <input type="text" id="searchInput" placeholder="Search vendor name…">
+    <select id="filterCounty"><option value="">All counties</option></select>
+    <select id="filterEsb">
+      <option value="">Any ESB status</option>
+      <option value="esb">ESB certified</option>
+      <option value="dbe">DBE certified</option>
+    </select>
+    <select id="filterOwnership">
+      <option value="">Any ownership</option>
+      <option value="wbe">Women-owned (WBE)</option>
+      <option value="mbe">Minority-owned (MBE)</option>
+    </select>
+    <button class="btn-reset" id="btnReset">Reset</button>
+    <span class="result-count" id="resultCount"></span>
+  </div>
 
-  <!-- Panel 1: Vendor directory -->
-  <section class="panel">
-    <h2 class="panel-title">1 · Vendor directory</h2>
-    <p class="panel-sub">
-      All NDOT NUCP-certified vendors with ESB/DBE certification status, licensing, and specializations.
-      Click any row to see the full profile below.
-    </p>
+  <div class="vendor-grid" id="vendorGrid"></div>
+</div>
 
-    <div class="filters">
-      <input type="text" id="searchInput" placeholder="Search vendor name…">
-      <select id="filterCounty">
-        <option value="">All counties</option>
-      </select>
-      <select id="filterEsb">
-        <option value="">Any ESB status</option>
-        <option value="esb">ESB certified</option>
-        <option value="dbe">DBE certified</option>
-      </select>
-      <select id="filterOwnership">
-        <option value="">Any ownership</option>
-        <option value="wbe">Women-owned (WBE)</option>
-        <option value="mbe">Minority-owned (MBE)</option>
-      </select>
-      <button class="btn-reset" id="btnReset">Reset</button>
-      <span class="result-count" id="resultCount"></span>
-    </div>
-
-    <div class="table-wrap">
-      <table class="vms-table" id="vendorTable">
-        <thead>
-          <tr>
-            <th>Vendor</th>
-            <th>Location</th>
-            <th>Certifications</th>
-            <th>NSCB License</th>
-            <th>Specializations</th>
-            <th>Contact</th>
-          </tr>
-        </thead>
-        <tbody id="vendorTableBody">
-          <tr><td colspan="6" style="text-align:center;color:var(--ink-mute);padding:24px">Loading…</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Panel 2: Vendor detail -->
-  <section class="panel detail-panel" id="detailPanel">
-    <div class="detail-header">
-      <div>
-        <div class="detail-name" id="detailName">—</div>
-        <p class="detail-sub" id="detailSub">—</p>
-      </div>
-      <button class="btn-close-detail" id="btnCloseDetail" aria-label="Close">×</button>
-    </div>
-    <div class="detail-badges" id="detailBadges"></div>
-    <div class="detail-sections" id="detailSections"></div>
-  </section>
-
-</main>
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
+  <div class="modal" id="modalPanel">
+    <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+    <div class="modal-name"    id="modalName"></div>
+    <div class="modal-address" id="modalAddress"></div>
+    <div class="modal-badges"  id="modalBadges"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
 
 <script type="module">
   const SPECIALTY_LABELS = {
@@ -335,7 +289,6 @@
     concrete_repair:'Concrete Repair', sandblasting:'Sandblasting',
     masonry:'Masonry', sign_installation:'Sign Installation',
   };
-
   const COUNTY_LABELS = {
     clark:'Clark County', washoe:'Washoe County', elko:'Elko County',
     carson_city:'Carson City', douglas:'Douglas County', lyon:'Lyon County',
@@ -346,35 +299,35 @@
   };
 
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const specLabel  = s => SPECIALTY_LABELS[s] || s.replace(/_/g,' ').replace(/\b\w/g,x=>x.toUpperCase());
+  const specLabel   = s => SPECIALTY_LABELS[s] || s.replace(/_/g,' ').replace(/\b\w/g,x=>x.toUpperCase());
   const countyLabel = c => COUNTY_LABELS[c] || (c ? c.charAt(0).toUpperCase()+c.slice(1).replace(/_/g,' ') : '—');
+  const row = (label, val) => `<div class="mrow"><span class="mrow-label">${label}</span><span class="mrow-val">${val}</span></div>`;
 
-  let ALL = [], filtered = [], selected = null;
+  let ALL = [], filtered = [];
 
   async function load() {
     const raw = await fetch('baked-vendors-v2.json').then(r=>r.json());
     ALL = Array.isArray(raw) ? raw : (raw.vendors || Object.values(raw).find(v=>Array.isArray(v)) || []);
-    document.getElementById('headerMeta').textContent = `${ALL.length} vendors · ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
-    populateCountyFilter();
-    updateScoreboard(ALL);
+    document.getElementById('headerMeta').textContent =
+      `${ALL.length} vendors · ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
+    populateCounties();
+    updateStats(ALL);
     applyFilters();
   }
 
-  function populateCountyFilter() {
+  function populateCounties() {
     const sel = document.getElementById('filterCounty');
     [...new Set(ALL.map(v=>v.county).filter(Boolean))].sort().forEach(c => {
-      const o = document.createElement('option');
-      o.value = c; o.textContent = countyLabel(c);
-      sel.appendChild(o);
+      const o = document.createElement('option'); o.value = c; o.textContent = countyLabel(c); sel.appendChild(o);
     });
   }
 
-  function updateScoreboard(vendors) {
-    document.getElementById('statTotal').textContent    = vendors.length;
-    document.getElementById('statEsb').textContent      = vendors.filter(v=>v.lbe?.cmd_cert_active).length;
-    document.getElementById('statDbe').textContent      = vendors.filter(v=>v.demographics?.dbe_certified).length;
-    document.getElementById('statWbe').textContent      = vendors.filter(v=>v.demographics?.wbe_certified).length;
-    document.getElementById('statLicActive').textContent= vendors.filter(v=>(v.licensing?.nv_license_status||'').toLowerCase()==='active').length;
+  function updateStats(vendors) {
+    document.getElementById('statTotal').textContent = vendors.length;
+    document.getElementById('statEsb').textContent   = vendors.filter(v=>v.lbe?.cmd_cert_active).length;
+    document.getElementById('statDbe').textContent   = vendors.filter(v=>v.demographics?.dbe_certified).length;
+    document.getElementById('statWbe').textContent   = vendors.filter(v=>v.demographics?.wbe_certified).length;
+    document.getElementById('statLic').textContent   = vendors.filter(v=>(v.licensing?.nv_license_status||'').toLowerCase()==='active').length;
   }
 
   function applyFilters() {
@@ -382,7 +335,6 @@
     const county = document.getElementById('filterCounty').value;
     const esb    = document.getElementById('filterEsb').value;
     const own    = document.getElementById('filterOwnership').value;
-
     filtered = ALL.filter(v => {
       if (q && !v.name.toLowerCase().includes(q)) return false;
       if (county && v.county !== county) return false;
@@ -392,163 +344,137 @@
       if (own === 'mbe' && !v.demographics?.mbe_certified) return false;
       return true;
     });
-
     document.getElementById('resultCount').textContent = `${filtered.length} shown`;
-    renderTable(filtered);
+    renderCards(filtered);
   }
 
-  function renderTable(vendors) {
-    const tbody = document.getElementById('vendorTableBody');
+  function renderCards(vendors) {
+    const grid = document.getElementById('vendorGrid');
     if (!vendors.length) {
-      tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No vendors match your filters.</td></tr>`;
+      grid.innerHTML = `<div class="empty-state">No vendors match your filters.</div>`;
       return;
     }
-    tbody.innerHTML = vendors.map((v, i) => {
+    grid.innerHTML = vendors.map((v, i) => {
       const lic  = v.licensing || {};
       const lbe  = v.lbe || {};
       const demo = v.demographics || {};
       const addr = v.address || {};
-
-      const certBadges = [
-        lbe.cmd_cert_active     ? `<span class="badge badge-green">ESB</span>` : '',
-        demo.dbe_certified      ? `<span class="badge badge-blue">DBE</span>`  : '',
-        demo.wbe_certified      ? `<span class="badge badge-blue">WBE</span>`  : '',
-        demo.mbe_certified      ? `<span class="badge badge-blue">MBE</span>`  : '',
+      const badges = [
+        lbe.cmd_cert_active  ? `<span class="badge badge-green">ESB</span>` : '',
+        demo.dbe_certified   ? `<span class="badge badge-blue">DBE</span>`  : '',
+        demo.wbe_certified   ? `<span class="badge badge-blue">WBE</span>`  : '',
+        demo.mbe_certified   ? `<span class="badge badge-blue">MBE</span>`  : '',
+        (lic.nv_license_status||'').toLowerCase()==='active' ? `<span class="badge badge-green">NSCB Active</span>` : '',
       ].filter(Boolean).join('');
-
+      const loc = [addr.city || countyLabel(v.county), addr.state].filter(Boolean).join(', ');
       const licStr = lic.nv_contractor_license
-        ? `NSCB #${esc(lic.nv_contractor_license)}`
-        : esc(lic.nv_license_regime_label || '—');
-
-      const expiry = lic.nv_license_expires ? `<br><span style="font-size:11px;color:var(--ink-mute)">exp ${esc(lic.nv_license_expires)}</span>` : '';
-
-      const specs = (v.specialties||[]).slice(0,2).map(s=>specLabel(s)).join(', ') || '—';
-      const loc   = [addr.city || countyLabel(v.county), addr.state].filter(Boolean).join(', ') || '—';
-      const phone = v.contact?.phone ? esc(v.contact.phone) : '—';
-
-      const isSelected = selected && selected.id === v.id ? ' is-selected' : '';
-
-      return `<tr class="${isSelected}" data-idx="${i}">
-        <td><strong>${esc(v.name)}</strong></td>
-        <td>${esc(loc)}</td>
-        <td>${certBadges || '<span class="badge badge-gray">None</span>'}</td>
-        <td>${licStr}${expiry}</td>
-        <td style="color:var(--ink-soft)">${esc(specs)}</td>
-        <td style="color:var(--ink-soft)">${phone}</td>
-      </tr>`;
+        ? `NSCB #${esc(lic.nv_contractor_license)}${lic.nv_license_expires ? ' · exp ' + esc(lic.nv_license_expires) : ''}`
+        : esc(lic.nv_license_regime_label || '');
+      const specs = (v.specialties||[]).slice(0,3).map(specLabel).join(' · ');
+      return `<div class="vendor-card" data-idx="${i}">
+        <div class="vc-name">${esc(v.name)}</div>
+        <div class="vc-location">${esc(loc)}</div>
+        <div class="vc-badges">${badges || '<span class="badge badge-gray">Unverified</span>'}</div>
+        ${licStr ? `<div class="vc-meta">${licStr}</div>` : ''}
+        ${v.contact?.phone ? `<div class="vc-meta">${esc(v.contact.phone)}</div>` : ''}
+        ${specs ? `<div class="vc-specs">${esc(specs)}</div>` : ''}
+      </div>`;
     }).join('');
-
-    tbody.querySelectorAll('tr[data-idx]').forEach(row => {
-      row.addEventListener('click', () => openDetail(filtered[+row.dataset.idx]));
+    grid.querySelectorAll('.vendor-card').forEach(card => {
+      card.addEventListener('click', () => openModal(filtered[+card.dataset.idx]));
     });
   }
 
-  function openDetail(v) {
-    selected = v;
-    renderTable(filtered); // re-render to show selection highlight
-
+  function openModal(v) {
     const lic  = v.licensing || {};
     const lbe  = v.lbe || {};
     const demo = v.demographics || {};
     const addr = v.address || {};
     const tr   = v.track_record || {};
     const licStatus = (lic.nv_license_status || '').toLowerCase();
+    const classes   = lic.nv_license_classifications || lic.classifications || [];
+    const specs     = v.specialties || [];
 
-    document.getElementById('detailName').textContent = v.name;
-    document.getElementById('detailSub').textContent =
+    document.getElementById('modalName').textContent = v.name;
+    document.getElementById('modalAddress').textContent =
       [[addr.street, addr.city, addr.state, addr.zip].filter(Boolean).join(', '), countyLabel(v.county)]
-      .filter(Boolean).join(' · ') || '—';
+      .filter(s => s && s !== '—').join(' · ') || '—';
 
     const badges = [
       lbe.cmd_cert_active  ? `<span class="badge badge-green">ESB Certified</span>` : '',
-      demo.dbe_certified   ? `<span class="badge badge-blue">DBE</span>` : '',
-      demo.wbe_certified   ? `<span class="badge badge-blue">WBE</span>` : '',
-      demo.mbe_certified   ? `<span class="badge badge-blue">MBE</span>` : '',
+      demo.dbe_certified   ? `<span class="badge badge-blue">DBE</span>`  : '',
+      demo.wbe_certified   ? `<span class="badge badge-blue">WBE</span>`  : '',
+      demo.mbe_certified   ? `<span class="badge badge-blue">MBE</span>`  : '',
       demo.dvbe_certified  ? `<span class="badge badge-blue">DVBE</span>` : '',
       licStatus === 'active' ? `<span class="badge badge-green">NSCB Active</span>` : licStatus ? `<span class="badge badge-amber">${esc(licStatus)}</span>` : '',
     ].filter(Boolean);
-    document.getElementById('detailBadges').innerHTML = badges.join('');
+    document.getElementById('modalBadges').innerHTML = badges.join('');
 
-    const classes = lic.nv_license_classifications || lic.classifications || [];
-    const specs   = (v.specialties || []);
-    const contractCount = tr.prior_ndot_contracts_count ?? '—';
-    const contractVal   = tr.prior_ndot_contracts_value
+    const contractVal = tr.prior_ndot_contracts_value
       ? '$' + Number(tr.prior_ndot_contracts_value).toLocaleString() : '—';
 
-    document.getElementById('detailSections').innerHTML = `
-      <div>
-        <div class="detail-section-title">ESB / Certification</div>
-        <div class="detail-rows">
-          <div class="detail-row"><span class="detail-row-label">ESB Status</span><span class="detail-row-val ${lbe.cmd_cert_active?'val-good':'val-warn'}">${lbe.cmd_cert_active?'Active — GOED Certified':'Not certified'}</span></div>
-          <div class="detail-row"><span class="detail-row-label">ESB Number</span><span class="detail-row-val">${esc(lbe.esb_number||'—')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Certifying Body</span><span class="detail-row-val">${lbe.certifying_body_key==='goed_esb'?'Nevada GOED':esc(lbe.certifying_body_key||'—')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Cert Expiration</span><span class="detail-row-val">${esc(lbe.cmd_cert_expires_on||'—')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">LBE Tier</span><span class="detail-row-val">${esc(lbe.tier||'N/A')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">DBE Certified</span><span class="detail-row-val">${demo.dbe_certified?'Yes':'No'}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Women-Owned (WBE)</span><span class="detail-row-val">${demo.wbe_certified?'Yes':'No'}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Minority-Owned (MBE)</span><span class="detail-row-val">${demo.mbe_certified?'Yes':'No'}</span></div>
-        </div>
+    document.getElementById('modalBody').innerHTML = `
+      <div class="modal-section-title">ESB / Certification</div>
+      <div class="modal-grid">
+        ${row('ESB Status',       `<span class="${lbe.cmd_cert_active?'val-good':'val-warn'}">${lbe.cmd_cert_active?'Active — GOED Certified':'Not certified'}</span>`)}
+        ${row('ESB Number',       esc(lbe.esb_number || '—'))}
+        ${row('Certifying Body',  lbe.certifying_body_key==='goed_esb'?'Nevada GOED':esc(lbe.certifying_body_key||'—'))}
+        ${row('Cert Expiration',  esc(lbe.cmd_cert_expires_on || '—'))}
+        ${row('LBE Tier',         esc(lbe.tier || 'N/A'))}
+        ${row('DBE Certified',    demo.dbe_certified ? 'Yes' : 'No')}
+        ${row('Women-Owned (WBE)',demo.wbe_certified ? 'Yes' : 'No')}
+        ${row('Minority-Owned (MBE)', demo.mbe_certified ? 'Yes' : 'No')}
       </div>
-
-      <div>
-        <div class="detail-section-title">Licensing</div>
-        <div class="detail-rows">
-          <div class="detail-row"><span class="detail-row-label">NSCB License #</span><span class="detail-row-val">${lic.nv_contractor_license?'NSCB #'+esc(lic.nv_contractor_license):esc(lic.nv_license_regime_label||'—')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">License Status</span><span class="detail-row-val ${licStatus==='active'?'val-good':'val-warn'}">${esc(licStatus||'—')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Expiration</span><span class="detail-row-val">${esc(lic.nv_license_expires||'—')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Classifications</span><span class="detail-row-val">${esc(classes.join(', ')||'—')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Business Type</span><span class="detail-row-val">${esc(v.business_type||'Contractor')}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Date Joined Pool</span><span class="detail-row-val">${esc(v.date_joined||'—')}</span></div>
-        </div>
+      <hr class="modal-divider">
+      <div class="modal-section-title">Licensing</div>
+      <div class="modal-grid">
+        ${row('NSCB License #',   lic.nv_contractor_license ? 'NSCB #'+esc(lic.nv_contractor_license) : esc(lic.nv_license_regime_label||'—'))}
+        ${row('License Status',   `<span class="${licStatus==='active'?'val-good':'val-warn'}">${esc(licStatus||'—')}</span>`)}
+        ${row('Expiration',       esc(lic.nv_license_expires || '—'))}
+        ${row('Classifications',  esc(classes.join(', ') || '—'))}
+        ${row('Business Type',    esc(v.business_type || 'Contractor'))}
+        ${row('Date Joined Pool', esc(v.date_joined || '—'))}
       </div>
-
-      <div>
-        <div class="detail-section-title">Contract History (NDOT)</div>
-        <div class="detail-rows">
-          <div class="detail-row"><span class="detail-row-label">Contracts Received</span><span class="detail-row-val">${contractCount}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Total Contract Value</span><span class="detail-row-val">${contractVal}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Data Source</span><span class="detail-row-val">${esc(v.source||'—')}</span></div>
-        </div>
+      <hr class="modal-divider">
+      <div class="modal-section-title">Contract History (NDOT)</div>
+      <div class="modal-grid">
+        ${row('Contracts Received', tr.prior_ndot_contracts_count ?? '—')}
+        ${row('Total Contract Value', contractVal)}
+        ${row('Data Source', esc(v.source || '—'))}
       </div>
-
-      <div>
-        <div class="detail-section-title">Contact</div>
-        <div class="detail-rows">
-          <div class="detail-row"><span class="detail-row-label">Phone</span><span class="detail-row-val">${v.contact?.phone?`<a href="tel:${esc(v.contact.phone)}">${esc(v.contact.phone)}</a>`:'—'}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Email</span><span class="detail-row-val">${v.contact?.email?`<a href="mailto:${esc(v.contact.email)}">${esc(v.contact.email)}</a>`:'—'}</span></div>
-          <div class="detail-row"><span class="detail-row-label">Website</span><span class="detail-row-val">${v.contact?.website?`<a href="${esc(v.contact.website)}" target="_blank" rel="noopener">${esc(v.contact.website)}</a>`:'—'}</span></div>
-          <div class="detail-row"><span class="detail-row-label">County</span><span class="detail-row-val">${esc(countyLabel(v.county))}</span></div>
-          <div class="detail-row"><span class="detail-row-label">District</span><span class="detail-row-val">${esc(v.district||addr.supervisor_district||'—')}</span></div>
-        </div>
+      <hr class="modal-divider">
+      <div class="modal-section-title">Contact</div>
+      <div class="modal-grid">
+        ${row('Phone',    v.contact?.phone   ? `<a href="tel:${esc(v.contact.phone)}">${esc(v.contact.phone)}</a>`             : '—')}
+        ${row('Email',   v.contact?.email   ? `<a href="mailto:${esc(v.contact.email)}">${esc(v.contact.email)}</a>`           : '—')}
+        ${row('Website', v.contact?.website ? `<a href="${esc(v.contact.website)}" target="_blank" rel="noopener">${esc(v.contact.website)}</a>` : '—')}
+        ${row('County',    esc(countyLabel(v.county)))}
+        ${row('District',  esc(v.district || addr.supervisor_district || '—'))}
       </div>
-
-      ${specs.length ? `<div style="grid-column:1/-1">
-        <div class="detail-section-title">Specializations</div>
+      ${specs.length ? `
+        <hr class="modal-divider">
+        <div class="modal-section-title">Specializations</div>
         <div class="specs-list">${specs.map(s=>`<span class="spec-chip">${esc(specLabel(s))}</span>`).join('')}</div>
-      </div>` : ''}
+      ` : ''}
     `;
 
-    const panel = document.getElementById('detailPanel');
-    panel.classList.add('open');
-    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('modalOverlay').classList.add('open');
   }
 
-  document.getElementById('btnCloseDetail').addEventListener('click', () => {
-    document.getElementById('detailPanel').classList.remove('open');
-    selected = null;
-    renderTable(filtered);
-  });
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id==='modalOverlay') closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 
   ['searchInput','filterCounty','filterEsb','filterOwnership'].forEach(id => {
     document.getElementById(id).addEventListener('input', applyFilters);
     document.getElementById(id).addEventListener('change', applyFilters);
   });
-
   document.getElementById('btnReset').addEventListener('click', () => {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('filterCounty').value = '';
-    document.getElementById('filterEsb').value = '';
-    document.getElementById('filterOwnership').value = '';
+    ['searchInput','filterCounty','filterEsb','filterOwnership'].forEach(id => {
+      const el = document.getElementById(id);
+      el.tagName === 'INPUT' ? el.value = '' : el.value = '';
+    });
     applyFilters();
   });
 
