@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIRP Sandbox Replay — Public/Synthetic Data</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="sandbox.css?v=20260622a">
+</head>
+<body class="sb-body">
+
+  <header class="sb-header">
+    <div class="sb-header-left">
+      <span class="sb-agency-mark">SF DPW · SIRP</span>
+      <span class="sb-tool-label">Sandbox Replay</span>
+      <span class="sb-data-tag" title="Public 311 data + synthetic fill only. No citizen PII, payment data, or nonpublic CMD directory data.">
+        PUBLIC + SYNTHETIC DATA ONLY
+      </span>
+    </div>
+    <div class="sb-header-right">
+      <span class="sb-header-meta" id="runGeneratedAt">—</span>
+    </div>
+  </header>
+
+  <p class="sb-disclaimer">
+    This is a fixed-batch replay for review purposes — not a live production system.
+    It runs the real SIRP scoring engine and audit chain against public 311 cases and synthetic
+    fill data. Demographic scoring is intentionally excluded from every score shown here
+    (certification-eligibility only); see the Live Dispatch panel for why.
+  </p>
+
+  <!-- ─── Scoreboard ─── -->
+  <section class="sb-scoreboard" id="scoreboard" aria-label="Run scoreboard">
+    <div class="sb-stat-card">
+      <div class="sb-stat-num" id="statAuditCompleteness">—</div>
+      <div class="sb-stat-label">Audit completeness</div>
+    </div>
+    <div class="sb-stat-card" id="violationsCard">
+      <div class="sb-stat-num" id="statViolations">—</div>
+      <div class="sb-stat-label">Eligibility violations</div>
+    </div>
+    <div class="sb-stat-card">
+      <div class="sb-stat-num" id="statThroughput">—</div>
+      <div class="sb-stat-label">Throughput (cases)</div>
+    </div>
+    <div class="sb-stat-card">
+      <div class="sb-stat-num" id="statMicroLbe">—</div>
+      <div class="sb-stat-label">% routed Micro/LBE</div>
+    </div>
+  </section>
+
+  <main class="sb-main">
+
+    <!-- ─── Panel 1: Complaint queue ─── -->
+    <section class="sb-panel" id="panelQueue" aria-labelledby="panelQueueTitle">
+      <h2 id="panelQueueTitle" class="sb-panel-title">1 · Complaint queue</h2>
+      <p class="sb-panel-sub">Public 311 sidewalk/curb cases. Click a case to see its full dispatch trace below.</p>
+      <div class="sb-table-wrap">
+        <table class="sb-table" id="queueTable">
+          <thead>
+            <tr><th>Case ID</th><th>Address</th><th>Subtype</th><th>Age</th><th>Priority</th></tr>
+          </thead>
+          <tbody id="queueTableBody">
+            <tr><td colspan="5" class="sb-loading">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── Panel 2: Vendor universe ─── -->
+    <section class="sb-panel" id="panelVendors" aria-labelledby="panelVendorsTitle">
+      <h2 id="panelVendorsTitle" class="sb-panel-title">2 · Vendor universe</h2>
+      <p class="sb-panel-sub">
+        <span id="vendorTotalLabel">—</span> firms in the certified pool ·
+        <span id="vendorEligibleLabel">—</span> set-aside eligible.
+        Contact info redacted — see <a href="#panelAudit">audit trail</a> for how cert-status is verified.
+      </p>
+      <div class="sb-vendor-summary" id="vendorSummary"></div>
+    </section>
+
+    <!-- ─── Panel 3: Live dispatch ─── -->
+    <section class="sb-panel" id="panelDispatch" aria-labelledby="panelDispatchTitle">
+      <h2 id="panelDispatchTitle" class="sb-panel-title">3 · Live dispatch — certification-only ranking</h2>
+      <p class="sb-panel-sub">
+        Same scoring engine as production (<code>public/scorer.js</code>), with the demographic-equity
+        component (15 pts) removed before this screen ever sees it — total rebased to
+        <strong id="certMaxLabel">85</strong> pts. Demographic scoring still exists in the production
+        matrix for DPW use; it is structurally excluded here, not just hidden.
+      </p>
+      <div class="sb-dispatch-layout">
+        <div class="sb-dispatch-selected" id="dispatchSelected">
+          <p class="sb-empty-hint">Select a case from the queue above to see its ranking.</p>
+        </div>
+        <div class="sb-dispatch-live">
+          <button class="sb-btn sb-btn-primary" id="btnLiveDispatch" disabled>
+            ⚡ Run live Claude dispatch for this case
+          </button>
+          <p class="sb-live-note">
+            Calls <code>/api/generate-work-order</code> for real (rate-limited to 10/hr) — reserved
+            for this one showcase moment. Every other case in the batch used the deterministic
+            synthesizer so the replay doesn't burn the quota.
+          </p>
+          <pre class="sb-live-output" id="liveOutput" hidden></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Panel 4: Artifacts ─── -->
+    <section class="sb-panel" id="panelArtifacts" aria-labelledby="panelArtifactsTitle">
+      <h2 id="panelArtifactsTitle" class="sb-panel-title">4 · Artifacts</h2>
+      <p class="sb-panel-sub">The work order issued for the selected case, and the Chapter 14B memo rendered on demand.</p>
+      <div class="sb-artifacts-layout">
+        <div class="sb-artifact-card">
+          <h3>Work order</h3>
+          <pre class="sb-json-view" id="workOrderView">Select a case above.</pre>
+        </div>
+        <div class="sb-artifact-card">
+          <h3>Chapter 14B memo</h3>
+          <button class="sb-btn" id="btnRenderMemo" disabled>Render memo PDF</button>
+          <div id="memoViewWrap"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Panel 5: Audit trail ─── -->
+    <section class="sb-panel" id="panelAudit" aria-labelledby="panelAuditTitle">
+      <h2 id="panelAuditTitle" class="sb-panel-title">5 · Audit trail</h2>
+      <p class="sb-panel-sub">
+        Local hash-chained event log — every step of every case, in order. Chain status:
+        <strong id="chainStatus">—</strong>.
+      </p>
+      <div class="sb-table-wrap sb-audit-scroll" id="auditScroll">
+        <table class="sb-table sb-table-mono" id="auditTable">
+          <thead>
+            <tr><th>#</th><th>Event</th><th>Case</th><th>Timestamp</th><th>Hash</th></tr>
+          </thead>
+          <tbody id="auditTableBody">
+            <tr><td colspan="5" class="sb-loading">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- jsPDF (required by 14b-memo.js for the on-demand memo render) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="14b-memo.js?v=20260622a"></script>
+  <script type="module" src="sandbox.js?v=20260622a"></script>
+</body>
+</html>

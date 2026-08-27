@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SF DPW — Submit a Quote</title>
+<style>
+  :root{--ink:#0a1f3d;--mut:#5b6b82;--accent:#0a6cb4;--line:#dce3ec;--bg:#f4f7fb;--ok:#1f6a37}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font:15px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--ink)}
+  .wrap{max-width:560px;margin:0 auto;padding:28px 18px 64px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 24px;box-shadow:0 1px 4px rgba(10,31,61,.05)}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 20px}
+  .field{margin:18px 0}
+  label.flabel{display:block;font-weight:600;margin-bottom:8px}
+  input[type=number],textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;resize:vertical}
+  textarea{min-height:64px}
+  .inline{display:flex;align-items:center;gap:8px}
+  .prefix{color:var(--mut);font-weight:700;font-size:17px}
+  .submit{margin-top:22px;width:100%;padding:14px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;cursor:pointer}
+  .submit:disabled{background:#c8ced6;cursor:not-allowed}
+  .decline{margin-top:10px;width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--mut);font-size:13px;font-weight:600;cursor:pointer}
+  .done{text-align:center;padding:40px 10px}
+  .done .check{width:54px;height:54px;border-radius:50%;background:#e2f2e7;color:var(--ok);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 14px}
+  .err{color:#b3261e;font-size:13px;margin-top:10px}
+  .foot{color:var(--mut);font-size:12px;text-align:center;margin-top:18px}
+  .legal{background:#f0f4f9;border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:12px;color:var(--mut);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="card">
+    <h1>Submit your quote</h1>
+    <p class="sub">Competitive §14B.7(c) Micro-LBE solicitation for SF DPW work order <strong id="cid">—</strong>.</p>
+
+    <div class="field">
+      <label class="flabel" for="amount">Your total quote amount</label>
+      <div class="inline">
+        <span class="prefix">$</span>
+        <input type="number" id="amount" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="flabel" for="days">Estimated days to complete</label>
+      <input type="number" id="days" min="0" step="1" inputmode="numeric" placeholder="e.g. 14">
+    </div>
+
+    <div class="field">
+      <label class="flabel" for="notes">Scope notes (optional)</label>
+      <textarea id="notes" maxlength="1000" placeholder="Materials, exclusions, assumptions…"></textarea>
+    </div>
+
+    <button class="submit" id="submitBtn" disabled>Submit quote</button>
+    <button class="decline" id="declineBtn">Decline to bid</button>
+    <div class="err" id="err"></div>
+    <div class="legal">Quotes submitted here are recorded in the City's tamper-evident audit log and compared on equal terms. The City is not obligated to award to the lowest bid; the awarding official records a written justification for the selection.</div>
+  </div>
+  <p class="foot">San Francisco Public Works · Contract Monitoring Division · Chapter 14B</p>
+</div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const complaintId = params.get('c') || params.get('id') || '';
+  const token = params.get('t') || params.get('token') || '';
+  document.getElementById('cid').textContent = complaintId || '(unknown)';
+
+  const amount = document.getElementById('amount');
+  const submitBtn = document.getElementById('submitBtn');
+  amount.addEventListener('input', () => { submitBtn.disabled = !(amount.value !== '' && Number(amount.value) >= 0); });
+
+  async function send(body, btn, label) {
+    const err = document.getElementById('err'); err.textContent = '';
+    submitBtn.disabled = true; document.getElementById('declineBtn').disabled = true;
+    btn.textContent = 'Submitting…';
+    try {
+      const res = await fetch('/api/quote-submit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ complaint_id: complaintId, token, ...body }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Submission failed');
+      document.getElementById('card').innerHTML =
+        '<div class="done"><div class="check">✓</div><h1>' + label + '</h1>' +
+        '<p class="sub">Recorded for work order ' + complaintId + '. The City will notify you of the award decision.</p></div>';
+    } catch (e) {
+      err.textContent = e.message;
+      submitBtn.disabled = false; document.getElementById('declineBtn').disabled = false;
+      btn.textContent = btn === submitBtn ? 'Submit quote' : 'Decline to bid';
+    }
+  }
+
+  submitBtn.onclick = () => send(
+    { amount: Number(amount.value), days: document.getElementById('days').value ? Number(document.getElementById('days').value) : null, notes: document.getElementById('notes').value },
+    submitBtn, 'Quote received'
+  );
+  document.getElementById('declineBtn').onclick = () => {
+    if (!confirm('Decline to bid on this work order?')) return;
+    send({ declined: true }, document.getElementById('declineBtn'), 'Thank you');
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+name: Ingest 311 complaints
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:          # manual trigger
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run 311 ingest
+        env:
+          DATASF_APP_TOKEN: ${{ secrets.DATASF_APP_TOKEN }}
+        run: python scripts/agents/ingest-311-agent.py --output public/data/complaints.json --limit 1000
+
+      - name: Run assignment agent
+        run: python scripts/agents/assignment-agent.py --complaints public/data/complaints.json --staff public/data/staff.json --output public/data/assignments.json
+
+      - name: Commit updated complaints + assignments
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add public/data/complaints.json public/data/assignments.json
+          git diff --staged --quiet || git commit -m "chore: refresh complaints + assignments [$(date -u +%Y-%m-%dT%H:%M)]"
+          git push

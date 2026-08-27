@@ -1,0 +1,87 @@
+{
+  "_meta": {
+    "source": "SF Board of Supervisors 2022 district boundaries (post-redistricting). Centroids approximated to geographic centers of district polygons. Adjacency = districts sharing at least one boundary segment per SF Elections Commission map.",
+    "verified_against": "https://www.sf.gov/sites/default/files/2024-04/2022_District_Map.pdf",
+    "baked_at": "2026-05-25",
+    "note": "Use this lookup at vendor-build time to assign each vendor a supervisor_district based on nearest centroid. At runtime, the matrix uses centroid coordinates only for the proximity component if a vendor lacks a precise geocode; primary proximity remains haversine on the actual address."
+  },
+  "districts": [
+    {
+      "id": "D1",
+      "name": "Richmond",
+      "neighborhoods": ["Outer Richmond", "Inner Richmond", "Lincoln Park", "Sea Cliff"],
+      "centroid": { "lat": 37.7780, "lng": -122.4710 },
+      "adjacent": ["D2", "D5"]
+    },
+    {
+      "id": "D2",
+      "name": "Marina / Pacific Heights",
+      "neighborhoods": ["Marina", "Cow Hollow", "Pacific Heights", "Presidio Heights"],
+      "centroid": { "lat": 37.7920, "lng": -122.4360 },
+      "adjacent": ["D1", "D3", "D5"]
+    },
+    {
+      "id": "D3",
+      "name": "North Beach / Chinatown",
+      "neighborhoods": ["North Beach", "Chinatown", "Telegraph Hill", "Russian Hill", "Nob Hill", "Financial District"],
+      "centroid": { "lat": 37.7990, "lng": -122.4120 },
+      "adjacent": ["D2", "D5", "D6"]
+    },
+    {
+      "id": "D4",
+      "name": "Sunset",
+      "neighborhoods": ["Outer Sunset", "Inner Sunset", "Parkside"],
+      "centroid": { "lat": 37.7530, "lng": -122.4830 },
+      "adjacent": ["D1", "D7"]
+    },
+    {
+      "id": "D5",
+      "name": "Haight / Western Addition",
+      "neighborhoods": ["Haight-Ashbury", "Western Addition", "Hayes Valley", "Lower Haight", "Japantown"],
+      "centroid": { "lat": 37.7740, "lng": -122.4380 },
+      "adjacent": ["D1", "D2", "D3", "D6", "D8"]
+    },
+    {
+      "id": "D6",
+      "name": "SOMA / Tenderloin",
+      "neighborhoods": ["SoMa", "Tenderloin", "South Beach", "Mission Bay", "Civic Center", "Treasure Island"],
+      "centroid": { "lat": 37.7790, "lng": -122.4030 },
+      "adjacent": ["D3", "D5", "D8", "D9", "D10"]
+    },
+    {
+      "id": "D7",
+      "name": "West of Twin Peaks",
+      "neighborhoods": ["Forest Hill", "West Portal", "Saint Francis Wood", "Lake Merced", "Lakeside", "Stonestown"],
+      "centroid": { "lat": 37.7350, "lng": -122.4640 },
+      "adjacent": ["D4", "D8", "D11"]
+    },
+    {
+      "id": "D8",
+      "name": "Castro / Noe Valley",
+      "neighborhoods": ["Castro", "Noe Valley", "Diamond Heights", "Glen Park", "Twin Peaks"],
+      "centroid": { "lat": 37.7530, "lng": -122.4400 },
+      "adjacent": ["D5", "D6", "D7", "D9", "D11"]
+    },
+    {
+      "id": "D9",
+      "name": "Mission / Bernal Heights",
+      "neighborhoods": ["Mission", "Bernal Heights", "Portola", "Saint Marys Park"],
+      "centroid": { "lat": 37.7480, "lng": -122.4150 },
+      "adjacent": ["D6", "D8", "D10", "D11"]
+    },
+    {
+      "id": "D10",
+      "name": "Bayview / Potrero Hill",
+      "neighborhoods": ["Bayview", "Hunters Point", "Potrero Hill", "Dogpatch", "Visitacion Valley", "Sunnydale"],
+      "centroid": { "lat": 37.7400, "lng": -122.3920 },
+      "adjacent": ["D6", "D9", "D11"]
+    },
+    {
+      "id": "D11",
+      "name": "Excelsior / OMI",
+      "neighborhoods": ["Excelsior", "OMI (Oceanview/Merced/Ingleside)", "Mission Terrace", "Outer Mission", "Crocker Amazon"],
+      "centroid": { "lat": 37.7200, "lng": -122.4430 },
+      "adjacent": ["D7", "D8", "D9", "D10"]
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "generated_at": "2026-06-23T06:07:55.219Z",
+  "source_cache": "scripts/sandbox/workorder-cache.json",
+  "case_count": 12,
+  "scoreboard": {
+    "audit_completeness_pct": 100,
+    "eligibility_violations": 0,
+    "throughput": 12,
+    "pct_micro_lbe": 100
+  },
+  "cases": [
+    {
+      "complaint_id": "SR-101003028783",
+      "address": "359 CAPP ST, SAN FRANCISCO, CA 94110",
+      "defect_type": "Curb Damaged or Missing",
+      "priority_code": "PRIORITY 2 — STANDARD REPAIR",
+      "defnum": "DPW-SIRP-2025-115179",
+      "selected_vendor": {
+        "id": "v_brady_concrete_inc",
+        "name": "Brady Concrete Inc.",
+        "cert_score": 84.7,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003029471",
+      "address": "1100 MONTGOMERY ST, SAN FRANCISCO, CA 94133",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-142054",
+      "selected_vendor": {
+        "id": "v_cgl_engineering_builders_llc",
+        "name": "CGL Engineering Builders LLC",
+        "cert_score": 84.5,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003029512",
+      "address": "462 THORNTON AVE, SAN FRANCISCO, CA 94124",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-142830",
+      "selected_vendor": {
+        "id": "v_on_the_level_concrete",
+        "name": "On the Level Concrete",
+        "cert_score": 84.9,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003035136",
+      "address": "910 PRESIDIO AVE, SAN FRANCISCO, CA 94115",
+      "defect_type": "Sidewalk Missing/Obstructed",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-943409",
+      "selected_vendor": {
+        "id": "v_lewis_m_merlo_inc",
+        "name": "Lewis M. Merlo Inc.",
+        "cert_score": 84.1,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003041319",
+      "address": "2526 42ND AVE, SAN FRANCISCO, CA 94116",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-749629",
+      "selected_vendor": {
+        "id": "v_s_h_concrete_construction",
+        "name": "S&H Concrete Construction",
+        "cert_score": 83,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003041348",
+      "address": "2146 42ND AVE, SAN FRANCISCO, CA 94116",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-749721",
+      "selected_vendor": {
+        "id": "v_s_h_concrete_construction",
+        "name": "S&H Concrete Construction",
+        "cert_score": 84.2,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003041357",
+      "address": "1822 42ND AVE, SAN FRANCISCO, CA 94122",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-749751",
+      "selected_vendor": {
+        "id": "v_s_h_concrete_construction",
+        "name": "S&H Concrete Construction",
+        "cert_score": 84.8,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003041378",
+      "address": "1546 42ND AVE, SAN FRANCISCO, CA 94122",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-749814",
+      "selected_vendor": {
+        "id": "v_s_h_concrete_construction",
+        "name": "S&H Concrete Construction",
+        "cert_score": 85,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003041423",
+      "address": "1751 42ND AVE, SAN FRANCISCO, CA 94122",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-750615",
+      "selected_vendor": {
+        "id": "v_s_h_concrete_construction",
+        "name": "S&H Concrete Construction",
+        "cert_score": 84.9,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003041425",
+      "address": "1787 42ND AVE, SAN FRANCISCO, CA 94122",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-750617",
+      "selected_vendor": {
+        "id": "v_s_h_concrete_construction",
+        "name": "S&H Concrete Construction",
+        "cert_score": 84.9,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003041432",
+      "address": "1867 42ND AVE, SAN FRANCISCO, CA 94122",
+      "defect_type": "Trip Hazard — Raised/Sunken Panel",
+      "priority_code": "PRIORITY 1 — EMERGENCY / ADA",
+      "defnum": "DPW-SIRP-2025-750645",
+      "selected_vendor": {
+        "id": "v_s_h_concrete_construction",
+        "name": "S&H Concrete Construction",
+        "cert_score": 84.8,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    },
+    {
+      "complaint_id": "SR-101003042532",
+      "address": "2198 INGALLS ST, SAN FRANCISCO, CA 94124",
+      "defect_type": "Cracked Concrete Panel",
+      "priority_code": "PRIORITY 2 — STANDARD REPAIR",
+      "defnum": "DPW-SIRP-2025-781397",
+      "selected_vendor": {
+        "id": "v_associated_builders_abei",
+        "name": "Associated Builders (ABEI)",
+        "cert_score": 84.7,
+        "cert_score_max": 85,
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ]
+      },
+      "eligibility_violation": false,
+      "memo_status": "issued"
+    }
+  ]
+}

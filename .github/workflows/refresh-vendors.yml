@@ -1,0 +1,58 @@
+name: Refresh vendor pool
+
+on:
+  schedule:
+    - cron: '0 4 * * 0'   # every Sunday at 4 AM UTC
+  workflow_dispatch:        # manual trigger
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install requests openpyxl playwright
+          playwright install chromium --with-deps
+
+      - name: Scrape CMD LBE directory + join vendors
+        run: |
+          python scripts/agents/cmd-scraper-playwright.py \
+            --output data/cmd-lbe-directory.json \
+            --join-vendors public/baked-vendors-v2.json
+
+      - name: Run CSLB enrichment (CSV required — skip if not present)
+        run: |
+          if [ -f data/cslb-c8-sf-county.xlsx ] || [ -f data/cslb-c8-sf-county.csv ]; then
+            CSLB_FILE=$(ls data/cslb-c8-sf-county.* 2>/dev/null | head -1)
+            python scripts/agents/cslb-enrichment-agent.py \
+              --vendors public/baked-vendors-v2.json \
+              --cslb-csv "$CSLB_FILE" \
+              --output public/baked-vendors-v2.json \
+              --dry-run false
+          else
+            echo "No CSLB file found in data/ — skipping CSLB enrichment"
+          fi
+
+      - name: Run eligibility report
+        run: node scripts/eligibility-report.mjs
+
+      - name: Run scorer smoke test
+        run: node scripts/test-scorer-v2.mjs
+
+      - name: Commit updated vendor data
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add data/cmd-lbe-directory.json public/baked-vendors-v2.json
+          git diff --staged --quiet || git commit -m "chore: refresh vendor pool + CMD LBE directory [$(date -u +%Y-%m-%dT%H:%M)]"
+          git push

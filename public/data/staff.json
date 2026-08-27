@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "note": "Add or remove dispatchers here. Assignments auto-update on the next 6h ingest run.",
+    "updated_at": "2026-06-01"
+  },
+  "staff": [
+    {
+      "email": "dispatcher@dpw.sfgov.org",
+      "name": "DPW Dispatcher",
+      "role": "dispatcher"
+    },
+    {
+      "email": "admin@munifi.com",
+      "name": "Munifi Admin",
+      "role": "admin"
+    }
+  ]
+}

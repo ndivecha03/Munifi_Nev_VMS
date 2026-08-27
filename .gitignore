@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+.vercel/
+.env
+.env.local
+node_modules/
+_script_0.js
+*.log
+.DS_Store
+
+# Transient build artifacts
+build-output.txt
+data/_socrata_cache/
+
+# IDE / OS noise
+.idea/
+.vscode/
+Thumbs.db
+# Raw DataSF pull (5.9 MB, regenerable via scripts/pull-datasf-awards.py)
+data/datasf-dpw-awards.json
+.vercel
+
+# Raw CSLB/scrape dumps (regenerable via scripts/agents/cslb-fetch-bulk.py)
+data/raw/

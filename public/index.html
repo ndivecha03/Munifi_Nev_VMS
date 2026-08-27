@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NV ESB Dispatch Console — NDOT / Public Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="dispatch.css?v=20260826j">
+</head>
+<body class="dispatch-body">
+
+  <!-- ─── Section 1: Persistent header ─── -->
+  <header class="dispatch-header" id="dispatchHeader">
+    <div class="dispatch-header-left">
+      <span class="agency-mark">NDOT / NV Public Works</span>
+      <span class="tool-label">NV ESB Dispatch Console</span>
+    </div>
+    <div class="dispatch-header-center">
+      <span class="header-date" id="headerDate"></span>
+      <span class="header-divider">·</span>
+      <span class="header-agent" id="headerAgent">Agent: —</span>
+    </div>
+    <div class="dispatch-header-right">
+      <span class="header-counter">
+        <strong id="openCount">0</strong><span class="counter-label">open</span>
+      </span>
+      <a class="header-counter header-counter-link" href="status.html"
+         title="Open dispatch audit log + per-work-order status">
+        <strong id="dispatchedTodayCount">0</strong><span class="counter-label">dispatched today</span>
+      </a>
+      <a class="header-nav-link" href="status.html" title="View dispatch lifecycle (audit log + per-work-order status)">Dispatch Lifecycle</a>
+      <button class="header-logout-btn" id="btnLogout" title="Sign out">Sign out</button>
+    </div>
+  </header>
+
+  <main class="dispatch-main" id="dispatchMain">
+
+    <!-- ─── Section 2: Queue sidebar ─── -->
+    <aside class="queue-sidebar" id="queueSidebar">
+      <div class="queue-header">
+        <h2 class="queue-title">Your queue</h2>
+        <p class="queue-subtitle">Assigned to you · sorted by priority</p>
+      </div>
+
+      <div class="queue-filters">
+        <div class="priority-filter-group" role="group" aria-label="Priority filter">
+          <button class="filter-pill" data-priority="all">All <span class="filter-count">0</span></button>
+          <button class="filter-pill" data-priority="high">High <span class="filter-count">0</span></button>
+          <button class="filter-pill" data-priority="medium">Med <span class="filter-count">0</span></button>
+          <button class="filter-pill" data-priority="low">Low <span class="filter-count">0</span></button>
+        </div>
+        <label class="district-filter-label">
+          <span class="visually-hidden">Filter by region</span>
+          <select class="district-filter" id="districtFilter">
+            <option value="all">All regions</option>
+            <option value="D1">R1 — Clark County (Las Vegas Metro)</option>
+            <option value="D2">R2 — Washoe County (Reno/Sparks)</option>
+            <option value="D3">R3 — Southern NV (Henderson/Boulder City)</option>
+            <option value="D4">R4 — Northern NV (Carson City/Elko)</option>
+            <option value="D5">R5 — Rural Central NV (Nye/Lander)</option>
+            <option value="D6">R6 — Western NV (Dayton/Fernley)</option>
+            <option value="D7">R7 — I-15 Corridor</option>
+            <option value="D8">R8 — US-95 Corridor</option>
+            <option value="D9">R9 — I-11 Corridor</option>
+            <option value="D10">R10 — SR-160 / Blue Diamond</option>
+            <option value="D11">R11 — Statewide / Multi-Region</option>
+          </select>
+        </label>
+      </div>
+
+      <ul class="queue-list" id="queueList" role="listbox" aria-label="Open NDOT work orders">
+        <li class="queue-empty">Loading…</li>
+      </ul>
+    </aside>
+
+    <!-- Main panel — Sections 3-6 land here on selection -->
+    <section class="dispatch-panel" id="dispatchPanel">
+      <div class="panel-placeholder">
+        <h2>Select a work order from the queue</h2>
+        <p>The matrix will rank the top 5 ESB/DBE-certified vendors for the selected work order's region and specialty. You'll review the score breakdown and generate an NRS ESB compliance record.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Audit log + per-complaint status now live at status.html
+       (combined Dispatch Lifecycle view). Header link points there. -->
+
+  <!-- Scripts -->
+  <!-- jsPDF (required by 14b-memo.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="14b-memo.js?v=20260826j"></script>
+  <script type="module" src="dispatch.js?v=20260826j"></script>
+</body>
+</html>

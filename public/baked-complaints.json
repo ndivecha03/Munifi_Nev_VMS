@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "source": "DataSF vw6y-z8j6 — SF 311 Cases, service_name='Sidewalk and Curb Inspection'",
+    "note": "Representative sample — replace with live DataSF query",
+    "baked_at": "2026-05-24"
+  },
+  "complaints": [
+    {
+      "id": "16795432",
+      "type": "Sidewalk and Curb Inspection",
+      "subtype": "Trip Hazard",
+      "address": "2450 Mission St, San Francisco",
+      "district": "9",
+      "lat": 37.7541,
+      "lng": -122.4185,
+      "opened": "2025-03-12",
+      "closed": "2025-04-08",
+      "status": "Closed",
+      "days": 27
+    },
+    {
+      "id": "16801234",
+      "type": "Sidewalk and Curb Inspection",
+      "subtype": "Cracked Concrete Panel",
+      "address": "880 Valencia St, San Francisco",
+      "district": "9",
+      "lat": 37.7580,
+      "lng": -122.4214,
+      "opened": "2025-02-18",
+      "closed": "2025-03-22",
+      "status": "Closed",
+      "days": 32
+    },
+    {
+      "id": "16812345",
+      "type": "Sidewalk and Curb Inspection",
+      "subtype": "ADA Ramp Damaged",
+      "address": "1095 Market St, San Francisco",
+      "district": "6",
+      "lat": 37.7774,
+      "lng": -122.4170,
+      "opened": "2025-01-05",
+      "closed": "2025-01-19",
+      "status": "Closed",
+      "days": 14
+    },
+    {
+      "id": "16823456",
+      "type": "Sidewalk and Curb Inspection",
+      "subtype": "Tree Root Heave",
+      "address": "450 Haight St, San Francisco",
+      "district": "5",
+      "lat": 37.7719,
+      "lng": -122.4299,
+      "opened": "2025-04-02",
+      "closed": null,
+      "status": "Open",
+      "days": null
+    },
+    {
+      "id": "16834567",
+      "type": "Sidewalk and Curb Inspection",
+      "subtype": "Curb Damaged",
+      "address": "3020 20th Ave, San Francisco",
+      "district": "7",
+      "lat": 37.7462,
+      "lng": -122.4769,
+      "opened": "2025-03-25",
+      "closed": "2025-05-10",
+      "status": "Closed",
+      "days": 46
+    },
+    {
+      "id": "16845678",
+      "type": "Sidewalk and Curb Inspection",
+      "subtype": "Trip Hazard",
+      "address": "1800 Cesar Chavez St, San Francisco",
+      "district": "10",
+      "lat": 37.7474,
+      "lng": -122.3994,
+      "opened": "2025-02-10",
+      "closed": "2025-04-15",
+      "status": "Closed",
+      "days": 64
+    },
+    {
+      "id": "16856789",
+      "type": "Sidewalk and Curb Inspection",
+      "subtype": "Concrete Panel Broken",
+      "address": "620 Geary Blvd, San Francisco",
+      "district": "1",
+      "lat": 37.7828,
+      "lng": -122.4608,
+      "opened": "2025-01-20",
+      "closed": "2025-02-28",
+      "status": "Closed",
+      "days": 39
+    },
+    {
+      "id": "16867890",
+      "type": "Sidewalk and Curb Inspection",
+      "subtype": "Trip Hazard",
+      "address": "4500 Mission St, San Francisco",
+      "district": "11",
+      "lat": 37.7213,
+      "lng": -122.4380,
+      "opened": "2025-04-15",
+      "closed": null,
+      "status": "Open",
+      "days": null
+    }
+  ]
+}

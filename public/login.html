@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in — NDOT NV ESB Dispatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --bg:           #f5f6f8;
+      --surface:      #ffffff;
+      --border:       #e1e4e8;
+      --border-strong:#c8ced6;
+      --ink:          #1a2332;
+      --ink-soft:     #4a5568;
+      --ink-mute:     #8a96a7;
+      --accent:       #0077b6;
+      --accent-soft:  #e6f0f8;
+      --accent-dark:  #005f94;
+      --error:        #d64545;
+      --error-soft:   #fce8e8;
+      --success:      #2c8a4a;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .agency-mark {
+      font-weight: 800;
+      letter-spacing: .04em;
+      font-size: 13px;
+      background: var(--ink);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .tool-label {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: -.01em;
+    }
+
+    /* ── Main layout ── */
+    .login-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px 44px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 2px 12px rgba(10,31,61,.06);
+    }
+
+    .login-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 8px;
+    }
+    .login-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      margin: 0 0 6px;
+    }
+    .login-sub {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin: 0 0 28px;
+      line-height: 1.5;
+    }
+
+    /* ── Form ── */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font: 500 14px/1.4 Inter, sans-serif;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,119,182,.12);
+    }
+    input.error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(214,69,69,.10);
+    }
+
+    /* ── Error banner ── */
+    .error-banner {
+      display: none;
+      background: var(--error-soft);
+      border: 1px solid #f5b8b8;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--error);
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+    .error-banner.visible { display: block; }
+
+    /* ── Submit button ── */
+    .btn-signin {
+      width: 100%;
+      padding: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font: 600 14px/1 Inter, sans-serif;
+      cursor: pointer;
+      transition: background .15s;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-signin:hover  { background: var(--accent-dark); }
+    .btn-signin:active { transform: translateY(1px); }
+    .btn-signin:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .spinner {
+      display: none;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+    .btn-signin.loading .spinner { display: block; }
+    .btn-signin.loading .btn-text { opacity: .7; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Demo credentials hint ── */
+    .demo-hint {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .demo-hint-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: 10px;
+    }
+    .demo-account {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color .12s, background .12s;
+    }
+    .demo-account:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .demo-account-role {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+    .demo-account-creds {
+      font-size: 12px;
+      color: var(--ink-soft);
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+    }
+
+    /* ── Footer ── */
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--ink-mute);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <span class="agency-mark">NDOT / NV Public Works</span>
+    <span class="tool-label">NV ESB Dispatch Console</span>
+  </div>
+
+  <div class="login-wrap">
+    <div class="login-card">
+      <p class="login-eyebrow">Sidewalk Inspection & Repair Program</p>
+      <h1 class="login-title">Sign in to continue</h1>
+      <p class="login-sub">Access is restricted to authorized DPW dispatch staff and administrators.</p>
+
+      <div class="error-banner" id="errorBanner" role="alert"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email"
+            placeholder="you@dpw.sfgov.org" autocomplete="email" spellcheck="false">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password"
+            placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-signin" id="submitBtn">
+          <div class="spinner"></div>
+          <span class="btn-text">Sign in →</span>
+        </button>
+      </form>
+
+      <!-- Demo credentials -->
+      <div class="demo-hint">
+        <div class="demo-hint-label">Demo accounts — click to fill</div>
+        <div class="demo-account" data-email="dispatcher@dot.nv.gov" data-password="NVESB2026!">
+          <div class="demo-account-role">NDOT Dispatcher</div>
+          <div class="demo-account-creds">dispatcher@dot.nv.gov · NVESB2026!</div>
+        </div>
+        <div class="demo-account" data-email="admin@munifi.com" data-password="Munifi2026!">
+          <div class="demo-account-role">Munifi Admin</div>
+          <div class="demo-account-creds">admin@munifi.com · Munifi2026!</div>
+        </div>
+      </div>
+
+      <p class="login-footer">
+        Munifi · SF Admin Code Ch. 14B
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // ── Demo accounts ──────────────────────────────────────────────────────────
+    // In a real deployment these would be verified server-side.
+    // For the demo, credentials are checked client-side only.
+    const ACCOUNTS = [
+      { email: 'dispatcher@dot.nv.gov', password: 'NVESB2026!', name: 'NDOT Dispatcher', role: 'dispatcher' },
+      { email: 'admin@munifi.com', password: 'Munifi2026!',  name: 'Munifi Admin',      role: 'admin' },
+    ];
+
+    const SESSION_KEY = 'nvesb_session';
+
+    // ── Redirect if already logged in ─────────────────────────────────────────
+    try {
+      const existing = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+      if (existing?.email) window.location.replace('index.html');
+    } catch {}
+
+    // ── Fill from demo-account chips ──────────────────────────────────────────
+    document.querySelectorAll('.demo-account').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.getElementById('email').value    = chip.dataset.email;
+        document.getElementById('password').value = chip.dataset.password;
+        document.getElementById('email').classList.remove('error');
+        document.getElementById('password').classList.remove('error');
+        hideError();
+        document.getElementById('submitBtn').focus();
+      });
+    });
+
+    // ── Form submit ───────────────────────────────────────────────────────────
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const email    = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const btn      = document.getElementById('submitBtn');
+
+      clearErrors();
+
+      if (!email) {
+        showFieldError('email', 'Email is required.');
+        return;
+      }
+      if (!password) {
+        showFieldError('password', 'Password is required.');
+        return;
+      }
+
+      // Simulate a brief network delay so it feels real
+      btn.disabled = true;
+      btn.classList.add('loading');
+
+      setTimeout(() => {
+        const account = ACCOUNTS.find(
+          a => a.email === email && a.password === password
+        );
+
+        if (account) {
+          localStorage.setItem(SESSION_KEY, JSON.stringify({
+            email:      account.email,
+            name:       account.name,
+            role:       account.role,
+            loggedInAt: new Date().toISOString(),
+          }));
+          // Also pre-fill the dispatch agent ID so the console doesn't prompt
+          try { localStorage.setItem('nvesb_dispatch_agent_id', account.name); } catch {}
+
+          // Audit: capture the login event. Fire-and-forget via sendBeacon
+          // so it survives the location.replace() that follows.
+          try {
+            const payload = {
+              event_type:   'auth.login',
+              actor_type:   'human',
+              actor_id:     account.email,
+              subject_type: 'session',
+              subject_id:   account.email,
+              tenant:       'sf',
+              source:       'browser:login.html',
+              payload: {
+                name: account.name,
+                role: account.role,
+                user_agent: navigator.userAgent,
+              },
+            };
+            if (navigator.sendBeacon) {
+              const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+              navigator.sendBeacon('/api/audit/event', blob);
+            } else {
+              fetch('/api/audit/event', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                keepalive: true,
+              }).catch(() => {});
+            }
+          } catch (_) { /* audit-log failure must never block login */ }
+
+          window.location.replace('index.html');
+        } else {
+          btn.disabled = false;
+          btn.classList.remove('loading');
+          showError('Incorrect email or password. Please try again.');
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
+          // Audit: failed login attempt. No correlation_id (no session yet).
+          try {
+            const payload = {
+              event_type:   'auth.login_failed',
+              actor_type:   'human',
+              actor_id:     email || 'unknown',
+              tenant:       'sf',
+              source:       'browser:login.html',
+              payload:      { user_agent: navigator.userAgent },
+            };
+            fetch('/api/audit/event', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              keepalive: true,
+            }).catch(() => {});
+          } catch (_) {}
+        }
+      }, 600);
+    });
+
+    function showError(msg) {
+      const banner = document.getElementById('errorBanner');
+      banner.textContent = msg;
+      banner.classList.add('visible');
+    }
+    function hideError() {
+      document.getElementById('errorBanner').classList.remove('visible');
+    }
+    function showFieldError(fieldId, msg) {
+      document.getElementById(fieldId).classList.add('error');
+      showError(msg);
+    }
+    function clearErrors() {
+      hideError();
+      document.getElementById('email').classList.remove('error');
+      document.getElementById('password').classList.remove('error');
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "source": "DataSF dataset vw6y-z8j6 — SF 311 Cases",
+    "filter": "service_name='Sidewalk and Curb Inspection'",
+    "year": 2025,
+    "baked_at": "2026-05-24",
+    "note": "Replace with live data from DataSF or CF Worker /health endpoint"
+  },
+  "citywide": {
+    "total_complaints_2025": 618392,
+    "sidewalk_complaints_2025": 6483,
+    "sidewalk_stuck_90d": 291,
+    "pct_reach_agency": 99.2,
+    "pct_never_close": 2.1,
+    "median_close_days": 20
+  },
+  "districts": {
+    "1":  { "name": "Richmond",              "volume": 548,  "closure30": 52.1, "medianDays": 23 },
+    "2":  { "name": "Marina / Pacific Hts",  "volume": 290,  "closure30": 61.4, "medianDays": 18 },
+    "3":  { "name": "North Beach / Chinatown","volume": 590, "closure30": 55.8, "medianDays": 21 },
+    "4":  { "name": "Sunset",                "volume": 495,  "closure30": 49.3, "medianDays": 26 },
+    "5":  { "name": "Haight / Castro",        "volume": 615,  "closure30": 57.2, "medianDays": 22 },
+    "6":  { "name": "SoMa / Tenderloin",      "volume": 755,  "closure30": 63.1, "medianDays": 19 },
+    "7":  { "name": "Glen Park / West Portal","volume": 470,  "closure30": 58.0, "medianDays": 20 },
+    "8":  { "name": "Noe Valley / Castro",    "volume": 510,  "closure30": 60.5, "medianDays": 19 },
+    "9":  { "name": "Mission",                "volume": 820,  "closure30": 54.6, "medianDays": 24 },
+    "10": { "name": "Bayview / Portola",      "volume": 710,  "closure30": 44.8, "medianDays": 30 },
+    "11": { "name": "Excelsior / Outer Mission","volume": 680,"closure30": 47.2, "medianDays": 28 }
+  },
+  "lbe_opportunity": {
+    "annualRedirectableLow": 5600000,
+    "annualRedirectableHigh": 8500000,
+    "avgPerFirmLow": 40000,
+    "avgPerFirmHigh": 75000,
+    "firmCount": "80–150",
+    "note": "Derived from SIRP Contract 2035D-3 scope; $6.1M/year baseline per DPW estimate"
+  }
+}

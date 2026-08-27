@@ -1,0 +1,919 @@
+{
+  "chain_verified": true,
+  "event_count": 60,
+  "synth_epoch": "2026-06-01T08:00:00.000Z",
+  "events": [
+    {
+      "seq": 0,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003028783",
+      "timestamp": "2026-06-01T08:00:00.000Z",
+      "payload": {
+        "address": "359 CAPP ST, SAN FRANCISCO, CA 94110",
+        "subtype": "curb_or_curb_ramp_defect",
+        "severity": "elevated"
+      },
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "70a64ba4f629c15fade05f8a886500c0314f9c93fc697e9e734897efbd89c226"
+    },
+    {
+      "seq": 1,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003028783",
+      "timestamp": "2026-06-01T08:01:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 12,
+          "tier2Almost": 3,
+          "tier3Other": 23,
+          "withinRadius": 12
+        },
+        "cert_only_max": 85,
+        "top_score": 84.7
+      },
+      "prev_hash": "70a64ba4f629c15fade05f8a886500c0314f9c93fc697e9e734897efbd89c226",
+      "hash": "fafde9cb1e7c90a86edc9809a6e3ca247448ed0f461166dd0364e194cb6c4fe3"
+    },
+    {
+      "seq": 2,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003028783",
+      "timestamp": "2026-06-01T08:02:00.000Z",
+      "payload": {
+        "vendor_id": "v_brady_concrete_inc",
+        "vendor_name": "Brady Concrete Inc.",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "fafde9cb1e7c90a86edc9809a6e3ca247448ed0f461166dd0364e194cb6c4fe3",
+      "hash": "8668e2185882cbee2346e0b15164c6ee6e3cc3519b7ec4cc569bb68c7b3e8b00"
+    },
+    {
+      "seq": 3,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003028783",
+      "timestamp": "2026-06-01T08:03:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-115179",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "8668e2185882cbee2346e0b15164c6ee6e3cc3519b7ec4cc569bb68c7b3e8b00",
+      "hash": "a104badc1e1cd802d7618c94c0f7e7c1f36d2e9608062cde66b293c9372fa38e"
+    },
+    {
+      "seq": 4,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003028783",
+      "timestamp": "2026-06-01T08:04:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "a104badc1e1cd802d7618c94c0f7e7c1f36d2e9608062cde66b293c9372fa38e",
+      "hash": "74652586f02ede584a97eecfda6ee84c6b7733f56e43e380de6c1bc8c2b2ca30"
+    },
+    {
+      "seq": 5,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003029471",
+      "timestamp": "2026-06-01T08:06:00.000Z",
+      "payload": {
+        "address": "1100 MONTGOMERY ST, SAN FRANCISCO, CA 94133",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "74652586f02ede584a97eecfda6ee84c6b7733f56e43e380de6c1bc8c2b2ca30",
+      "hash": "64fd6e2184afab1319cff2bcf8a1efdc5c96296844a796723406a7cd316ca03a"
+    },
+    {
+      "seq": 6,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003029471",
+      "timestamp": "2026-06-01T08:07:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 18,
+          "tier2Almost": 3,
+          "tier3Other": 32,
+          "withinRadius": 18
+        },
+        "cert_only_max": 85,
+        "top_score": 84.5
+      },
+      "prev_hash": "64fd6e2184afab1319cff2bcf8a1efdc5c96296844a796723406a7cd316ca03a",
+      "hash": "8f4f891b4296f71b4d232596412a2cbc25333469e56c4e7778aec968b3da4e20"
+    },
+    {
+      "seq": 7,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003029471",
+      "timestamp": "2026-06-01T08:08:00.000Z",
+      "payload": {
+        "vendor_id": "v_cgl_engineering_builders_llc",
+        "vendor_name": "CGL Engineering Builders LLC",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "8f4f891b4296f71b4d232596412a2cbc25333469e56c4e7778aec968b3da4e20",
+      "hash": "9c41052caaa5dd87e8ee0579943b21f2ef53ea92fc1ff7552413b2228cc82e14"
+    },
+    {
+      "seq": 8,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003029471",
+      "timestamp": "2026-06-01T08:09:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-142054",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "9c41052caaa5dd87e8ee0579943b21f2ef53ea92fc1ff7552413b2228cc82e14",
+      "hash": "b8b409d8724c8f20004c8dd00368c15d4fe364358a0147beeb75ceb6aa9e269b"
+    },
+    {
+      "seq": 9,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003029471",
+      "timestamp": "2026-06-01T08:10:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "b8b409d8724c8f20004c8dd00368c15d4fe364358a0147beeb75ceb6aa9e269b",
+      "hash": "6a4a325ee3d32f7b3d81f78444f8ac822c3378e6d0a2758507d6fc3c845c2999"
+    },
+    {
+      "seq": 10,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003029512",
+      "timestamp": "2026-06-01T08:12:00.000Z",
+      "payload": {
+        "address": "462 THORNTON AVE, SAN FRANCISCO, CA 94124",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "6a4a325ee3d32f7b3d81f78444f8ac822c3378e6d0a2758507d6fc3c845c2999",
+      "hash": "2d638ef3d29a0c84ea65a2d6249bb4a9a168e14dafc8ebb57bc8d0d2abd4de15"
+    },
+    {
+      "seq": 11,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003029512",
+      "timestamp": "2026-06-01T08:13:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 18,
+          "tier2Almost": 3,
+          "tier3Other": 32,
+          "withinRadius": 18
+        },
+        "cert_only_max": 85,
+        "top_score": 84.9
+      },
+      "prev_hash": "2d638ef3d29a0c84ea65a2d6249bb4a9a168e14dafc8ebb57bc8d0d2abd4de15",
+      "hash": "b8e97d07f98b99c93432a8a80ade94b0dce2ed96ef2d07a0ee636f85e831c8e0"
+    },
+    {
+      "seq": 12,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003029512",
+      "timestamp": "2026-06-01T08:14:00.000Z",
+      "payload": {
+        "vendor_id": "v_on_the_level_concrete",
+        "vendor_name": "On the Level Concrete",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "b8e97d07f98b99c93432a8a80ade94b0dce2ed96ef2d07a0ee636f85e831c8e0",
+      "hash": "0be7d3f66d37abbc1e2b3a92e135327777e4415f6c4e4c6f7d5620487adce147"
+    },
+    {
+      "seq": 13,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003029512",
+      "timestamp": "2026-06-01T08:15:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-142830",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "0be7d3f66d37abbc1e2b3a92e135327777e4415f6c4e4c6f7d5620487adce147",
+      "hash": "0efd374c69d77af0b22b79c44f94f7ed6d0f5f068fdd317e31063b9f3e6f7213"
+    },
+    {
+      "seq": 14,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003029512",
+      "timestamp": "2026-06-01T08:16:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "0efd374c69d77af0b22b79c44f94f7ed6d0f5f068fdd317e31063b9f3e6f7213",
+      "hash": "315828f8c1e589788d34ffdf8b7839cc6123ad00d195de278ed22c116ed862aa"
+    },
+    {
+      "seq": 15,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003035136",
+      "timestamp": "2026-06-01T08:18:00.000Z",
+      "payload": {
+        "address": "910 PRESIDIO AVE, SAN FRANCISCO, CA 94115",
+        "subtype": "missing_side_sewer_vent_cover",
+        "severity": "emergency"
+      },
+      "prev_hash": "315828f8c1e589788d34ffdf8b7839cc6123ad00d195de278ed22c116ed862aa",
+      "hash": "a0893ee3351930cc4a6593f99113a9f524724896e38b7c1dcfb1adea1c2ed14f"
+    },
+    {
+      "seq": 16,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003035136",
+      "timestamp": "2026-06-01T08:19:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 18,
+          "tier2Almost": 3,
+          "tier3Other": 31,
+          "withinRadius": 18
+        },
+        "cert_only_max": 85,
+        "top_score": 84.1
+      },
+      "prev_hash": "a0893ee3351930cc4a6593f99113a9f524724896e38b7c1dcfb1adea1c2ed14f",
+      "hash": "88083734d0326c3a61df6cc060634786a3065878d183bfd7d479f41a10dde157"
+    },
+    {
+      "seq": 17,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003035136",
+      "timestamp": "2026-06-01T08:20:00.000Z",
+      "payload": {
+        "vendor_id": "v_lewis_m_merlo_inc",
+        "vendor_name": "Lewis M. Merlo Inc.",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "88083734d0326c3a61df6cc060634786a3065878d183bfd7d479f41a10dde157",
+      "hash": "c7e4c72b37479e018876124762e7d5696610e1cb05832cd59ee074bd7458bb01"
+    },
+    {
+      "seq": 18,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003035136",
+      "timestamp": "2026-06-01T08:21:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-943409",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "c7e4c72b37479e018876124762e7d5696610e1cb05832cd59ee074bd7458bb01",
+      "hash": "4bb45ef73d23115441a5753b4c474dcb91dd4fde0a38224138558089cc4893c6"
+    },
+    {
+      "seq": 19,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003035136",
+      "timestamp": "2026-06-01T08:22:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "4bb45ef73d23115441a5753b4c474dcb91dd4fde0a38224138558089cc4893c6",
+      "hash": "8fad32fcd02925cba664d65b0fb9e7e4d992c2cb59fa749c3f198cb2a0e490ce"
+    },
+    {
+      "seq": 20,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003041319",
+      "timestamp": "2026-06-01T08:24:00.000Z",
+      "payload": {
+        "address": "2526 42ND AVE, SAN FRANCISCO, CA 94116",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "8fad32fcd02925cba664d65b0fb9e7e4d992c2cb59fa749c3f198cb2a0e490ce",
+      "hash": "f2bedee51fe6b4575186c2b1f4689e4602020c92bc2934533a03a09a56b6d581"
+    },
+    {
+      "seq": 21,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003041319",
+      "timestamp": "2026-06-01T08:25:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 17,
+          "tier2Almost": 3,
+          "tier3Other": 29,
+          "withinRadius": 17
+        },
+        "cert_only_max": 85,
+        "top_score": 83
+      },
+      "prev_hash": "f2bedee51fe6b4575186c2b1f4689e4602020c92bc2934533a03a09a56b6d581",
+      "hash": "469ac56c18e6750c77832337ba241e0a75d3531844878e94732cc5b9c6a38a90"
+    },
+    {
+      "seq": 22,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003041319",
+      "timestamp": "2026-06-01T08:26:00.000Z",
+      "payload": {
+        "vendor_id": "v_s_h_concrete_construction",
+        "vendor_name": "S&H Concrete Construction",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "469ac56c18e6750c77832337ba241e0a75d3531844878e94732cc5b9c6a38a90",
+      "hash": "c612d97ed900fedd5cf7d285c1c2cf5222a5778eebcc1aaec0369d341eb0f062"
+    },
+    {
+      "seq": 23,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003041319",
+      "timestamp": "2026-06-01T08:27:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-749629",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "c612d97ed900fedd5cf7d285c1c2cf5222a5778eebcc1aaec0369d341eb0f062",
+      "hash": "5f1234a87fd296c96fb5d2225e86bd339e46c9398c5a6076b5973bfa78d20145"
+    },
+    {
+      "seq": 24,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003041319",
+      "timestamp": "2026-06-01T08:28:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "5f1234a87fd296c96fb5d2225e86bd339e46c9398c5a6076b5973bfa78d20145",
+      "hash": "c0e72c23e1f3276d0c22c2912e20e258c63396abb63973cdf5a38880ec649d2c"
+    },
+    {
+      "seq": 25,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003041348",
+      "timestamp": "2026-06-01T08:30:00.000Z",
+      "payload": {
+        "address": "2146 42ND AVE, SAN FRANCISCO, CA 94116",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "c0e72c23e1f3276d0c22c2912e20e258c63396abb63973cdf5a38880ec649d2c",
+      "hash": "deb4bc308b557f133cd1eb1bdfabc7c2cf1e63f020cc6a59f57f128ba700a22c"
+    },
+    {
+      "seq": 26,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003041348",
+      "timestamp": "2026-06-01T08:31:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 17,
+          "tier2Almost": 3,
+          "tier3Other": 29,
+          "withinRadius": 17
+        },
+        "cert_only_max": 85,
+        "top_score": 84.2
+      },
+      "prev_hash": "deb4bc308b557f133cd1eb1bdfabc7c2cf1e63f020cc6a59f57f128ba700a22c",
+      "hash": "5995beda54c2b48363aec6c36a38a957e3031a61f625895e4abd639788fefaa5"
+    },
+    {
+      "seq": 27,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003041348",
+      "timestamp": "2026-06-01T08:32:00.000Z",
+      "payload": {
+        "vendor_id": "v_s_h_concrete_construction",
+        "vendor_name": "S&H Concrete Construction",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "5995beda54c2b48363aec6c36a38a957e3031a61f625895e4abd639788fefaa5",
+      "hash": "94b8b2811e75480cf1662449f4567ee770f7203a84ea8c3fe5250b77b43079a9"
+    },
+    {
+      "seq": 28,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003041348",
+      "timestamp": "2026-06-01T08:33:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-749721",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "94b8b2811e75480cf1662449f4567ee770f7203a84ea8c3fe5250b77b43079a9",
+      "hash": "d13b63979e45254ef996488484387fe054aef3715b96b92a91ca21cd6aa7715e"
+    },
+    {
+      "seq": 29,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003041348",
+      "timestamp": "2026-06-01T08:34:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "d13b63979e45254ef996488484387fe054aef3715b96b92a91ca21cd6aa7715e",
+      "hash": "bbd58bcc2f32b022645c00844bd68b5772e7b15c686a228d4f0a14835945f40f"
+    },
+    {
+      "seq": 30,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003041357",
+      "timestamp": "2026-06-01T08:36:00.000Z",
+      "payload": {
+        "address": "1822 42ND AVE, SAN FRANCISCO, CA 94122",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "bbd58bcc2f32b022645c00844bd68b5772e7b15c686a228d4f0a14835945f40f",
+      "hash": "175592c039d6914c6698916dcc65a1b64d14ba02bb3abf390d638aca7232f6f9"
+    },
+    {
+      "seq": 31,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003041357",
+      "timestamp": "2026-06-01T08:37:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 17,
+          "tier2Almost": 3,
+          "tier3Other": 30,
+          "withinRadius": 17
+        },
+        "cert_only_max": 85,
+        "top_score": 84.8
+      },
+      "prev_hash": "175592c039d6914c6698916dcc65a1b64d14ba02bb3abf390d638aca7232f6f9",
+      "hash": "8c76e4631bf21cd502d1b29c9f89f403fa3b43ee43c78a26623e35d63aa9bcf3"
+    },
+    {
+      "seq": 32,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003041357",
+      "timestamp": "2026-06-01T08:38:00.000Z",
+      "payload": {
+        "vendor_id": "v_s_h_concrete_construction",
+        "vendor_name": "S&H Concrete Construction",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "8c76e4631bf21cd502d1b29c9f89f403fa3b43ee43c78a26623e35d63aa9bcf3",
+      "hash": "2dac488f8e8001e9cbdb8417f0c0dd4319df2b0242bad906875d8dec04aaec45"
+    },
+    {
+      "seq": 33,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003041357",
+      "timestamp": "2026-06-01T08:39:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-749751",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "2dac488f8e8001e9cbdb8417f0c0dd4319df2b0242bad906875d8dec04aaec45",
+      "hash": "5a08d9bd4502f174a2aace5f355cdd84ce1be17d3e432299dc27d94410e4af65"
+    },
+    {
+      "seq": 34,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003041357",
+      "timestamp": "2026-06-01T08:40:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "5a08d9bd4502f174a2aace5f355cdd84ce1be17d3e432299dc27d94410e4af65",
+      "hash": "b02a9f8e87ccb24bb5752767847bcfb9651cea4b11e0ebd1a71a8d2ad4e442af"
+    },
+    {
+      "seq": 35,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003041378",
+      "timestamp": "2026-06-01T08:42:00.000Z",
+      "payload": {
+        "address": "1546 42ND AVE, SAN FRANCISCO, CA 94122",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "b02a9f8e87ccb24bb5752767847bcfb9651cea4b11e0ebd1a71a8d2ad4e442af",
+      "hash": "722870b6c8d1a6b0b35e16186b407b7bbd53a7718ccadcaa0e2b070e0a130249"
+    },
+    {
+      "seq": 36,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003041378",
+      "timestamp": "2026-06-01T08:43:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 17,
+          "tier2Almost": 3,
+          "tier3Other": 31,
+          "withinRadius": 17
+        },
+        "cert_only_max": 85,
+        "top_score": 85
+      },
+      "prev_hash": "722870b6c8d1a6b0b35e16186b407b7bbd53a7718ccadcaa0e2b070e0a130249",
+      "hash": "d00c9cf74d72cbc1a460e99f8e3a8ad4ec6429661a413d762640716ed531074b"
+    },
+    {
+      "seq": 37,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003041378",
+      "timestamp": "2026-06-01T08:44:00.000Z",
+      "payload": {
+        "vendor_id": "v_s_h_concrete_construction",
+        "vendor_name": "S&H Concrete Construction",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "d00c9cf74d72cbc1a460e99f8e3a8ad4ec6429661a413d762640716ed531074b",
+      "hash": "373cfe0f46a204e8a55ec2e13678c5eaafb03c6688ada57ca27493305c0bdbd2"
+    },
+    {
+      "seq": 38,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003041378",
+      "timestamp": "2026-06-01T08:45:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-749814",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "373cfe0f46a204e8a55ec2e13678c5eaafb03c6688ada57ca27493305c0bdbd2",
+      "hash": "5018f103873e2988d23436fdf52c17c862960e5cac274565580eb817d8cc07df"
+    },
+    {
+      "seq": 39,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003041378",
+      "timestamp": "2026-06-01T08:46:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "5018f103873e2988d23436fdf52c17c862960e5cac274565580eb817d8cc07df",
+      "hash": "5f008f03bb93f5486bb1774102f1c532020df11e5872a32ece375a8460be6e63"
+    },
+    {
+      "seq": 40,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003041423",
+      "timestamp": "2026-06-01T08:48:00.000Z",
+      "payload": {
+        "address": "1751 42ND AVE, SAN FRANCISCO, CA 94122",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "5f008f03bb93f5486bb1774102f1c532020df11e5872a32ece375a8460be6e63",
+      "hash": "b9ced695b98525886d8f928803d5f9f8b6d9e73cca61d00eb333944e0e16f715"
+    },
+    {
+      "seq": 41,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003041423",
+      "timestamp": "2026-06-01T08:49:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 17,
+          "tier2Almost": 3,
+          "tier3Other": 30,
+          "withinRadius": 17
+        },
+        "cert_only_max": 85,
+        "top_score": 84.9
+      },
+      "prev_hash": "b9ced695b98525886d8f928803d5f9f8b6d9e73cca61d00eb333944e0e16f715",
+      "hash": "20f71ecaf73286cd680453fa20bffb92f782dd79c38fb6cf665e7eda28ddbec6"
+    },
+    {
+      "seq": 42,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003041423",
+      "timestamp": "2026-06-01T08:50:00.000Z",
+      "payload": {
+        "vendor_id": "v_s_h_concrete_construction",
+        "vendor_name": "S&H Concrete Construction",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "20f71ecaf73286cd680453fa20bffb92f782dd79c38fb6cf665e7eda28ddbec6",
+      "hash": "8733936544e57e3dd396151d79abf3e82b76f781357023a875a3d2db2a4b00e5"
+    },
+    {
+      "seq": 43,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003041423",
+      "timestamp": "2026-06-01T08:51:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-750615",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "8733936544e57e3dd396151d79abf3e82b76f781357023a875a3d2db2a4b00e5",
+      "hash": "266155b79f95f977c63348ece6039b079e28511519c0ca08a21b752048b9793a"
+    },
+    {
+      "seq": 44,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003041423",
+      "timestamp": "2026-06-01T08:52:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "266155b79f95f977c63348ece6039b079e28511519c0ca08a21b752048b9793a",
+      "hash": "dda63a60502f506bc7dd1d36091bb552cfc1dcdc90710baf28f23b2f693a49d9"
+    },
+    {
+      "seq": 45,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003041425",
+      "timestamp": "2026-06-01T08:54:00.000Z",
+      "payload": {
+        "address": "1787 42ND AVE, SAN FRANCISCO, CA 94122",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "dda63a60502f506bc7dd1d36091bb552cfc1dcdc90710baf28f23b2f693a49d9",
+      "hash": "68c0f324ea049b7c13a665c3b88c78f29d26591423a3fa0a0250660d70e583cd"
+    },
+    {
+      "seq": 46,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003041425",
+      "timestamp": "2026-06-01T08:55:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 17,
+          "tier2Almost": 3,
+          "tier3Other": 30,
+          "withinRadius": 17
+        },
+        "cert_only_max": 85,
+        "top_score": 84.9
+      },
+      "prev_hash": "68c0f324ea049b7c13a665c3b88c78f29d26591423a3fa0a0250660d70e583cd",
+      "hash": "f6cc20bd87546388c5b518cda0a9fcbfe1ec834dfbe52acea389d7956f019a75"
+    },
+    {
+      "seq": 47,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003041425",
+      "timestamp": "2026-06-01T08:56:00.000Z",
+      "payload": {
+        "vendor_id": "v_s_h_concrete_construction",
+        "vendor_name": "S&H Concrete Construction",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "f6cc20bd87546388c5b518cda0a9fcbfe1ec834dfbe52acea389d7956f019a75",
+      "hash": "894cf752b3534d0e85966fc15cea2287f894f00cf928c928bfb4c2b9a0bff59f"
+    },
+    {
+      "seq": 48,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003041425",
+      "timestamp": "2026-06-01T08:57:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-750617",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "894cf752b3534d0e85966fc15cea2287f894f00cf928c928bfb4c2b9a0bff59f",
+      "hash": "87101c2c526467c73db088ddb590637061f36fd6e33b97d033eaca6b772d3374"
+    },
+    {
+      "seq": 49,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003041425",
+      "timestamp": "2026-06-01T08:58:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "87101c2c526467c73db088ddb590637061f36fd6e33b97d033eaca6b772d3374",
+      "hash": "db16b2f04a834b52da29dc256a7a648e276415b7486eded61c9c06088cb0201f"
+    },
+    {
+      "seq": 50,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003041432",
+      "timestamp": "2026-06-01T09:00:00.000Z",
+      "payload": {
+        "address": "1867 42ND AVE, SAN FRANCISCO, CA 94122",
+        "subtype": "sidewalk_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "db16b2f04a834b52da29dc256a7a648e276415b7486eded61c9c06088cb0201f",
+      "hash": "1aaeea0654bcf59e0b6fb2b2e6539650fe5bac62b609c249a6df01ab2b82ea50"
+    },
+    {
+      "seq": 51,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003041432",
+      "timestamp": "2026-06-01T09:01:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 17,
+          "tier2Almost": 3,
+          "tier3Other": 30,
+          "withinRadius": 17
+        },
+        "cert_only_max": 85,
+        "top_score": 84.8
+      },
+      "prev_hash": "1aaeea0654bcf59e0b6fb2b2e6539650fe5bac62b609c249a6df01ab2b82ea50",
+      "hash": "13900674afdaf9d55e4b49426ebf47a175e551d28dc7286fc9c71aeb2b188f1b"
+    },
+    {
+      "seq": 52,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003041432",
+      "timestamp": "2026-06-01T09:02:00.000Z",
+      "payload": {
+        "vendor_id": "v_s_h_concrete_construction",
+        "vendor_name": "S&H Concrete Construction",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "13900674afdaf9d55e4b49426ebf47a175e551d28dc7286fc9c71aeb2b188f1b",
+      "hash": "1715aa70e66916ee36b0bf5b4654777a0095fff77ef5cde0a89f91fcc884fdb6"
+    },
+    {
+      "seq": 53,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003041432",
+      "timestamp": "2026-06-01T09:03:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-750645",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "1715aa70e66916ee36b0bf5b4654777a0095fff77ef5cde0a89f91fcc884fdb6",
+      "hash": "2ef9d6b3146a06d18830a32c3b2d758e2c7d44663b8680a20a33f5c69813e202"
+    },
+    {
+      "seq": 54,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003041432",
+      "timestamp": "2026-06-01T09:04:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "2ef9d6b3146a06d18830a32c3b2d758e2c7d44663b8680a20a33f5c69813e202",
+      "hash": "8f3ae4f2bc7f8f71af9b17b5905fafe539cd0264ce9bd37a4a65e5af7a1dacc5"
+    },
+    {
+      "seq": 55,
+      "event_type": "sandbox.case.intake",
+      "complaint_id": "SR-101003042532",
+      "timestamp": "2026-06-01T09:06:00.000Z",
+      "payload": {
+        "address": "2198 INGALLS ST, SAN FRANCISCO, CA 94124",
+        "subtype": "pavement_defect",
+        "severity": "emergency"
+      },
+      "prev_hash": "8f3ae4f2bc7f8f71af9b17b5905fafe539cd0264ce9bd37a4a65e5af7a1dacc5",
+      "hash": "96e7d700fba983b387658aea9e26d6b79ded619c3f1a398037e6d6de8eeaa955"
+    },
+    {
+      "seq": 56,
+      "event_type": "sandbox.case.scored",
+      "complaint_id": "SR-101003042532",
+      "timestamp": "2026-06-01T09:07:00.000Z",
+      "payload": {
+        "pool_used": "eligible-only",
+        "pool_stats": {
+          "tier1Eligible": 18,
+          "tier2Almost": 3,
+          "tier3Other": 32,
+          "withinRadius": 18
+        },
+        "cert_only_max": 85,
+        "top_score": 84.7
+      },
+      "prev_hash": "96e7d700fba983b387658aea9e26d6b79ded619c3f1a398037e6d6de8eeaa955",
+      "hash": "060c9155bc58c6f461cb644e666b0a634001696d5883554dd10f0ed815d706db"
+    },
+    {
+      "seq": 57,
+      "event_type": "sandbox.case.vendor_selected",
+      "complaint_id": "SR-101003042532",
+      "timestamp": "2026-06-01T09:08:00.000Z",
+      "payload": {
+        "vendor_id": "v_associated_builders_abei",
+        "vendor_name": "Associated Builders (ABEI)",
+        "badges": [
+          "Micro-LBE",
+          "CMD Certified",
+          "Set-Aside Eligible",
+          "Overlooked",
+          "Same district"
+        ],
+        "eligibility_violation": false
+      },
+      "prev_hash": "060c9155bc58c6f461cb644e666b0a634001696d5883554dd10f0ed815d706db",
+      "hash": "3af98c8353b3c4e2b645e325bf80a05d035ff96584ee387233f21de0453092ec"
+    },
+    {
+      "seq": 58,
+      "event_type": "sandbox.case.workorder_issued",
+      "complaint_id": "SR-101003042532",
+      "timestamp": "2026-06-01T09:09:00.000Z",
+      "payload": {
+        "defnum": "DPW-SIRP-2025-781397",
+        "generated_by": "synth-workorder.mjs (deterministic, no LLM)"
+      },
+      "prev_hash": "3af98c8353b3c4e2b645e325bf80a05d035ff96584ee387233f21de0453092ec",
+      "hash": "84f813c71e1cdc3cb9c6ebfdbde94f61b4d1a30aec0b547f2643e57cc738792a"
+    },
+    {
+      "seq": 59,
+      "event_type": "sandbox.case.memo_issued",
+      "complaint_id": "SR-101003042532",
+      "timestamp": "2026-06-01T09:10:00.000Z",
+      "payload": {
+        "method": "browser:jsPDF (rendered on-demand in dashboard)",
+        "status": "issued"
+      },
+      "prev_hash": "84f813c71e1cdc3cb9c6ebfdbde94f61b4d1a30aec0b547f2643e57cc738792a",
+      "hash": "d99cea9e1fea781a568ebbaf284264dab8aecf3419388122f55a7ba0c1a55cb8"
+    }
+  ]
+}

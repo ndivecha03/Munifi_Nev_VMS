@@ -1,0 +1,1205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Work Order Status — NDOT / NV ESB Dispatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="dispatch.css?v=20260603b">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .status-body {
+      min-height: 100vh;
+      background: var(--console-bg);
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 14px;
+      color: var(--console-ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .status-header {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--console-surface);
+      border-bottom: 1px solid var(--console-border);
+      padding: 12px 24px;
+      box-shadow: 0 1px 3px rgba(10,31,61,.04);
+    }
+    .status-header-left { display: flex; align-items: center; gap: 12px; }
+    .status-back {
+      font-size: 13px; color: var(--console-accent); font-weight: 500;
+      text-decoration: none; display: flex; align-items: center; gap: 4px;
+    }
+    .status-back:hover { text-decoration: underline; }
+    .status-header-title {
+      font-weight: 700; font-size: 15px; color: var(--console-ink);
+      letter-spacing: -.01em;
+    }
+
+    /* ── Page layout ── */
+    .status-page {
+      max-width: 860px;
+      margin: 32px auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Case banner ── */
+    .case-banner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .case-banner-left { display: flex; align-items: center; gap: 14px; }
+    .case-number {
+      font-size: 22px; font-weight: 700; color: var(--console-ink);
+      letter-spacing: -.02em;
+    }
+    .case-status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px;
+    }
+    .case-status-badge.dispatched {
+      background: #e2f2e7; color: #2c8a4a;
+    }
+    .case-status-badge.open {
+      background: var(--console-pri-high-soft); color: var(--console-pri-high);
+    }
+    .case-status-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%; background: currentColor;
+    }
+    .priority-tag {
+      font-size: 12px; font-weight: 600; padding: 3px 10px;
+      border-radius: 12px; letter-spacing: .02em;
+    }
+    .priority-tag.high   { background: var(--console-pri-high-soft); color: var(--console-pri-high); }
+    .priority-tag.medium { background: var(--console-pri-med-soft);  color: var(--console-pri-med); }
+    .priority-tag.low    { background: var(--console-pri-low-soft);  color: var(--console-pri-low); }
+
+    /* ── Two-column layout ── */
+    .status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 600px) { .status-grid { grid-template-columns: 1fr; } }
+
+    /* ── Cards ── */
+    .status-card {
+      background: var(--console-surface);
+      border: 1px solid var(--console-border);
+      border-radius: 10px;
+      padding: 20px 24px;
+    }
+    .card-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--console-ink-mute);
+      margin-bottom: 14px;
+    }
+    .card-primary {
+      font-size: 16px; font-weight: 600; color: var(--console-ink);
+      line-height: 1.3; margin-bottom: 6px;
+    }
+    .card-secondary {
+      font-size: 13px; color: var(--console-ink-soft);
+      margin-bottom: 4px; line-height: 1.5;
+    }
+    .card-secondary strong { color: var(--console-ink); font-weight: 600; }
+    .card-meta {
+      margin-top: 10px;
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .meta-chip {
+      font-size: 11px; font-weight: 600; letter-spacing: .02em;
+      padding: 3px 9px; border-radius: 10px;
+      background: var(--console-accent-soft); color: var(--console-accent);
+    }
+    .meta-chip.neutral {
+      background: #f0f2f5; color: var(--console-ink-soft);
+    }
+
+    /* ── Timeline ── */
+    .timeline-card { margin-bottom: 16px; }
+    .timeline-list { list-style: none; padding: 0; margin: 0; position: relative; }
+    .timeline-list::before {
+      content: '';
+      position: absolute; left: 10px; top: 4px; bottom: 4px;
+      width: 2px; background: var(--console-border);
+    }
+    .timeline-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 8px 0; position: relative;
+    }
+    .tl-dot {
+      flex-shrink: 0;
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      border: 2px solid var(--console-border);
+      background: var(--console-surface);
+      color: var(--console-ink-mute);
+      position: relative; z-index: 1;
+    }
+    .tl-dot.done {
+      background: var(--console-accent); border-color: var(--console-accent);
+      color: #fff;
+    }
+    .tl-dot.active {
+      background: #fff; border-color: var(--console-accent); color: var(--console-accent);
+      box-shadow: 0 0 0 3px var(--console-accent-soft);
+    }
+    .tl-content { flex: 1; padding-top: 2px; }
+    .tl-step {
+      font-weight: 600; font-size: 13px; color: var(--console-ink);
+      line-height: 1.3;
+    }
+    .tl-step.muted { color: var(--console-ink-mute); font-weight: 500; }
+    .tl-date {
+      font-size: 12px; color: var(--console-ink-mute); margin-top: 2px;
+    }
+
+    /* ── Actions ── */
+    .action-row {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .action-btn {
+      flex: 1; min-width: 180px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 20px; border-radius: 8px; border: none; cursor: pointer;
+      font-family: Inter, sans-serif; font-size: 14px; font-weight: 600;
+      transition: opacity .15s, transform .1s;
+      text-decoration: none;
+    }
+    .action-btn:active { transform: scale(.98); }
+    .action-btn.followup {
+      background: var(--console-accent-soft); color: var(--console-accent);
+      border: 1px solid #c2d9ef;
+    }
+    .action-btn.followup:hover { background: #d6eaf8; }
+    .action-btn.payment {
+      background: var(--console-accent); color: #fff;
+    }
+    .action-btn.payment:hover { opacity: .9; }
+    .action-btn.payment:disabled {
+      background: #c8ced6; cursor: not-allowed; opacity: .7;
+    }
+
+    /* ── Not found state ── */
+    .not-found {
+      text-align: center; padding: 80px 24px;
+      color: var(--console-ink-soft);
+    }
+    .not-found h2 { font-size: 20px; color: var(--console-ink); margin-bottom: 10px; }
+
+    /* ── Payment modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,31,61,.45);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--console-surface);
+      border-radius: 14px; padding: 32px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 20px 60px rgba(10,31,61,.2);
+    }
+    .modal-title {
+      font-size: 18px; font-weight: 700; color: var(--console-ink);
+      margin-bottom: 20px; letter-spacing: -.02em;
+    }
+    .modal-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 8px 0; border-bottom: 1px solid var(--console-border);
+      font-size: 13px;
+    }
+    .modal-row:last-of-type { border-bottom: none; }
+    .modal-row-label { color: var(--console-ink-soft); }
+    .modal-row-value { font-weight: 600; color: var(--console-ink); }
+    .modal-amount {
+      font-size: 28px; font-weight: 800; color: var(--console-ink);
+      letter-spacing: -.03em; text-align: center;
+      margin: 20px 0 8px; font-variant-numeric: tabular-nums;
+    }
+    .modal-amount-sub {
+      text-align: center; font-size: 12px; color: var(--console-ink-mute);
+      margin-bottom: 24px;
+    }
+    .modal-method {
+      display: flex; gap: 10px; margin-bottom: 24px;
+    }
+    .method-opt {
+      flex: 1; padding: 10px 14px; border-radius: 8px; cursor: pointer;
+      border: 2px solid var(--console-border); font-size: 13px; font-weight: 500;
+      text-align: center; background: var(--console-surface);
+      transition: border-color .15s, background .15s;
+    }
+    .method-opt.selected {
+      border-color: var(--console-accent); background: var(--console-accent-soft);
+      color: var(--console-accent); font-weight: 600;
+    }
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-cancel {
+      flex: 1; padding: 11px; border-radius: 8px; border: 1px solid var(--console-border);
+      background: none; font-size: 14px; font-weight: 600; cursor: pointer;
+      color: var(--console-ink-soft); font-family: Inter, sans-serif;
+    }
+    .modal-cancel:hover { background: var(--console-bg); }
+    .modal-release {
+      flex: 2; padding: 11px; border-radius: 8px; border: none;
+      background: var(--console-accent); color: #fff;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: Inter, sans-serif;
+    }
+    .modal-release:hover { opacity: .9; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--console-ink); color: #fff;
+      padding: 12px 22px; border-radius: 8px; font-size: 14px; font-weight: 500;
+      opacity: 0; transition: opacity .25s, transform .25s;
+      pointer-events: none; z-index: 300;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ════════════════════════════════════════════════════════════════════
+       Audit-list view (when no ?id is provided)
+       ════════════════════════════════════════════════════════════════════ */
+    .audit-shell { max-width: 1400px; margin: 0 auto; padding: 28px 36px 48px; }
+    .audit-toolbar {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 24px; margin-bottom: 20px;
+    }
+    .audit-toolbar-left { min-width: 0; }
+    .audit-title {
+      margin: 0 0 4px;
+      font: 700 22px/1 Inter, sans-serif;
+      color: var(--console-ink); letter-spacing: -.01em;
+    }
+    .audit-subtitle {
+      margin: 0; font-size: 13px; color: var(--console-ink-mute); max-width: 60ch;
+    }
+    .audit-toolbar-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    .btn-audit-back, .btn-audit-csv {
+      display: inline-flex; align-items: center;
+      padding: 8px 14px; border-radius: 6px;
+      font: 600 13px/1 Inter, sans-serif;
+      cursor: pointer;
+      border: 1px solid var(--console-border);
+      text-decoration: none;
+      transition: background .12s, border-color .12s;
+    }
+    .btn-audit-back { background: var(--console-surface); color: var(--console-ink-soft); }
+    .btn-audit-back:hover { border-color: var(--console-ink-soft); color: var(--console-ink); }
+    .btn-audit-csv { background: var(--console-accent); color: #fff; border-color: var(--console-accent); }
+    .btn-audit-csv:hover:not([disabled]) { background: #005a8a; }
+    .btn-audit-csv[disabled] { opacity: .4; cursor: not-allowed; }
+
+    .audit-summary-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+      margin-bottom: 24px;
+    }
+    .audit-stat {
+      background: var(--console-surface);
+      border: 1px solid var(--console-border);
+      border-radius: 10px; padding: 16px 18px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .audit-stat-num {
+      font: 700 26px/1 Inter, sans-serif;
+      color: var(--console-accent);
+      letter-spacing: -.01em;
+      font-variant-numeric: tabular-nums;
+    }
+    .audit-stat-label { font-size: 12px; color: var(--console-ink-soft); line-height: 1.4; }
+
+    .audit-table-wrapper {
+      background: var(--console-surface);
+      border: 1px solid var(--console-border);
+      border-radius: 10px; overflow: auto;
+    }
+    .audit-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .audit-table th, .audit-table td {
+      padding: 10px 14px; text-align: left;
+      border-bottom: 1px solid var(--console-border);
+      vertical-align: middle;
+    }
+    .audit-table tbody tr:last-child td { border-bottom: none; }
+    .audit-table thead th {
+      font: 600 11px/1 Inter, sans-serif;
+      letter-spacing: .04em; text-transform: uppercase;
+      color: var(--console-ink-mute);
+      background: var(--console-bg);
+      border-bottom: 1px solid var(--console-border-strong);
+      white-space: nowrap;
+    }
+    .audit-table tbody tr:hover { background: var(--console-accent-soft); }
+    .audit-table tbody td { color: var(--console-ink); }
+    .cell-time { white-space: nowrap; color: var(--console-ink-soft); font-variant-numeric: tabular-nums; }
+    .cell-id { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .cell-address { max-width: 220px; }
+    .cell-vendor { font-weight: 500; }
+    .cell-num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+
+    .audit-tier {
+      display: inline-flex; align-items: center;
+      font: 600 10px/1 Inter, sans-serif;
+      letter-spacing: .03em;
+      padding: 3px 7px; border-radius: 999px;
+      white-space: nowrap;
+    }
+    .audit-tier-microlbe { background: #e2f2e7; color: #1f6a37; }
+    .audit-tier-smalllbe { background: #fdf3d8; color: #8a5a0d; }
+    .audit-tier-sbalbe   { background: #e6f0f8; color: #0c4a6e; }
+    .audit-tier-lbe      { background: var(--console-bg); color: var(--console-ink-soft); }
+
+    .audit-policy {
+      display: inline-flex; align-items: center;
+      font: 600 11px/1 Inter, sans-serif;
+      padding: 3px 8px; border-radius: 999px;
+      white-space: nowrap;
+    }
+    .audit-policy.policy-14b { background: var(--console-accent-soft); color: var(--console-accent); }
+    .audit-policy.policy-bid { background: var(--console-bg); color: var(--console-ink-soft); }
+
+    .audit-step {
+      display: inline-flex; align-items: center;
+      font: 600 11px/1 Inter, sans-serif;
+      padding: 3px 8px; border-radius: 999px;
+      white-space: nowrap;
+    }
+    .audit-step-completed   { background: #e2f2e7; color: #1f6a37; }
+    .audit-step-inspection  { background: #e6f0f8; color: #0c4a6e; }
+    .audit-step-in-progress { background: #fdf3d8; color: #8a5a0d; }
+    .audit-step-confirmed   { background: #f3e8ff; color: #6b21a8; }
+    .audit-step-dispatched  { background: var(--console-bg); color: var(--console-ink-soft); }
+
+    .empty-state {
+      background: var(--console-surface);
+      border: 1px solid var(--console-border);
+      border-radius: 10px;
+      padding: 56px 48px; text-align: center;
+      color: var(--console-ink-soft);
+    }
+    .empty-state h3 {
+      margin: 0 0 12px;
+      font: 700 18px/1 Inter, sans-serif;
+      color: var(--console-ink);
+    }
+    .empty-state p { margin: 0 0 8px; font-size: 13px; line-height: 1.55; }
+    .empty-state a { color: var(--console-accent); font-weight: 600; text-decoration: none; }
+    .empty-state a:hover { text-decoration: underline; }
+
+    /* ── Competitive-quote bid comparison ── */
+    .bid-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 4px 0 8px; }
+    .bid-table th, .bid-table td {
+      padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--console-border); vertical-align: middle;
+    }
+    .bid-table thead th {
+      font: 600 10px/1 Inter, sans-serif; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--console-ink-mute); background: var(--console-bg);
+    }
+    .bid-table tbody tr.is-award { background: #e2f2e7; }
+    .bid-table .cell-amt { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+    .bid-lowest { display: inline-block; font: 600 9px/1 Inter, sans-serif; letter-spacing: .04em;
+      padding: 2px 6px; border-radius: 999px; background: #e6f0f8; color: #0c4a6e; margin-left: 6px; }
+    .bid-status { display: inline-flex; font: 600 10px/1 Inter, sans-serif; padding: 3px 7px; border-radius: 999px; }
+    .bid-status.quoted { background: #e2f2e7; color: #1f6a37; }
+    .bid-status.requested { background: #fdf3d8; color: #8a5a0d; }
+    .bid-status.declined { background: var(--console-bg); color: var(--console-ink-mute); }
+    .bid-status.awarded { background: #d4edda; color: #155724; }
+    .bid-status.not_awarded { background: var(--console-bg); color: var(--console-ink-soft); }
+
+    .just-form { border-top: 1px solid var(--console-border); margin-top: 14px; padding-top: 16px; }
+    .just-form label { display: block; font: 600 12px/1.3 Inter, sans-serif; color: var(--console-ink); margin: 12px 0 6px; }
+    .just-form select, .just-form textarea {
+      width: 100%; border: 1px solid var(--console-border); border-radius: 8px; padding: 9px 11px;
+      font: 13px/1.4 Inter, sans-serif; color: var(--console-ink); background: var(--console-surface); resize: vertical;
+    }
+    .just-form textarea { min-height: 56px; }
+    .just-loser { margin: 8px 0; padding: 10px 12px; background: var(--console-bg); border-radius: 8px; }
+    .just-loser .name { font-weight: 600; font-size: 12px; margin-bottom: 6px; }
+    .just-actions { display: flex; gap: 10px; margin-top: 16px; }
+    .just-btn { flex: 1; padding: 12px; border-radius: 8px; border: none; cursor: pointer;
+      font: 700 14px/1 Inter, sans-serif; background: var(--console-accent); color: #fff; }
+    .just-btn:disabled { background: #c8ced6; cursor: not-allowed; }
+    .just-note { font-size: 12px; color: var(--console-ink-mute); margin-top: 10px; line-height: 1.5; }
+    .award-recorded { background: #e2f2e7; border: 1px solid #b7ddc3; border-radius: 8px; padding: 14px 16px; margin-top: 12px; }
+    .award-recorded h4 { margin: 0 0 6px; font-size: 13px; color: #1f6a37; }
+    .award-recorded p { margin: 4px 0; font-size: 12px; color: var(--console-ink); line-height: 1.5; }
+
+    @media (max-width: 900px) {
+      .audit-summary-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .audit-shell { padding: 18px 14px 32px; }
+      .audit-toolbar { flex-direction: column; }
+      .audit-summary-row { grid-template-columns: 1fr; }
+      .audit-table { font-size: 12px; }
+      .audit-table th, .audit-table td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body class="status-body">
+
+  <!-- Header -->
+  <header class="status-header">
+    <div class="status-header-left">
+      <a class="status-back" href="index.html">← Console</a>
+      <span style="color:var(--console-border-strong)">|</span>
+      <span class="agency-mark">NDOT / NV Public Works</span>
+      <span class="status-header-title">Complaint Status</span>
+    </div>
+    <div style="font-size:13px;color:var(--console-ink-mute)" id="headerDate"></div>
+  </header>
+
+  <!-- Page body -->
+  <main class="status-page" id="statusPage">
+    <div class="not-found" id="loadingState">
+      <p>Loading…</p>
+    </div>
+  </main>
+
+  <!-- Payment modal -->
+  <div class="modal-overlay" id="paymentModal" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-title">Release Payment</div>
+      <div class="modal-amount" id="modalAmount">$75,000</div>
+      <div class="modal-amount-sub">Estimated work order value</div>
+      <div class="modal-row">
+        <span class="modal-row-label">Work order</span>
+        <span class="modal-row-value" id="modalComplaintId">—</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-row-label">Vendor</span>
+        <span class="modal-row-value" id="modalVendorName">—</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-row-label">Policy authority</span>
+        <span class="modal-row-value" id="modalPolicy">—</span>
+      </div>
+      <div style="margin:20px 0 8px;font-size:12px;font-weight:600;color:var(--console-ink-mute);text-transform:uppercase;letter-spacing:.06em">
+        Payment method
+      </div>
+      <div class="modal-method">
+        <div class="method-opt selected" id="methodEft" onclick="selectMethod('eft')">EFT (on file)</div>
+        <div class="method-opt" id="methodCheck" onclick="selectMethod('check')">City check</div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closePaymentModal()">Cancel</button>
+        <button class="modal-release" onclick="submitPayment()">Release Payment →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── Constants ──────────────────────────────────────────────────────────
+    const AUDIT_LOG_KEY = 'nvesb_dispatch_audit_log';
+    const QUEUE_URL     = './data/complaints.json';  // NDOT work orders (SeeClickFix + mock)
+    const VENDORS_URL   = './baked-vendors-v2.json';
+
+    const TIMELINE_STEPS = [
+      { key: 'reported',   label: 'Reported' },
+      { key: 'dispatched', label: 'Dispatched' },
+      { key: 'confirmed',  label: 'Vendor confirmed' },
+      { key: 'in_progress',label: 'Work in progress' },
+      { key: 'inspection', label: 'Inspection' },
+      { key: 'completed',  label: 'Completed' },
+    ];
+
+    // The steps that are "done" once a dispatch record exists.
+    // Further steps are advanced by the mock status buttons.
+    const DONE_ON_DISPATCH = new Set(['reported', 'dispatched']);
+
+    // ── URL param ──────────────────────────────────────────────────────────
+    const params      = new URLSearchParams(location.search);
+    const complaintId = params.get('id');
+
+    // ── Header date ────────────────────────────────────────────────────────
+    document.getElementById('headerDate').textContent = new Date().toLocaleDateString(
+      'en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }
+    );
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function fmt(n) {
+      return n == null ? '—' : Number(n).toLocaleString('en-US');
+    }
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric',
+      });
+    }
+    function fmtDateTime(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleString('en-US', {
+        month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
+      });
+    }
+    function escape(s) {
+      return String(s ?? '').replace(/[<>&"']/g, c =>
+        ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;', "'":'&#39;' }[c])
+      );
+    }
+
+    // ── Audit log helpers ──────────────────────────────────────────────────
+    function loadAuditLog() {
+      try { return JSON.parse(localStorage.getItem(AUDIT_LOG_KEY) || '[]'); }
+      catch { return []; }
+    }
+    function saveAuditLog(log) {
+      try { localStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(log)); } catch {}
+    }
+
+    function getDispatchRecord(id) {
+      return loadAuditLog().find(r => r.complaint_id === id) || null;
+    }
+    function getStatusOverrides(id) {
+      try {
+        return JSON.parse(localStorage.getItem(`nvesb_status_${id}`) || '{}');
+      } catch { return {}; }
+    }
+    function saveStatusOverride(id, key, value) {
+      const obj = getStatusOverrides(id);
+      obj[key] = value;
+      try { localStorage.setItem(`nvesb_status_${id}`, JSON.stringify(obj)); } catch {}
+    }
+
+    // ── Payment modal state ────────────────────────────────────────────────
+    let selectedPayMethod = 'eft';
+    function selectMethod(m) {
+      selectedPayMethod = m;
+      document.getElementById('methodEft').classList.toggle('selected', m === 'eft');
+      document.getElementById('methodCheck').classList.toggle('selected', m === 'check');
+    }
+    function openPaymentModal(record, complaint) {
+      document.getElementById('modalAmount').textContent =
+        '$' + fmt(complaint?.estimatedCost ?? record?.work_order_estimate);
+      document.getElementById('modalComplaintId').textContent = record.complaint_id;
+      document.getElementById('modalVendorName').textContent = record.vendor_name;
+      document.getElementById('modalPolicy').textContent =
+        record.policy_authority === 'NRS ESB.7' ? 'NRS 338.0117 ESB Set-Aside' : 'Competitive bid';
+      document.getElementById('paymentModal').classList.add('open');
+    }
+    function closePaymentModal() {
+      document.getElementById('paymentModal').classList.remove('open');
+    }
+    function submitPayment() {
+      closePaymentModal();
+      showToast('Payment request submitted — pending NDOT controller sign-off');
+    }
+
+    // ── Toast ──────────────────────────────────────────────────────────────
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3500);
+    }
+
+    // ── Audit-list view (when no ?id is provided) ─────────────────────────
+    function renderAuditList() {
+      const page = document.getElementById('statusPage');
+      const allRows = loadAuditLog().slice().sort(
+        (a, b) => new Date(b.dispatched_at) - new Date(a.dispatched_at)
+      );
+
+      // Summary stats
+      const totalCount = allRows.length;
+      const totalValue = allRows.reduce((s, r) => s + (r.work_order_estimate || 0), 0);
+      const lbeRows = allRows.filter(r => /lbe/i.test(r.vendor_lbe_tier || ''));
+      const lbeValue = lbeRows.reduce((s, r) => s + (r.work_order_estimate || 0), 0);
+      const microCount = allRows.filter(r => /micro/i.test(r.vendor_lbe_tier || '')).length;
+      const dollar = n => '$' + (n || 0).toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+      // Per-row completion status (read from nvesb_status_<id> overrides)
+      function statusForRow(r) {
+        let overrides = {};
+        try { overrides = JSON.parse(localStorage.getItem(`nvesb_status_${r.complaint_id}`) || '{}'); } catch {}
+        if (overrides.currentStep === 'completed') return { label: 'Completed', cls: 'completed' };
+        if (overrides.currentStep === 'inspection') return { label: 'Inspection', cls: 'inspection' };
+        if (overrides.currentStep === 'in_progress') return { label: 'In progress', cls: 'in-progress' };
+        if (overrides.currentStep === 'confirmed') return { label: 'Confirmed', cls: 'confirmed' };
+        return { label: 'Dispatched', cls: 'dispatched' };
+      }
+
+      let tableHtml;
+      if (allRows.length === 0) {
+        tableHtml = `
+          <div class="empty-state">
+            <h3>No dispatches yet</h3>
+            <p>Once you dispatch a complaint from the
+              <a href="index.html">dispatch console</a>, it will appear here with
+              its timeline, follow-up actions, and payment authorization.</p>
+            <p style="margin-top:12px;font-size:13px;color:var(--console-ink-mute)">
+              This page is the combined audit log + per-complaint status view —
+              click any row in the table once you have dispatches.
+            </p>
+          </div>`;
+      } else {
+        const trs = allRows.map(r => {
+          const policyClass = r.policy_authority === '14B.7' ? 'policy-14b' : 'policy-bid';
+          const policyLabel = r.policy_authority === '14B.7' ? 'Ch. 14B §14B.7' : 'Competitive bid';
+          const tierCls = (r.vendor_lbe_tier || '').toLowerCase().replace(/[^a-z]/g, '');
+          const tierHtml = r.vendor_lbe_tier
+            ? `<span class="audit-tier audit-tier-${tierCls}">${escape(r.vendor_lbe_tier)}</span>`
+            : '<span style="color:var(--console-ink-mute);font-style:italic">—</span>';
+          const st = statusForRow(r);
+          return `
+            <tr onclick="location.href='status.html?id=${encodeURIComponent(r.complaint_id)}'"
+                style="cursor:pointer">
+              <td class="cell-time">${escape(fmtDateTime(r.dispatched_at))}</td>
+              <td class="cell-id">${escape(r.complaint_id)}</td>
+              <td class="cell-address">${escape(r.complaint_address || '—')}</td>
+              <td>${escape(r.complaint_district || '—')}</td>
+              <td class="cell-vendor">${escape(r.vendor_name || '—')}</td>
+              <td>${tierHtml}</td>
+              <td class="cell-num">${r.score != null ? Math.round(r.score) : '—'}</td>
+              <td class="cell-num">${dollar(r.work_order_estimate)}</td>
+              <td><span class="audit-policy ${policyClass}">${escape(policyLabel)}</span></td>
+              <td><span class="audit-step audit-step-${st.cls}">${st.label}</span></td>
+              <td>${escape(r.agent_id || '—')}</td>
+            </tr>`;
+        }).join('');
+        tableHtml = `
+          <div class="audit-table-wrapper">
+            <table class="audit-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th><th>Case ID</th><th>Address</th><th>District</th>
+                  <th>Vendor</th><th>ESB cert</th><th>Score</th><th>WO $</th>
+                  <th>Policy</th><th>Status</th><th>Agent</th>
+                </tr>
+              </thead>
+              <tbody>${trs}</tbody>
+            </table>
+            <p style="font-size:12px;color:var(--console-ink-mute);text-align:right;padding:8px 14px;margin:0">
+              Click any row to open that complaint's timeline + follow-up + payment view.
+            </p>
+          </div>`;
+      }
+
+      page.innerHTML = `
+        <div class="audit-shell">
+          <div class="audit-toolbar">
+            <div class="audit-toolbar-left">
+              <h2 class="audit-title">Dispatch lifecycle</h2>
+              <p class="audit-subtitle">
+                Every dispatch logged through the console — click into any row to see its
+                timeline, follow-up with the vendor, and authorize payment.
+              </p>
+            </div>
+            <div class="audit-toolbar-actions">
+              <a class="btn-audit-back" href="index.html">← Back to queue</a>
+              <button class="btn-audit-back" id="btnWatchdog" title="Refresh certs + run the Vendor Cert Watchdog now">⟳ Run cert watchdog</button>
+              <button class="btn-audit-csv" id="btnAuditCSV"${allRows.length === 0 ? ' disabled' : ''}>Export CSV</button>
+            </div>
+          </div>
+
+          <div class="audit-summary-row">
+            <div class="audit-stat">
+              <div class="audit-stat-num">${totalCount}</div>
+              <div class="audit-stat-label">Total dispatches</div>
+            </div>
+            <div class="audit-stat">
+              <div class="audit-stat-num">${dollar(totalValue)}</div>
+              <div class="audit-stat-label">Total work-order value</div>
+            </div>
+            <div class="audit-stat">
+              <div class="audit-stat-num">${dollar(lbeValue)}</div>
+              <div class="audit-stat-label">to ESB firms${totalValue ? ` (${(lbeValue/totalValue*100).toFixed(0)}%)` : ''}</div>
+            </div>
+            <div class="audit-stat">
+              <div class="audit-stat-num">${microCount}</div>
+              <div class="audit-stat-label">ESB set-aside (NRS 338.0117)${totalCount ? ` (${(microCount/totalCount*100).toFixed(0)}%)` : ''}</div>
+            </div>
+          </div>
+
+          ${tableHtml}
+        </div>`;
+
+      // Wire CSV export
+      const btn = document.getElementById('btnAuditCSV');
+      if (btn) btn.addEventListener('click', () => exportAuditCSV(allRows));
+      // Wire on-command Vendor Cert Watchdog
+      const wbtn = document.getElementById('btnWatchdog');
+      if (wbtn) wbtn.addEventListener('click', runWatchdog);
+    }
+
+    // ── On-command Vendor Cert Watchdog ────────────────────────────────────
+    // Hits the live /api/v2/watchdog endpoint. notify=true composes vendor
+    // expiry notices, which stay suppressed until AUTONOMOUS_SEND=true.
+    async function runWatchdog() {
+      const wbtn = document.getElementById('btnWatchdog');
+      const orig = wbtn ? wbtn.textContent : '';
+      if (wbtn) { wbtn.disabled = true; wbtn.textContent = 'Running…'; }
+      showToast('Running Vendor Cert Watchdog…');
+      try {
+        const res = await fetch('/api/v2/watchdog?notify=true', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+        });
+        const d = await res.json();
+        const b = d.buckets || {};
+        const n = d.notifications;
+        let msg = `Watchdog: ${d.total ?? 0} at-risk · EXPIRED ${b.EXPIRED || 0} · ≤14d ${b['2WKS'] || 0} · ≤30d ${b['30D'] || 0} · ≤60d ${b['60D'] || 0}`;
+        if (n) msg += ` — ${n.suppressed || 0} notice(s) ${n.sent ? `(${n.sent} sent)` : 'queued (suppressed)'}`;
+        showToast(msg);
+      } catch (e) {
+        showToast('Watchdog failed: ' + (e.message || e));
+      } finally {
+        if (wbtn) { wbtn.disabled = false; wbtn.textContent = orig; }
+      }
+    }
+
+    function exportAuditCSV(rows) {
+      const headers = ['Timestamp','Case ID','Address','District','Vendor','ESB Cert #','LBE Tier','Score','Work Order $','Policy Authority','Agent'];
+      const escCsv = v => {
+        const s = v == null ? '' : String(v);
+        if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+        return s;
+      };
+      const lines = [headers.join(',')];
+      for (const r of rows) {
+        lines.push([
+          r.dispatched_at, r.complaint_id, r.complaint_address, r.complaint_district,
+          r.vendor_name, r.vendor_cmd_cert, r.vendor_lbe_tier,
+          r.score != null ? Math.round(r.score) : '',
+          r.work_order_estimate, r.policy_authority, r.agent_id,
+        ].map(escCsv).join(','));
+      }
+      const blob = new Blob([lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nvesb_dispatch_audit_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    //  Competitive quotes — bid comparison + written award justification
+    // ════════════════════════════════════════════════════════════════════
+    let QUOTE_STATE = null;  // { complaint_id, quotes, award, complaint, record }
+
+    function money(n) { return n == null ? '—' : '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }); }
+
+    async function loadQuotes(complaintId, complaint, record) {
+      const card = document.getElementById('quotesCard');
+      const body = document.getElementById('quotesBody');
+      if (!card || !body) return;
+      let data;
+      try {
+        const res = await fetch('/api/quotes?complaint_id=' + encodeURIComponent(complaintId));
+        data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'failed');
+      } catch (e) {
+        // No quotes table / endpoint not live yet — keep the card hidden silently.
+        return;
+      }
+      if (!data.quotes || data.quotes.length === 0) return;  // not a multi-quote contract
+      QUOTE_STATE = { complaint_id: complaintId, ...data, complaint, record };
+      card.style.display = '';
+      renderQuotes();
+    }
+
+    function renderQuotes() {
+      const body = document.getElementById('quotesBody');
+      const { quotes, award } = QUOTE_STATE;
+      const quoted = quotes.filter(q => ['quoted', 'awarded', 'not_awarded'].includes(q.status));
+      const lowest = quoted.reduce((m, q) => (q.quote_amount != null && (m == null || q.quote_amount < m.quote_amount) ? q : m), null);
+      const decided = !!award;
+
+      const rows = quotes.map(q => {
+        const isLow = lowest && q.id === lowest.id && q.quote_amount != null;
+        const isAward = decided && q.vendor_id === award.awarded_vendor_id;
+        return `
+          <tr class="${isAward ? 'is-award' : ''}">
+            <td>${escape(q.vendor_name || '—')}${isAward ? ' ✓' : ''}</td>
+            <td class="cell-amt">${q.quote_amount != null ? money(q.quote_amount) : '—'}${isLow ? '<span class="bid-lowest">LOWEST</span>' : ''}</td>
+            <td>${q.quote_days != null ? q.quote_days + ' days' : '—'}</td>
+            <td><span class="bid-status ${q.status}">${q.status.replace('_', ' ')}</span></td>
+            <td style="color:var(--console-ink-soft);font-size:12px">${escape(q.quote_notes || '')}</td>
+          </tr>`;
+      }).join('');
+
+      const table = `
+        <table class="bid-table">
+          <thead><tr><th>Vendor</th><th style="text-align:right">Quote</th><th>Timeline</th><th>Status</th><th>Notes</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <div class="card-secondary" style="margin-bottom:4px">
+          ${quoted.length} of ${quotes.length} solicited vendor(s) have responded.
+          ${lowest ? `Lowest bid: <strong>${escape(lowest.vendor_name)}</strong> at ${money(lowest.quote_amount)}.` : ''}
+        </div>`;
+
+      if (decided) {
+        const reasons = (award.non_award_reasons || []).map(r =>
+          `<p><strong>${escape(r.vendor_name)}:</strong> ${escape(r.reason)}</p>`).join('');
+        body.innerHTML = table + `
+          <div class="award-recorded">
+            <h4>✓ Award justification recorded</h4>
+            <p><strong>Awarded to:</strong> ${escape((quotes.find(q => q.vendor_id === award.awarded_vendor_id) || {}).vendor_name || '—')}</p>
+            <p><strong>Why:</strong> ${escape(award.award_rationale)}</p>
+            ${reasons ? `<p style="margin-top:8px"><strong>Why not the others:</strong></p>${reasons}` : ''}
+            ${award.doc_path ? `<p class="just-note">Justification document archived to the audit log (justifications/${escape(award.doc_path.split('/').pop())}).</p>` : ''}
+          </div>`;
+        return;
+      }
+
+      // Justification form — only vendors that actually quoted can be awarded;
+      // every OTHER quoting vendor needs a written non-award reason.
+      const eligible = quotes.filter(q => q.status === 'quoted');
+      if (eligible.length === 0) {
+        body.innerHTML = table + `<div class="just-note">Waiting on at least one quote before an award can be justified.</div>`;
+        return;
+      }
+      const options = eligible.map(q => `<option value="${escape(q.vendor_id)}">${escape(q.vendor_name)} — ${money(q.quote_amount)}</option>`).join('');
+      body.innerHTML = table + `
+        <div class="just-form">
+          <label for="awardVendor">Award this work order to</label>
+          <select id="awardVendor" onchange="renderLoserReasons()">${options}</select>
+
+          <label for="awardRationale">Why this vendor? (written public-interest finding — §14B.7(L))</label>
+          <textarea id="awardRationale" placeholder="e.g. Lowest responsive bid meeting the 14-day timeline; CMD Micro-LBE certified; strong prior completion record on District 6 sidewalk work."></textarea>
+
+          <div id="loserReasons"></div>
+
+          <div class="just-actions">
+            <button class="just-btn" id="recordAwardBtn" onclick="submitJustification()">Generate justification &amp; record award</button>
+          </div>
+          <div class="just-note">A PDF justification is generated and archived to the tamper-evident audit log. Build records the decision; outbound award/regret emails stay suppressed until the system is set autonomous.</div>
+          <div class="err" id="justErr" style="color:#b3261e;font-size:12px;margin-top:8px"></div>
+        </div>`;
+      renderLoserReasons();
+    }
+
+    // The reasons block lists every quoting vendor EXCEPT the one selected to win.
+    function renderLoserReasons() {
+      const sel = document.getElementById('awardVendor');
+      if (!sel) return;
+      const awardedId = sel.value;
+      const losers = QUOTE_STATE.quotes.filter(q => q.status === 'quoted' && q.vendor_id !== awardedId);
+      document.getElementById('loserReasons').innerHTML =
+        `<label>Why not the other vendors that quoted? (required for each)</label>` +
+        (losers.length === 0 ? `<div class="just-note">No other vendors quoted.</div>` :
+          losers.map(q => `
+            <div class="just-loser">
+              <div class="name">${escape(q.vendor_name)} — ${money(q.quote_amount)}${q.quote_days != null ? ` · ${q.quote_days} days` : ''}</div>
+              <textarea data-loser="${escape(q.vendor_id)}" placeholder="e.g. Higher bid with no offsetting schedule or quality advantage."></textarea>
+            </div>`).join(''));
+    }
+
+    function buildJustificationPDF(payload, awardedName) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+      const L = 56, R = 556; let y = 64;
+      const line = (t, opt = {}) => {
+        doc.setFont('helvetica', opt.bold ? 'bold' : 'normal');
+        doc.setFontSize(opt.size || 10);
+        const wrapped = doc.splitTextToSize(t, R - L);
+        doc.text(wrapped, L, y); y += wrapped.length * (opt.size ? opt.size + 3 : 13) + (opt.gap || 4);
+      };
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(14);
+      doc.text('State of Nevada — Department of Transportation (NDOT)', L, y); y += 20;
+      doc.setFontSize(11); doc.text('Competitive Quote Award Justification', L, y); y += 10;
+      doc.setDrawColor(200); doc.line(L, y, R, y); y += 18;
+
+      line(`Work order: ${payload.complaint_id}`, { bold: true });
+      if (QUOTE_STATE.complaint?.address) line(`Location: ${QUOTE_STATE.complaint.address}${QUOTE_STATE.complaint.supervisor_district ? ', ' + QUOTE_STATE.complaint.supervisor_district : ''}`);
+      line(`Authority: NRS 338.0117 — Nevada Emerging Small Business (ESB) set-aside / §14B.7(L) three-quote rule`);
+      line(`Prepared: ${new Date().toLocaleString('en-US')}`, { gap: 10 });
+
+      line('Bids compared', { bold: true, size: 11, gap: 6 });
+      QUOTE_STATE.quotes.filter(q => ['quoted','awarded','not_awarded'].includes(q.status)).forEach(q => {
+        line(`• ${q.vendor_name} — ${q.quote_amount != null ? '$' + Number(q.quote_amount).toLocaleString('en-US') : 'no amount'}${q.quote_days != null ? `, ${q.quote_days} days` : ''}`);
+      });
+      y += 6;
+      line('Award decision', { bold: true, size: 11, gap: 6 });
+      line(`Awarded to: ${awardedName}`, { bold: true });
+      line(`Rationale: ${payload.award_rationale}`, { gap: 10 });
+
+      if (payload.non_award_reasons.length) {
+        line('Vendors not selected', { bold: true, size: 11, gap: 6 });
+        payload.non_award_reasons.forEach(r => line(`• ${r.vendor_name}: ${r.reason}`));
+        y += 10;
+      }
+      line('Awarding official signature: ____________________________    Date: ____________', { gap: 6 });
+      line('This finding is recorded in the City\'s append-only, hash-chained audit log.', { size: 8 });
+      return doc.output('datauristring').split(',')[1]; // base64
+    }
+
+    async function submitJustification() {
+      const err = document.getElementById('justErr');
+      const btn = document.getElementById('recordAwardBtn');
+      err.textContent = '';
+      const sel = document.getElementById('awardVendor');
+      const awardedId = sel.value;
+      const awardedName = sel.options[sel.selectedIndex].text.split(' — ')[0];
+      const rationale = document.getElementById('awardRationale').value.trim();
+      if (rationale.length < 10) { err.textContent = 'Enter a written rationale for the awarded vendor (at least a sentence).'; return; }
+      const reasonEls = Array.from(document.querySelectorAll('#loserReasons textarea[data-loser]'));
+      const non_award_reasons = [];
+      for (const el of reasonEls) {
+        const reason = el.value.trim();
+        const vid = el.getAttribute('data-loser');
+        const vendor_name = (QUOTE_STATE.quotes.find(q => q.vendor_id === vid) || {}).vendor_name || '';
+        if (!reason) { err.textContent = `Enter a reason for not selecting ${vendor_name}.`; el.focus(); return; }
+        non_award_reasons.push({ vendor_id: vid, vendor_name, reason });
+      }
+
+      btn.disabled = true; btn.textContent = 'Recording…';
+      const payload = {
+        complaint_id: QUOTE_STATE.complaint_id, awarded_vendor_id: awardedId,
+        award_rationale: rationale, non_award_reasons,
+        dispatcher_id: (QUOTE_STATE.record && QUOTE_STATE.record.agent_id) || 'dispatcher',
+        correlation_id: QUOTE_STATE.quotes[0]?.correlation_id || undefined,
+      };
+      try { payload.doc_base64 = buildJustificationPDF(payload, awardedName); } catch (e) { /* PDF optional */ }
+      try {
+        const res = await fetch('/api/award-justify', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+        });
+        const d = await res.json();
+        if (!res.ok) throw new Error((d.error || 'failed') + (d.missing ? ': ' + d.missing.join(', ') : ''));
+        showToast('Award justification recorded to the audit log');
+        await loadQuotes(QUOTE_STATE.complaint_id, QUOTE_STATE.complaint, QUOTE_STATE.record);
+      } catch (e) {
+        err.textContent = e.message; btn.disabled = false; btn.textContent = 'Generate justification & record award';
+      }
+    }
+
+    // ── Main render ────────────────────────────────────────────────────────
+    async function main() {
+      const page = document.getElementById('statusPage');
+
+      if (!complaintId) {
+        renderAuditList();
+        return;
+      }
+
+      // Load complaint from queue.json
+      const [queueRes, vendorsRes] = await Promise.all([
+        fetch(QUEUE_URL).then(r => r.json()).catch(() => ({ complaints: [] })),
+        fetch(VENDORS_URL).then(r => r.json()).catch(() => ({ vendors: [] })),
+      ]);
+      const complaint = (queueRes.complaints || []).find(c => c.id === complaintId) || null;
+      const record    = getDispatchRecord(complaintId);
+      const overrides = getStatusOverrides(complaintId);
+
+      // Find vendor contact info
+      const vendor = record
+        ? (vendorsRes.vendors || []).find(v => v.id === record.vendor_id) || null
+        : null;
+
+      // If neither complaint nor record found
+      if (!complaint && !record) {
+        page.innerHTML = `<div class="not-found">
+          <h2>Complaint not found</h2>
+          <p>No record found for <strong>${escape(complaintId)}</strong>. It may have been
+          archived, or the ID may be incorrect.</p>
+          <p style="margin-top:16px"><a href="index.html" style="color:var(--console-accent)">← Back to dispatch console</a></p>
+        </div>`;
+        return;
+      }
+
+      const isDispatched = !!record;
+      const priority = complaint?.priority ?? 'medium';
+      const address  = complaint?.address ?? record?.complaint_address ?? '—';
+      const district = complaint?.supervisor_district ?? record?.complaint_district ?? '—';
+      const defect   = complaint?.defect ?? '—';
+      const cost     = complaint?.estimatedCost ?? record?.work_order_estimate;
+      const openedOn = complaint?.opened_on ?? null;
+
+      // Build status step list
+      const currentStep = DONE_ON_DISPATCH.has('completed') ? 'completed'
+        : overrides.currentStep ?? (isDispatched ? 'dispatched' : 'reported');
+      const stepOrder = TIMELINE_STEPS.map(s => s.key);
+      const currentIdx = stepOrder.indexOf(currentStep);
+
+      // Vendor email for follow-up
+      const vendorEmail  = vendor?.contact?.email ?? null;
+      const vendorPhone  = vendor?.contact?.phone ?? null;
+      const lbeTier      = record?.vendor_lbe_tier ?? vendor?.lbe?.tier ?? null;
+      const cmdCert      = record?.vendor_cmd_cert ?? vendor?.lbe?.cmd_cert_number ?? null;
+
+      const mailtoBody = encodeURIComponent(
+        `Dear ${record?.vendor_name ?? 'Contractor'},\n\n` +
+        `This is a follow-up regarding work order ${complaintId} dispatched on ${fmtDateTime(record?.dispatched_at)}.\n\n` +
+        `Location: ${address}, ${district}\n` +
+        `Defect: ${defect}\n` +
+        `Estimated value: $${fmt(cost)}\n\n` +
+        `Please provide a status update at your earliest convenience.\n\n` +
+        `— NDOT / NV Public Works Dispatch Console`
+      );
+      const mailtoSubject = encodeURIComponent(`Follow-up: ${complaintId} — ${address}`);
+      const mailtoHref = vendorEmail
+        ? `mailto:${vendorEmail}?subject=${mailtoSubject}&body=${mailtoBody}`
+        : `mailto:?subject=${mailtoSubject}&body=${mailtoBody}`;
+
+      // ── Render ────────────────────────────────────────────────────────────
+      page.innerHTML = `
+        <!-- Case banner -->
+        <div class="case-banner">
+          <div class="case-banner-left">
+            <span class="case-number">${escape(complaintId)}</span>
+            <span class="case-status-badge ${isDispatched ? 'dispatched' : 'open'}">
+              <span class="dot"></span>
+              ${isDispatched ? 'Dispatched' : 'Open'}
+            </span>
+            <span class="priority-tag ${priority}">${priority === 'medium' ? 'Med' : priority.charAt(0).toUpperCase() + priority.slice(1)} Priority</span>
+          </div>
+          <span style="font-size:13px;color:var(--console-ink-mute)">
+            ${openedOn ? 'Opened ' + fmtDate(openedOn) : ''}
+          </span>
+        </div>
+
+        <!-- Complaint + Vendor cards -->
+        <div class="status-grid">
+          <!-- Complaint card -->
+          <div class="status-card">
+            <div class="card-label">Complaint</div>
+            <div class="card-primary">${escape(address)}</div>
+            <div class="card-secondary">${escape(district)} · ${escape(defect)}</div>
+            ${cost != null ? `<div class="card-secondary">Estimated: <strong>$${fmt(cost)}</strong></div>` : ''}
+            ${openedOn ? `<div class="card-secondary" style="margin-top:6px">Opened ${fmtDate(openedOn)}</div>` : ''}
+          </div>
+
+          <!-- Vendor card -->
+          <div class="status-card">
+            <div class="card-label">Dispatched Vendor</div>
+            ${record ? `
+              <div class="card-primary">${escape(record.vendor_name)}</div>
+              <div class="card-secondary">Dispatched ${fmtDateTime(record.dispatched_at)}</div>
+              ${record.agent_id ? `<div class="card-secondary">Agent: <strong>${escape(record.agent_id)}</strong></div>` : ''}
+              ${record.policy_authority === '14B.7'
+                ? `<div class="card-secondary">Policy: <strong>NRS 338.0117 ESB Set-Aside</strong></div>`
+                : `<div class="card-secondary">Policy: Competitive bid</div>`}
+              <div class="card-meta">
+                ${lbeTier ? `<span class="meta-chip">${escape(lbeTier)}</span>` : ''}
+                ${cmdCert ? `<span class="meta-chip neutral">ESB ${escape(cmdCert)}</span>` : ''}
+                ${vendorPhone ? `<span class="meta-chip neutral">${escape(vendorPhone)}</span>` : ''}
+              </div>
+            ` : `
+              <div class="card-secondary" style="color:var(--console-ink-mute);font-style:italic">
+                No vendor dispatched yet.
+              </div>
+            `}
+          </div>
+        </div>
+
+        <!-- Timeline card -->
+        <div class="status-card timeline-card">
+          <div class="card-label">Status Timeline</div>
+          <ul class="timeline-list">
+            ${TIMELINE_STEPS.map((step, i) => {
+              const done   = i <= currentIdx;
+              const active = i === currentIdx + 1 && isDispatched;
+              const dotCls = done ? 'done' : active ? 'active' : '';
+              let dateStr  = '';
+              if (step.key === 'reported')   dateStr = fmtDate(openedOn);
+              if (step.key === 'dispatched') dateStr = record ? fmtDateTime(record.dispatched_at) : '';
+              if (overrides[step.key + '_at']) dateStr = fmtDateTime(overrides[step.key + '_at']);
+              return `
+                <li class="timeline-item">
+                  <span class="tl-dot ${dotCls}">${done ? '✓' : i + 1}</span>
+                  <div class="tl-content">
+                    <div class="tl-step${done ? '' : ' muted'}">${escape(step.label)}</div>
+                    ${dateStr ? `<div class="tl-date">${escape(dateStr)}</div>` : ''}
+                  </div>
+                  ${(active || (done && i > 1)) && !done ? `
+                    <button
+                      onclick="advanceStatus('${complaintId}', '${step.key}')"
+                      style="font-size:11px;font-weight:600;color:var(--console-accent);
+                             background:none;border:none;cursor:pointer;padding:0;white-space:nowrap">
+                      Mark done
+                    </button>` : ''}
+                </li>`;
+            }).join('')}
+          </ul>
+        </div>
+
+        <!-- Competitive quotes / bid comparison + justification -->
+        <div class="status-card" id="quotesCard" style="margin-bottom:16px;display:none">
+          <div class="card-label">Competitive Quotes · §14B.7(c) bid comparison</div>
+          <div id="quotesBody"><div class="card-secondary" style="color:var(--console-ink-mute)">Loading quotes…</div></div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="action-row" id="actionRow">
+          <a class="action-btn followup" href="${mailtoHref}">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <path d="M1 3.5A1.5 1.5 0 012.5 2h10A1.5 1.5 0 0114 3.5v8A1.5 1.5 0 0112.5 13H2.5A1.5 1.5 0 011 11.5v-8zm1.5-.5a.5.5 0 00-.5.5v.382l5.5 3.437 5.5-3.437V3.5a.5.5 0 00-.5-.5H2.5zm-.5 2.118V11.5a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V5.118L7.5 8.062 2 5.118z" fill="currentColor"/>
+            </svg>
+            Follow up with vendor
+          </a>
+          <button
+            class="action-btn payment"
+            id="payBtn"
+            ${!isDispatched ? 'disabled title="Dispatch a vendor first"' : ''}>
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <path d="M1.5 3A1.5 1.5 0 000 4.5v6A1.5 1.5 0 001.5 12h12A1.5 1.5 0 0015 10.5v-6A1.5 1.5 0 0013.5 3H1.5zM1 4.5a.5.5 0 01.5-.5H13.5a.5.5 0 01.5.5V5H1v-.5zm0 2h13v4a.5.5 0 01-.5.5H1.5a.5.5 0 01-.5-.5v-4zm2 2a.5.5 0 000 1h3a.5.5 0 000-1H3z" fill="currentColor"/>
+            </svg>
+            Release Payment${cost != null ? ' — $' + fmt(cost) : ''}
+          </button>
+        </div>
+      `;
+
+      // Wire the payment button via a listener instead of an inline onclick.
+      // Serializing the dispatch record into an onclick attribute (the old
+      // JSON.stringify(record) approach) was an XSS vector: a quote or backtick
+      // in vendor_name/address could break out of the attribute. Passing the
+      // object directly to the handler keeps it out of the DOM entirely.
+      if (isDispatched) {
+        document.getElementById('payBtn')?.addEventListener('click',
+          () => openPaymentModal(record, { estimatedCost: cost }));
+      }
+
+      // If this complaint went out for competitive quotes, show the bid-comparison
+      // platform + justification form (Supabase-backed; hidden if there are none).
+      loadQuotes(complaintId, complaint, record);
+    }
+
+    // ── Advance status (mock, stores to localStorage) ──────────────────────
+    function advanceStatus(id, stepKey) {
+      saveStatusOverride(id, stepKey + '_at', new Date().toISOString());
+      saveStatusOverride(id, 'currentStep', stepKey);
+      main();
+      showToast(`Status updated: ${stepKey.replace(/_/g, ' ')}`);
+      if (stepKey === 'completed') sendCompletionSurvey(id);
+    }
+
+    // On completion, fire the citizen satisfaction survey (dispatcher enters the
+    // email here). Stored ephemerally for 30 days; the send is gated by
+    // AUTONOMOUS_SEND, so it's queued/suppressed until the operator goes live.
+    async function sendCompletionSurvey(id) {
+      const rec = getDispatchRecord(id) || {};
+      let email = rec.citizen_email || null;
+      if (!email) {
+        email = window.prompt("Job complete — enter the citizen's email to send the 5-question satisfaction survey (Cancel to skip):");
+        if (!email) return;
+      }
+      try {
+        const res = await fetch('/api/survey-send', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ complaint_id: id, citizen_email: email }),
+        });
+        const d = await res.json();
+        if (res.ok) showToast(d.email && d.email.suppressed ? 'Survey queued (suppressed until autonomous)' : 'Survey sent to citizen');
+        else showToast('Survey send failed: ' + (d.error || 'error'));
+      } catch (e) { showToast('Survey send failed: ' + (e.message || e)); }
+    }
+
+    main();
+  </script>
+</body>
+</html>

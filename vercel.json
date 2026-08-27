@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "builds": [
+    { "src": "public/**", "use": "@vercel/static" },
+    { "src": "demo/index.html", "use": "@vercel/static" },
+    { "src": "demo/vendor-dashboard.html", "use": "@vercel/static" },
+    { "src": "demo/audit-chatbot.html", "use": "@vercel/static" },
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "api/generate-work-order.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/api/generate-work-order", "dest": "/api/generate-work-order.py" },
+    { "src": "/api/(.*)", "dest": "/api/$1.js" },
+    { "src": "/vendor-dashboard", "dest": "/demo/vendor-dashboard.html" },
+    { "src": "/audit-chatbot", "dest": "/demo/audit-chatbot.html" },
+    { "src": "/demo", "dest": "/demo/index.html" },
+    { "src": "/demo/(.*)", "dest": "/demo/$1" },
+    { "src": "/", "dest": "/demo/index.html" },
+    { "src": "/(.*)", "dest": "/public/$1" }
+  ]
+}

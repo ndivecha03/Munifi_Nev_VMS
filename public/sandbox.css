@@ -1,0 +1,178 @@
+/* public/sandbox.css — SIRP Sandbox Replay dashboard.
+   Reuses the production console's color tokens (dispatch.css :root) for
+   visual consistency, but is otherwise a standalone stylesheet so this
+   page can be deployed to its own isolated Vercel project without
+   pulling in dispatch.css's queue/header rules. */
+
+:root {
+  --console-bg:           #f5f6f8;
+  --console-surface:      #ffffff;
+  --console-border:       #e1e4e8;
+  --console-border-strong:#c8ced6;
+  --console-ink:          #1a2332;
+  --console-ink-soft:     #4a5568;
+  --console-ink-mute:     #8a96a7;
+  --console-accent:       #0077b6;
+  --console-accent-soft:  #e6f0f8;
+  --console-pri-high:     #d64545;
+  --console-pri-high-soft:#fce8e8;
+  --console-pri-med:      #c9821b;
+  --console-pri-med-soft: #fdf3d8;
+  --console-pri-low:      #2c8a4a;
+  --console-pri-low-soft: #e2f2e7;
+}
+
+* { box-sizing: border-box; }
+
+.sb-body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--console-bg);
+  color: var(--console-ink);
+}
+
+/* ─── Header ─── */
+.sb-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--console-ink); color: #fff;
+}
+.sb-header-left { display: flex; align-items: center; gap: 12px; }
+.sb-agency-mark { font-weight: 700; font-size: 14px; letter-spacing: 0.03em; }
+.sb-tool-label { font-size: 14px; color: #c7d0dc; }
+.sb-data-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+  padding: 4px 10px; border-radius: 4px;
+  background: var(--console-pri-low-soft); color: var(--console-pri-low);
+}
+.sb-header-meta { font-size: 13px; color: #c7d0dc; }
+
+.sb-disclaimer {
+  margin: 0; padding: 10px 24px;
+  background: var(--console-accent-soft); color: #0c4a6e;
+  font-size: 13px; line-height: 1.5;
+  border-bottom: 1px solid var(--console-border);
+}
+
+/* ─── Scoreboard ─── */
+.sb-scoreboard {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  padding: 20px 24px;
+}
+.sb-stat-card {
+  background: var(--console-surface);
+  border: 1px solid var(--console-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-align: center;
+}
+.sb-stat-num {
+  font-size: 28px; font-weight: 700; color: var(--console-accent);
+  font-family: 'SF Mono', Menlo, monospace;
+}
+#violationsCard .sb-stat-num.is-violation { color: var(--console-pri-high); }
+#violationsCard .sb-stat-num.is-clean     { color: var(--console-pri-low); }
+.sb-stat-label {
+  font-size: 12px; color: var(--console-ink-soft); margin-top: 4px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+
+/* ─── Main / panels ─── */
+.sb-main { padding: 0 24px 40px; display: flex; flex-direction: column; gap: 20px; }
+
+.sb-panel {
+  background: var(--console-surface);
+  border: 1px solid var(--console-border);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+.sb-panel-title { margin: 0 0 4px; font-size: 16px; font-weight: 700; }
+.sb-panel-sub { margin: 0 0 14px; font-size: 13px; color: var(--console-ink-soft); line-height: 1.5; }
+.sb-panel-sub code { background: var(--console-bg); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+
+/* ─── Tables ─── */
+.sb-table-wrap { overflow-x: auto; border: 1px solid var(--console-border); border-radius: 8px; }
+.sb-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.sb-table th {
+  text-align: left; padding: 10px 12px; background: var(--console-bg);
+  color: var(--console-ink-soft); font-weight: 600; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--console-border);
+  position: sticky; top: 0;
+}
+.sb-table td { padding: 9px 12px; border-bottom: 1px solid var(--console-border); }
+.sb-table tbody tr { cursor: pointer; }
+.sb-table tbody tr:hover { background: var(--console-accent-soft); }
+.sb-table tbody tr.is-selected { background: var(--console-accent-soft); font-weight: 600; }
+.sb-table-mono td, .sb-table-mono th { font-family: 'SF Mono', Menlo, monospace; font-size: 12px; }
+.sb-loading { text-align: center; color: var(--console-ink-mute); padding: 18px; }
+.sb-audit-scroll { max-height: 360px; overflow-y: auto; }
+
+/* ─── Vendor summary ─── */
+.sb-vendor-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.sb-vendor-bucket {
+  background: var(--console-bg); border: 1px solid var(--console-border);
+  border-radius: 8px; padding: 10px 12px; text-align: center;
+}
+.sb-vendor-bucket .num { font-size: 20px; font-weight: 700; }
+.sb-vendor-bucket .label { font-size: 11px; color: var(--console-ink-soft); margin-top: 2px; }
+.sb-vendor-bucket.risk .num { color: var(--console-pri-high); }
+
+/* ─── Dispatch panel ─── */
+.sb-dispatch-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
+.sb-dispatch-selected { min-height: 120px; }
+.sb-empty-hint { color: var(--console-ink-mute); font-size: 13px; }
+
+.sb-case-header { font-weight: 700; margin-bottom: 6px; }
+.sb-case-address { color: var(--console-ink-soft); font-size: 13px; margin-bottom: 12px; }
+
+.sb-component-bars { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.sb-component-row { display: grid; grid-template-columns: 160px 1fr 50px; align-items: center; gap: 8px; font-size: 12px; }
+.sb-component-track { background: var(--console-bg); border-radius: 4px; height: 8px; overflow: hidden; }
+.sb-component-fill { display: block; background: var(--console-accent); height: 100%; border-radius: 4px; }
+.sb-total-score { font-size: 15px; font-weight: 700; margin-top: 4px; }
+
+.sb-badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.sb-badge {
+  font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+  background: var(--console-pri-low-soft); color: var(--console-pri-low);
+  border: 1px solid #b5dcc2;
+}
+
+.sb-btn {
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  padding: 9px 16px; border-radius: 6px;
+  border: 1px solid var(--console-border-strong);
+  background: var(--console-surface); color: var(--console-ink);
+  cursor: pointer;
+}
+.sb-btn:hover:not(:disabled) { background: var(--console-bg); }
+.sb-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.sb-btn-primary { background: var(--console-accent); color: #fff; border-color: var(--console-accent); }
+.sb-btn-primary:hover:not(:disabled) { background: #006096; }
+
+.sb-live-note { font-size: 12px; color: var(--console-ink-mute); margin: 8px 0 0; line-height: 1.5; }
+.sb-live-output {
+  margin-top: 10px; padding: 10px; background: var(--console-ink); color: #d8f0e0;
+  border-radius: 6px; font-size: 11px; max-height: 220px; overflow: auto;
+  white-space: pre-wrap; word-break: break-word;
+}
+
+/* ─── Artifacts ─── */
+.sb-artifacts-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.sb-artifact-card h3 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--console-ink-soft); }
+.sb-json-view {
+  background: var(--console-bg); border: 1px solid var(--console-border); border-radius: 6px;
+  padding: 12px; font-size: 11px; max-height: 320px; overflow: auto; margin: 0;
+  white-space: pre-wrap; word-break: break-word;
+}
+#memoViewWrap embed { width: 100%; height: 320px; border: 1px solid var(--console-border); border-radius: 6px; margin-top: 10px; }
+
+/* ─── Audit hash chain ─── */
+.sb-hash { color: var(--console-ink-mute); }
+.sb-event-type { font-weight: 600; }
+
+@media (max-width: 900px) {
+  .sb-scoreboard { grid-template-columns: repeat(2, 1fr); }
+  .sb-dispatch-layout, .sb-artifacts-layout { grid-template-columns: 1fr; }
+}

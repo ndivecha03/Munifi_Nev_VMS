@@ -1,0 +1,2214 @@
+{
+  "vendors": [
+    {
+      "id": "ndot-vendor-1000",
+      "name": "A M ENGINEERING LLC",
+      "address": {
+        "street": "2051 W Sunset Rd Ste 101",
+        "city": "Tucson",
+        "state": "AZ",
+        "zip": "85704",
+        "lat": 40.8234,
+        "lng": -115.7691
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3000"
+      },
+      "licensing": {
+        "nv_contractor_license": "0039803",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2",
+          "A-15"
+        ],
+        "nv_license_expires": "07-31-2027",
+        "nv_license_classifications": [
+          "A General Engineering"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "drainage_repair",
+        "culvert_replacement"
+      ],
+      "county": "elko",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "775-738-3113",
+        "email": "aaron@amengineering.pro"
+      }
+    },
+    {
+      "id": "ndot-vendor-1001",
+      "name": "A&V Trucking Corporation, DBA A&V Trucking Corp",
+      "address": {
+        "street": "170 Paxton Lane",
+        "city": "Reno",
+        "state": "NV",
+        "zip": "89506",
+        "lat": 36.1639,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2025-3001"
+      },
+      "licensing": {
+        "nv_contractor_license": "0089088",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_expires": "02-28-2028",
+        "nv_license_classifications": [
+          "C-5 Concrete Contracting"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "asphalt_overlay"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-234-4873",
+        "email": "avtruckingcorp@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1002",
+      "name": "A-1 Sandblasting, Inc. dba A-1 Masonry & Sandblasting, DBA A-1 Masonry & Sandblasting",
+      "address": {
+        "street": "5675 Wynn Road",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89118",
+        "lat": 36.1669,
+        "lng": -115.1398
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3002"
+      },
+      "licensing": {
+        "nv_contractor_license": "0055935",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-16",
+          "A-2",
+          "A-12"
+        ],
+        "nv_license_expires": "08-31-2028",
+        "nv_license_classifications": [
+          "C-18 Masonry"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "concrete_repair",
+        "pavement_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-889-9690",
+        "email": "jroberts@a-1masonry.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1003",
+      "name": "Accu Grading and Paving Inc.",
+      "address": {
+        "street": "10501 W Gowan Rd Ste 225",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89129",
+        "lat": 36.1699,
+        "lng": -115.1368
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3003"
+      },
+      "licensing": {
+        "nv_contractor_license": "0085858",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_expires": "08-31-2027",
+        "nv_license_classifications": [
+          "A-7 Excavating and Grading"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "asphalt_overlay",
+        "pavement_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-643-5464",
+        "email": "kristen@accugandp.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1004",
+      "name": "Aerial Mapping Consultants",
+      "address": {
+        "street": "1044 North Las Vegas Business Pkwy",
+        "city": "North Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.2041,
+        "lng": -115.1115
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3004"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2"
+        ],
+        "nv_license_regime": "pe_licensed",
+        "nv_license_regime_label": "NV PE Licensed (NVBPELS)"
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "sign_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-286-8389",
+        "email": "joeb@aerialmappingconsultants.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1005",
+      "name": "AeroTech Mapping Inc, DBA AeroTech Mapping Inc.",
+      "address": {
+        "street": "1055 LAS VEGAS Business Pkwy",
+        "city": "LAS VEGAS",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1759,
+        "lng": -115.1458
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3005"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2"
+        ],
+        "nv_license_regime": "pe_licensed",
+        "nv_license_regime_label": "NV PE Licensed (NVBPELS)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "sign_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "602-245-5088",
+        "email": "aliciasweetwater67@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1006",
+      "name": "Affordable Striping & Sealing LLC, DBA Affordable Striping & Sealing, LLC",
+      "address": {
+        "street": "4440 E Alexander Rd Ste A",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89115",
+        "lat": 36.1789,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3006"
+      },
+      "licensing": {
+        "nv_contractor_license": "0067803",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-8",
+          "A-2",
+          "A-12"
+        ],
+        "nv_license_expires": "02-28-2028",
+        "nv_license_classifications": [
+          "A-8 Sealing and Striping of Impermeable Paving Surfaces"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "striping_markings",
+        "pavement_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-222-9009",
+        "email": "shonda@affordablestriping.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1007",
+      "name": "Ainsworth Associates Mechanical Engineers",
+      "address": {
+        "street": "1077 Reno Business Pkwy",
+        "city": "Reno",
+        "state": "NV",
+        "zip": "89502",
+        "lat": 39.5206,
+        "lng": -119.8138
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3007"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2",
+          "A-15"
+        ],
+        "nv_license_regime": "pe_licensed",
+        "nv_license_regime_label": "NV PE Licensed (NVBPELS)"
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "drainage_repair",
+        "culvert_replacement"
+      ],
+      "county": "washoe",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "775-329-9100",
+        "email": "ahall@aa-me.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1008",
+      "name": "All American Asphalt Sealing Inc., DBA Antelmo Lara",
+      "address": {
+        "street": "1565 TRAINER",
+        "city": "Way Reno",
+        "state": "NV",
+        "zip": "89512",
+        "lat": 39.5236,
+        "lng": -119.8108
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3008"
+      },
+      "licensing": {
+        "nv_contractor_license": "0058135",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-8",
+          "A-2",
+          "A-12"
+        ],
+        "nv_license_expires": "08-31-2028",
+        "nv_license_classifications": [
+          "A-16 Paving of Streets, Driveways and Parking LotsA-8 Sealing and Striping of Impermeable Paving Surfaces"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "striping_markings",
+        "pavement_repair"
+      ],
+      "county": "washoe",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "775-329-3003",
+        "email": "xxxaaasealing96@yahoo.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1009",
+      "name": "ALL RIGHT FLAGGING, LLC",
+      "address": {
+        "street": "1099 Las Vegas Business Pkwy",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1669,
+        "lng": -115.1338
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3009"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2"
+        ],
+        "nv_license_regime": "ndot_traffic_control",
+        "nv_license_regime_label": "NDOT Traffic Control Certified"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "guardrail_installation",
+        "sign_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-416-4349",
+        "email": "showgizmo89030@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1010",
+      "name": "Allegiant Electric LLC",
+      "address": {
+        "street": "2480 N Decatur Suite 115",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89108",
+        "lat": 36.1699,
+        "lng": -115.1458
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2025-3010"
+      },
+      "licensing": {
+        "nv_contractor_license": "0082100",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2"
+        ],
+        "nv_license_expires": "02-28-2027",
+        "nv_license_classifications": [
+          "C-2 Electrical"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "sign_installation",
+        "guardrail_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-715-3645",
+        "email": "anthony.vigil@allegiantelectric.vegas"
+      }
+    },
+    {
+      "id": "ndot-vendor-1011",
+      "name": "Allstate Civil Engineers Inc",
+      "address": {
+        "street": "1121 Las Vegas Business Pkwy",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1729,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3011"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2",
+          "A-15"
+        ],
+        "nv_license_regime": "pe_licensed",
+        "nv_license_regime_label": "NV PE Licensed (NVBPELS)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "drainage_repair",
+        "culvert_replacement"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-556-4957",
+        "email": "allstate.ce.engineers@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1012",
+      "name": "AMALGAMATED SAFETY COMPANY, DBA N/A",
+      "address": {
+        "street": "2222 W Bonanza",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89106",
+        "lat": 36.1759,
+        "lng": -115.1398
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3012"
+      },
+      "licensing": {
+        "nv_contractor_license": "0021951",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2"
+        ],
+        "nv_license_expires": "05-31-2028",
+        "nv_license_classifications": [
+          "A General Engineering"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "guardrail_installation",
+        "sign_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-871-9385",
+        "email": "henrysm48@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1013",
+      "name": "AMG FREIGHT LLC",
+      "address": {
+        "street": "1143 LAS VEGAS Business Pkwy",
+        "city": "LAS VEGAS",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1789,
+        "lng": -115.1368
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3013"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_regime": "dot_carrier",
+        "nv_license_regime_label": "FMCSA DOT Carrier"
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "asphalt_overlay"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-291-8089",
+        "email": "los702@icloud.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1014",
+      "name": "AMG Freight Solutions LLC",
+      "address": {
+        "street": "1154 Las Vegas Business Pkwy",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1609,
+        "lng": -115.1338
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3014"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_regime": "dot_carrier",
+        "nv_license_regime_label": "FMCSA DOT Carrier"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "asphalt_overlay"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-988-1161 Ext. 105"
+      }
+    },
+    {
+      "id": "ndot-vendor-1015",
+      "name": "Andre McLeod, DBA Hoosier Made Trucking",
+      "address": {
+        "street": "1165 Reno Business Pkwy",
+        "city": "Reno",
+        "state": "NV",
+        "zip": "89502",
+        "lat": 39.5236,
+        "lng": -119.8198
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2024-3015"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_regime": "dot_carrier",
+        "nv_license_regime_label": "FMCSA DOT Carrier"
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "asphalt_overlay"
+      ],
+      "county": "washoe",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "775-219-8707",
+        "email": "hoosiermadetrucking@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1016",
+      "name": "ARIA LANDSCAPE ARCHITECTURE LLC, DBA FOLK Landscape Architects",
+      "address": {
+        "street": "1176 Las Vegas Business Pkwy",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1669,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2025-3016"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-7",
+          "A-12",
+          "A-2"
+        ],
+        "nv_license_regime": "landscape_arch_licensed",
+        "nv_license_regime_label": "NV Landscape Arch Licensed (NSBAID)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "erosion_control",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-596-3222",
+        "email": "anna@folkforlife.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1017",
+      "name": "ARRIOLA CONSULTING AND INSPECTIONS LLC, DBA Arriola Contracting Services",
+      "address": {
+        "street": "13490 Damonte View Ln",
+        "city": "Reno",
+        "state": "NV",
+        "zip": "89511",
+        "lat": 36.0397,
+        "lng": -114.9819
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2026-3017"
+      },
+      "licensing": {
+        "nv_contractor_license": "0093862",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2",
+          "A-16"
+        ],
+        "nv_license_expires": "05-31-2027",
+        "nv_license_classifications": [
+          "B-2 Residential and Small Commercial"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "concrete_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-204-7440",
+        "email": "angela@aci-llc.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1018",
+      "name": "Aztech Inspections & Testing, LLC",
+      "address": {
+        "street": "1198 Las Vegas Business Pkwy",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1729,
+        "lng": -115.1368
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3018"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2",
+          "A-16"
+        ],
+        "nv_license_regime": "pe_licensed",
+        "nv_license_regime_label": "NV PE Licensed (NVBPELS)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "concrete_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-247-7645",
+        "email": "jcox@aztechmaterials.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1019",
+      "name": "BAR Electric, LLC",
+      "address": {
+        "street": "3395 Pinks Pl",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89102",
+        "lat": 36.1759,
+        "lng": -115.1338
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3019"
+      },
+      "licensing": {
+        "nv_contractor_license": "0089496",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2"
+        ],
+        "nv_license_expires": "05-31-2028",
+        "nv_license_classifications": [
+          "C-2 Electrical",
+          "C-21 Refrigeration and Air Conditioning"
+        ],
+        "nv_additional_licenses": [
+          "NSCB-0092484"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "sign_installation",
+        "guardrail_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-604-9176",
+        "email": "andrew@barelectriclv.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1020",
+      "name": "BD Construction Services LLC",
+      "address": {
+        "street": "3572 Northranch Way",
+        "city": "Roseville",
+        "state": "CA",
+        "zip": "95661",
+        "lat": 36.1789,
+        "lng": -115.1458
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3020"
+      },
+      "licensing": {
+        "nv_contractor_license": "0094655",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_expires": "11-30-2027",
+        "nv_license_classifications": [
+          "B-2 Residential and Small Commercial"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "concrete_repair",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-400-1510",
+        "email": "bd.constructionservices2015@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1021",
+      "name": "BEC Environmental, Inc, DBA N/A",
+      "address": {
+        "street": "2341 N Pacific St",
+        "city": "Orange",
+        "state": "CA",
+        "zip": "92865",
+        "lat": 36.1609,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2024-3021"
+      },
+      "licensing": {
+        "nv_contractor_license": "0088237",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-7",
+          "A-12",
+          "A-2"
+        ],
+        "nv_license_expires": "06-30-2027",
+        "nv_license_classifications": [
+          "A-13 Wrecking BuildingsA-23 Removal of Asbestos"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "erosion_control",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-304-9830",
+        "email": "eileen@becnv.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1022",
+      "name": "BEEM CONSTRUCTORS L.L.C.",
+      "address": {
+        "street": "125 Technology Dr Suite 100",
+        "city": "Irvine",
+        "state": "CA",
+        "zip": "92618",
+        "lat": 36.1639,
+        "lng": -115.1398
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3022"
+      },
+      "licensing": {
+        "nv_contractor_license": "0042783",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_expires": "09-30-2027",
+        "nv_license_classifications": [
+          "B-2 Residential and Small Commercial"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "concrete_repair",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-429-2443"
+      }
+    },
+    {
+      "id": "ndot-vendor-1023",
+      "name": "Best in the West Safety, Inc.",
+      "address": {
+        "street": "5613 N Lookout Crest St",
+        "city": "North Las Vegas",
+        "state": "NV",
+        "zip": "89031",
+        "lat": 36.1669,
+        "lng": -115.1368
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2026-3023"
+      },
+      "licensing": {
+        "nv_contractor_license": "0085161",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2"
+        ],
+        "nv_license_expires": "02-28-2027",
+        "nv_license_classifications": [
+          "C-21 Refrigeration and Air Conditioning"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "guardrail_installation",
+        "sign_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-897-4906 Ext. 103",
+        "email": "dhale@biwsafety.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1024",
+      "name": "Bird Dog Trucking LLC",
+      "address": {
+        "street": "1465 E Bird Dog Dr Ste 110",
+        "city": "Meridian",
+        "state": "ID",
+        "zip": "83642",
+        "lat": 39.5296,
+        "lng": -119.8078
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3024"
+      },
+      "licensing": {
+        "nv_contractor_license": "0070512",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_expires": "03-31-2028",
+        "nv_license_classifications": [
+          "B-2 Residential and Small CommercialB-5 Prefabricated Steel Structures"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "asphalt_overlay"
+      ],
+      "county": "washoe",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "775-386-7329",
+        "email": "birddogtruckingnv@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1025",
+      "name": "Blue Diamond Civil Engineering LLC, DBA Blue Diamond Civil Engineering",
+      "address": {
+        "street": "4262 Blue Diamond Rd # 102",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89139",
+        "lat": 36.1729,
+        "lng": -115.1458
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3025"
+      },
+      "licensing": {
+        "nv_contractor_license": "0072559",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2",
+          "A-15"
+        ],
+        "nv_license_expires": "01-31-2027",
+        "nv_license_classifications": [
+          "A-10 Commercial and Residential Pools"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "drainage_repair",
+        "culvert_replacement"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-981-7824",
+        "email": "info@osambelaandassociates.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1026",
+      "name": "BMH Transport LLC",
+      "address": {
+        "street": "1286 Las Vegas Business Pkwy",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1759,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3026"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_regime": "dot_carrier",
+        "nv_license_regime_label": "FMCSA DOT Carrier"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "asphalt_overlay"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-287-1985",
+        "email": "bmhtransportllc@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1027",
+      "name": "C. Smith Painting & Wall Covering LLC, DBA same",
+      "address": {
+        "street": "1218 Stable Glen Drive",
+        "city": "North Las Vegas",
+        "state": "NV",
+        "zip": "89031",
+        "lat": 36.2101,
+        "lng": -115.1175
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3027"
+      },
+      "licensing": {
+        "nv_contractor_license": "0078623",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-16",
+          "A-2"
+        ],
+        "nv_license_expires": "01-31-2028",
+        "nv_license_classifications": [
+          "C-4A PaintingC-4B Wallcovering"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "concrete_repair",
+        "sign_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-219-5454",
+        "email": "smithpwc@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1028",
+      "name": "Canyon Electric Company, Inc.",
+      "address": {
+        "street": "4357 Corporate Center Dr #430",
+        "city": "N Las Vegas",
+        "state": "NV",
+        "zip": "89030",
+        "lat": 36.1609,
+        "lng": -115.1368
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2025-3028"
+      },
+      "licensing": {
+        "nv_contractor_license": "0039105",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2"
+        ],
+        "nv_license_expires": "12-31-2026",
+        "nv_license_classifications": [
+          "B-2 Residential and Small Commercial",
+          "C-2 Electrical"
+        ],
+        "nv_additional_licenses": [
+          "NSCB-0024254"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "sign_installation",
+        "guardrail_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-423-9512",
+        "email": "service@canyonelectric.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1029",
+      "name": "CASAS ELECTRIC, INC.",
+      "address": {
+        "street": "1319 LAS VEGAS Business Pkwy",
+        "city": "LAS VEGAS",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1639,
+        "lng": -115.1338
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3029"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2"
+        ],
+        "nv_license_regime": "nscb_electrical",
+        "nv_license_regime_label": "NSCB C-2 Electrical (unverified number)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "sign_installation",
+        "guardrail_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-597-2093",
+        "email": "dcasas@casaselectric.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1030",
+      "name": "Civil 360 LLC, DBA Civil 360 Planning & Engineering",
+      "address": {
+        "street": "1330 North Las Vegas Business Pkwy",
+        "city": "North Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1981,
+        "lng": -115.1235
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3030"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2",
+          "A-15"
+        ],
+        "nv_license_regime": "pe_licensed",
+        "nv_license_regime_label": "NV PE Licensed (NVBPELS)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "drainage_repair",
+        "culvert_replacement"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-899-6068",
+        "email": "jescobedo@civil360lv.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1031",
+      "name": "CMMCM LLC, DBA MULLER CONSTRUCTION",
+      "address": {
+        "street": "2133 Industrial Road",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89102",
+        "lat": 36.1699,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3031"
+      },
+      "licensing": {
+        "nv_contractor_license": "0080590",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_expires": "11-30-2027",
+        "nv_license_classifications": [
+          "B General Building",
+          "C-3 Carpentry Maintenance and Minor Repairs",
+          "C-5 Concrete Contracting",
+          "C-14 Steel Reinforcing and Erection",
+          "C-4 Painting and Decorating",
+          "A General Engineering"
+        ],
+        "nv_additional_licenses": [
+          "NSCB-0080591",
+          "NSCB-0078284",
+          "NSCB-0083957",
+          "NSCB-0083955",
+          "NSCB-0078912"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "concrete_repair",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-832-1111",
+        "email": "agoodwin@cmm-cm.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1032",
+      "name": "Copperhead Electric, LLC",
+      "address": {
+        "street": "3863 S Valley View Blvd #36",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89103",
+        "lat": 36.1729,
+        "lng": -115.1398
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2026-3032"
+      },
+      "licensing": {
+        "nv_contractor_license": "0090397",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2"
+        ],
+        "nv_license_expires": "03-31-2027",
+        "nv_license_classifications": [
+          "C-2 Electrical"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "sign_installation",
+        "guardrail_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-927-5847",
+        "email": "traci@copperheadelectricnv.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1033",
+      "name": "Corestone Engineering Inc, DBA NA",
+      "address": {
+        "street": "1363 Reno Business Pkwy",
+        "city": "Reno",
+        "state": "NV",
+        "zip": "89502",
+        "lat": 39.5356,
+        "lng": -119.8108
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3033"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-4",
+          "A-2",
+          "A-15"
+        ],
+        "nv_license_regime": "pe_licensed",
+        "nv_license_regime_label": "NV PE Licensed (NVBPELS)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "bridge_inspection",
+        "drainage_repair",
+        "culvert_replacement"
+      ],
+      "county": "washoe",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "775-636-5916",
+        "email": "vimal@corestoneengineering.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1034",
+      "name": "Create Design Unit, LLC",
+      "address": {
+        "street": "923 Tahoe Blvd Unit 100 B",
+        "city": "Incline Village",
+        "state": "NV",
+        "zip": "89451",
+        "lat": 36.1789,
+        "lng": -115.1338
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2025-3034"
+      },
+      "licensing": {
+        "nv_contractor_license": "0053399",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-7",
+          "A-12",
+          "A-2"
+        ],
+        "nv_license_expires": "05-31-2028",
+        "nv_license_classifications": [
+          "B-2 Residential and Small Commercial"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "erosion_control"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-410-9131",
+        "email": "tsf@createdesignunit.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1035",
+      "name": "D & D Transport, LLC",
+      "address": {
+        "street": "1385 Sparks Business Pkwy",
+        "city": "Sparks",
+        "state": "NV",
+        "zip": "89502",
+        "lat": 39.5259,
+        "lng": -119.7587
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3035"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_regime": "dot_carrier",
+        "nv_license_regime_label": "FMCSA DOT Carrier"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "asphalt_overlay"
+      ],
+      "county": "washoe",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "775-223-3432",
+        "email": "duncan.ddtransport@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1036",
+      "name": "DAIMLER CONSTRUCTION INC.",
+      "address": {
+        "street": "5951 Honeygrove Ave Suite A",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89110",
+        "lat": 36.1639,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2024-3036"
+      },
+      "licensing": {
+        "nv_contractor_license": "0089824",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_expires": "09-30-2026",
+        "nv_license_classifications": [
+          "C-2 Electrical",
+          "B-2 Residential and Small Commercial",
+          "C-21B Air Conditioning"
+        ],
+        "nv_additional_licenses": [
+          "NSCB-0068029",
+          "NSCB-0076078"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "concrete_repair",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-357-1467",
+        "email": "dcilvpatrick@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1037",
+      "name": "Delta Drywall & Paint",
+      "address": {
+        "street": "11500 S Eastern #150",
+        "city": "Henderson",
+        "state": "NV",
+        "zip": "89052",
+        "lat": 36.0367,
+        "lng": -114.9819
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3037"
+      },
+      "licensing": {
+        "nv_contractor_license": "0091275",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-16",
+          "A-2"
+        ],
+        "nv_license_expires": "10-31-2027",
+        "nv_license_classifications": [
+          "C-4 Painting and Decorating"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "concrete_repair",
+        "sign_installation"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-416-2884",
+        "email": "rudyg@deltadrywallpaint.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1038",
+      "name": "DESERT COMMERCIAL SWEEPING INC",
+      "address": {
+        "street": "5460 Desert Point",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89118",
+        "lat": 39.1638,
+        "lng": -119.7644
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3038"
+      },
+      "licensing": {
+        "nv_contractor_license": "0079453",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_expires": "10-31-2026",
+        "nv_license_classifications": [
+          "C-1D Plumbing"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "striping_markings"
+      ],
+      "county": "washoe",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "775-841-0985",
+        "email": "dcsweeping@aol.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1039",
+      "name": "Desert Shield Environmental Professionals LLC",
+      "address": {
+        "street": "7748 Rosebark Cliffs St.",
+        "city": "North Las Vegas",
+        "state": "NV",
+        "zip": "89084",
+        "lat": 36.1729,
+        "lng": -115.1338
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3039"
+      },
+      "licensing": {
+        "nv_contractor_license": "0088823",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-7",
+          "A-12",
+          "A-2"
+        ],
+        "nv_license_expires": "11-30-2027",
+        "nv_license_classifications": [
+          "C-4 Painting and Decorating"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "erosion_control",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "512-296-6330",
+        "email": "caitlin.macmurtrie@desert-shield.co"
+      }
+    },
+    {
+      "id": "ndot-vendor-1040",
+      "name": "Designland PLLC",
+      "address": {
+        "street": "1440 Las Vegas Business Pkwy",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1759,
+        "lng": -115.1458
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2025-3040"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-7",
+          "A-12",
+          "A-2"
+        ],
+        "nv_license_regime": "pe_licensed",
+        "nv_license_regime_label": "NV PE Licensed (NVBPELS)"
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "erosion_control"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-665-9507",
+        "email": "ben.designland@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1041",
+      "name": "Eagle Excavation, LLC",
+      "address": {
+        "street": "1625 W. Brooks Ave",
+        "city": "North Las Vegas",
+        "state": "NV",
+        "zip": "89032",
+        "lat": 36.1789,
+        "lng": -115.1428
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "usdot_dbe",
+        "esb_number": "ESB-NV-2026-3041"
+      },
+      "licensing": {
+        "nv_contractor_license": "0081622",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-15",
+          "A-7",
+          "A-2"
+        ],
+        "nv_license_expires": "09-30-2028",
+        "nv_license_classifications": [
+          "A-7 Excavating and GradingA-13 Wrecking BuildingsA-15 Sewers, Drains and PipesA-19 Pipeline and Conduits 06/05/2025- BASED OFF BROADENING APP ON 9/14/2021 APP 1019693"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": true,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "drainage_repair",
+        "erosion_control",
+        "culvert_replacement"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 1,
+        "prior_ndot_contracts_value": 45000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-591-8949",
+        "email": "sara@excavationlv.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1042",
+      "name": "Eco Vita LLC, DBA Eco Vita Environmental Compliance",
+      "address": {
+        "street": "1462 RENO Business Pkwy",
+        "city": "RENO",
+        "state": "NV",
+        "zip": "89502",
+        "lat": 39.5206,
+        "lng": -119.8138
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3042"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-7",
+          "A-12",
+          "A-2"
+        ],
+        "nv_license_regime": "environmental_firm",
+        "nv_license_regime_label": "Environmental Firm (NDEP regulated)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "erosion_control",
+        "drainage_repair"
+      ],
+      "county": "washoe",
+      "track_record": {
+        "prior_ndot_contracts_count": 2,
+        "prior_ndot_contracts_value": 90000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-556-2500",
+        "email": "ahamburg@ecovitaenv.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1043",
+      "name": "Eddie Hernan Grijalva DBA EHG Trucking, DBA EHG Trucking",
+      "address": {
+        "street": "1473 Las Vegas Business Pkwy",
+        "city": "Las Vegas",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.1639,
+        "lng": -115.1368
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2025-3043"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-2",
+          "A-12",
+          "A-16"
+        ],
+        "nv_license_regime": "dot_carrier",
+        "nv_license_regime_label": "FMCSA DOT Carrier"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "pavement_repair",
+        "asphalt_overlay"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 3,
+        "prior_ndot_contracts_value": 135000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-479-8036",
+        "email": "ehgtrucking1@gmail.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1044",
+      "name": "Elaphos Environmental LLC",
+      "address": {
+        "street": "1484 Henderson Business Pkwy",
+        "city": "Henderson",
+        "state": "NV",
+        "zip": "89101",
+        "lat": 36.0367,
+        "lng": -114.9759
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2026-3044"
+      },
+      "licensing": {
+        "nv_license_status": "active",
+        "classifications": [
+          "A-7",
+          "A-12",
+          "A-2"
+        ],
+        "nv_license_regime": "environmental_firm",
+        "nv_license_regime_label": "Environmental Firm (NDEP regulated)"
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "erosion_control",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 4,
+        "prior_ndot_contracts_value": 180000
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "224-622-4882",
+        "email": "mokhayesh@elaphosenv.com"
+      }
+    },
+    {
+      "id": "ndot-vendor-1045",
+      "name": "ENVIRO TECH 1, LLC",
+      "address": {
+        "street": "10520 Rollins Dr",
+        "city": "Reno",
+        "state": "NV",
+        "zip": "89521",
+        "lat": 36.1699,
+        "lng": -115.1458
+      },
+      "lbe": {
+        "cmd_cert_active": true,
+        "certifying_body_key": "goed_esb",
+        "esb_number": "ESB-NV-2024-3045"
+      },
+      "licensing": {
+        "nv_contractor_license": "0090472",
+        "nv_license_status": "active",
+        "classifications": [
+          "A-7",
+          "A-12",
+          "A-2"
+        ],
+        "nv_license_expires": "03-31-2027",
+        "nv_license_classifications": [
+          "B General Building"
+        ]
+      },
+      "demographics": {
+        "dbe_certified": false,
+        "wbe_certified": false,
+        "dvbe_certified": false
+      },
+      "specialties": [
+        "erosion_control",
+        "drainage_repair"
+      ],
+      "county": "clark",
+      "track_record": {
+        "prior_ndot_contracts_count": 0,
+        "prior_ndot_contracts_value": 0
+      },
+      "source": "ndot_nucp_2025_live",
+      "contact": {
+        "phone": "702-454-0682",
+        "email": "office@envirotechworks.com"
+      }
+    }
+  ]
+}
