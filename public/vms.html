@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vendor Directory — NV ESB Dispatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --bg:           #f5f6f8;
+      --surface:      #ffffff;
+      --border:       #e1e4e8;
+      --border-strong:#c8ced6;
+      --ink:          #1a2332;
+      --ink-soft:     #4a5568;
+      --ink-mute:     #8a96a7;
+      --accent:       #0077b6;
+      --accent-soft:  #e6f0f8;
+      --accent-dark:  #005f94;
+      --green:        #2c8a4a;
+      --green-soft:   #e6f4ec;
+      --amber:        #b45309;
+      --amber-soft:   #fef3c7;
+      --red:          #c53030;
+      --red-soft:     #fee2e2;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .agency-mark {
+      font-weight: 800;
+      letter-spacing: .04em;
+      font-size: 13px;
+      background: var(--ink);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .tool-label {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: -.01em;
+    }
+    .top-bar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-back {
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .btn-back:hover { text-decoration: underline; }
+
+    /* ── Page layout ── */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--ink);
+    }
+    .page-header p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    /* ── Stats row ── */
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 18px;
+      flex: 1;
+      min-width: 140px;
+    }
+    .stat-chip .stat-val {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .stat-chip .stat-lbl {
+      font-size: 12px;
+      color: var(--ink-mute);
+      margin-top: 2px;
+    }
+
+    /* ── Filters ── */
+    .filters {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .filters input[type="text"] {
+      flex: 1;
+      min-width: 180px;
+      padding: 8px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--ink);
+      outline: none;
+    }
+    .filters input[type="text"]:focus { border-color: var(--accent); }
+    .filters select {
+      padding: 8px 10px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--surface);
+      outline: none;
+      cursor: pointer;
+    }
+    .filters select:focus { border-color: var(--accent); }
+    .btn-reset {
+      padding: 8px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      background: var(--surface);
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--ink-soft);
+      cursor: pointer;
+    }
+    .btn-reset:hover { background: var(--bg); }
+    .result-count {
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--ink-mute);
+      white-space: nowrap;
+    }
+
+    /* ── Vendor grid ── */
+    .vendor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .vendor-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .vendor-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 10px rgba(0,119,182,.1);
+    }
+    .vc-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+    .vc-sub {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+    .vc-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: .02em;
+    }
+    .badge-green  { background: var(--green-soft); color: var(--green); }
+    .badge-blue   { background: var(--accent-soft); color: var(--accent-dark); }
+    .badge-amber  { background: var(--amber-soft); color: var(--amber); }
+    .badge-gray   { background: #f0f1f3; color: var(--ink-soft); }
+    .vc-meta {
+      font-size: 12px;
+      color: var(--ink-mute);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px;
+      position: relative;
+      transform: translateY(12px);
+      transition: transform .2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 18px;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--ink-mute);
+      line-height: 1;
+      padding: 4px;
+    }
+    .modal-close:hover { color: var(--ink); }
+
+    .modal-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 4px;
+      padding-right: 28px;
+    }
+    .modal-sub {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin: 0 0 16px;
+    }
+    .modal-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .modal-section {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+    .modal-section:first-of-type { margin-top: 0; border-top: none; padding-top: 0; }
+    .modal-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--ink-mute);
+      margin-bottom: 10px;
+    }
+    .modal-rows {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 16px;
+    }
+    .modal-row { display: flex; flex-direction: column; gap: 2px; }
+    .modal-row-label { font-size: 11px; color: var(--ink-mute); }
+    .modal-row-val { font-size: 13px; color: var(--ink); font-weight: 500; }
+    .modal-row-val a { color: var(--accent); text-decoration: none; }
+    .modal-row-val a:hover { text-decoration: underline; }
+    .val-good { color: var(--green); }
+    .val-warn { color: var(--amber); }
+
+    .specs-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .spec-chip {
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--ink-mute);
+    }
+    .empty-state svg { opacity: .3; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="agency-mark">NDOT / NV Public Works</span>
+  <span class="tool-label">Vendor Directory</span>
+  <div class="top-bar-right">
+    <a href="login.html" class="btn-back">← Back to Console</a>
+  </div>
+</div>
+
+<div class="page">
+  <div class="page-header">
+    <h1>NV ESB Vendor Management System</h1>
+    <p>NDOT NUCP-certified vendors — ESB/DBE certifications, licensing, specializations, and contract history.</p>
+  </div>
+
+  <div class="stats-row" id="statsRow">
+    <div class="stat-chip"><div class="stat-val" id="statTotal">—</div><div class="stat-lbl">Total vendors</div></div>
+    <div class="stat-chip"><div class="stat-val" id="statEsb">—</div><div class="stat-lbl">ESB certified</div></div>
+    <div class="stat-chip"><div class="stat-val" id="statDbe">—</div><div class="stat-lbl">DBE certified</div></div>
+    <div class="stat-chip"><div class="stat-val" id="statWbe">—</div><div class="stat-lbl">WBE certified</div></div>
+    <div class="stat-chip"><div class="stat-val" id="statActive">—</div><div class="stat-lbl">Active NSCB license</div></div>
+  </div>
+
+  <div class="filters">
+    <input type="text" id="searchInput" placeholder="Search vendor name…">
+    <select id="filterCounty">
+      <option value="">All counties</option>
+    </select>
+    <select id="filterEsb">
+      <option value="">Any ESB status</option>
+      <option value="esb">ESB certified</option>
+      <option value="dbe">DBE certified</option>
+    </select>
+    <select id="filterOwnership">
+      <option value="">Any ownership</option>
+      <option value="wbe">Women-owned</option>
+      <option value="mbe">Minority-owned</option>
+    </select>
+    <button class="btn-reset" id="btnReset">Reset</button>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+
+  <div class="vendor-grid" id="vendorGrid"></div>
+</div>
+
+<!-- Vendor detail modal -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
+  <div class="modal" id="modalPanel"></div>
+</div>
+
+<script type="module">
+  const VENDOR_URL = 'baked-vendors-v2.json';
+
+  const SPECIALTY_LABELS = {
+    bridge_inspection: 'Bridge Inspection',
+    drainage_repair: 'Drainage Repair',
+    culvert_replacement: 'Culvert Replacement',
+    trucking: 'Trucking',
+    hauling: 'Hauling',
+    aggregate_supply: 'Aggregate Supply',
+    concrete: 'Concrete',
+    sidewalk: 'Sidewalk',
+    paving: 'Paving',
+    asphalt: 'Asphalt',
+    grading: 'Grading',
+    excavation: 'Excavation',
+    electrical: 'Electrical',
+    traffic_control: 'Traffic Control',
+    landscaping: 'Landscaping',
+    environmental: 'Environmental',
+    surveying: 'Surveying',
+    engineering: 'Engineering',
+    aerial_mapping: 'Aerial Mapping',
+    utility_locating: 'Utility Locating',
+    waterproofing: 'Waterproofing',
+    fencing: 'Fencing',
+    demolition: 'Demolition',
+    painting: 'Painting',
+    signage: 'Signage',
+  };
+
+  const COUNTY_LABELS = {
+    clark: 'Clark County',
+    washoe: 'Washoe County',
+    elko: 'Elko County',
+    carson_city: 'Carson City',
+    douglas: 'Douglas County',
+    lyon: 'Lyon County',
+    storey: 'Storey County',
+    churchill: 'Churchill County',
+    lander: 'Lander County',
+    humboldt: 'Humboldt County',
+    pershing: 'Pershing County',
+    mineral: 'Mineral County',
+    nye: 'Nye County',
+    esmeralda: 'Esmeralda County',
+    lincoln: 'Lincoln County',
+    white_pine: 'White Pine County',
+    eureka: 'Eureka County',
+  };
+
+  function countyLabel(c) { return COUNTY_LABELS[c] || (c ? c.charAt(0).toUpperCase() + c.slice(1) : '—'); }
+  function specLabel(s) { return SPECIALTY_LABELS[s] || s.replace(/_/g, ' ').replace(/\b\w/g, x => x.toUpperCase()); }
+  function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  let ALL = [];
+  let filtered = [];
+
+  async function loadVendors() {
+    const resp = await fetch(VENDOR_URL);
+    const raw = await resp.json();
+    ALL = Array.isArray(raw) ? raw : (raw.vendors || Object.values(raw).find(v => Array.isArray(v)) || []);
+    populateCountyFilter();
+    updateStats(ALL);
+    applyFilters();
+  }
+
+  function populateCountyFilter() {
+    const counties = [...new Set(ALL.map(v => v.county).filter(Boolean))].sort();
+    const sel = document.getElementById('filterCounty');
+    counties.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = countyLabel(c);
+      sel.appendChild(opt);
+    });
+  }
+
+  function updateStats(vendors) {
+    document.getElementById('statTotal').textContent = vendors.length;
+    document.getElementById('statEsb').textContent = vendors.filter(v => v.lbe?.cmd_cert_active).length;
+    document.getElementById('statDbe').textContent = vendors.filter(v => v.demographics?.dbe_certified).length;
+    document.getElementById('statWbe').textContent = vendors.filter(v => v.demographics?.wbe_certified).length;
+    document.getElementById('statActive').textContent = vendors.filter(v => (v.licensing?.nv_license_status || '').toLowerCase() === 'active').length;
+  }
+
+  function applyFilters() {
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const county = document.getElementById('filterCounty').value;
+    const esb = document.getElementById('filterEsb').value;
+    const own = document.getElementById('filterOwnership').value;
+
+    filtered = ALL.filter(v => {
+      if (q && !v.name.toLowerCase().includes(q)) return false;
+      if (county && v.county !== county) return false;
+      if (esb === 'esb' && !v.lbe?.cmd_cert_active) return false;
+      if (esb === 'dbe' && !v.demographics?.dbe_certified) return false;
+      if (own === 'wbe' && !v.demographics?.wbe_certified) return false;
+      if (own === 'mbe' && !v.demographics?.mbe_certified) return false;
+      return true;
+    });
+
+    document.getElementById('resultCount').textContent = `${filtered.length} shown`;
+    renderGrid(filtered);
+  }
+
+  function renderGrid(vendors) {
+    const grid = document.getElementById('vendorGrid');
+    if (!vendors.length) {
+      grid.innerHTML = `<div class="empty-state"><div>No vendors match your filters.</div></div>`;
+      return;
+    }
+    grid.innerHTML = vendors.map(v => vendorCardHtml(v)).join('');
+    grid.querySelectorAll('.vendor-card').forEach((el, i) => {
+      el.addEventListener('click', () => openModal(vendors[i]));
+    });
+  }
+
+  function vendorCardHtml(v) {
+    const lic = v.licensing || {};
+    const lbe = v.lbe || {};
+    const demo = v.demographics || {};
+    const addr = v.address || {};
+    const licStatus = (lic.nv_license_status || '').toLowerCase();
+
+    const badges = [];
+    if (lbe.cmd_cert_active) badges.push(`<span class="badge badge-green">ESB Certified</span>`);
+    if (demo.dbe_certified)  badges.push(`<span class="badge badge-blue">DBE</span>`);
+    if (demo.wbe_certified)  badges.push(`<span class="badge badge-blue">WBE</span>`);
+    if (demo.mbe_certified)  badges.push(`<span class="badge badge-blue">MBE</span>`);
+    if (licStatus === 'active') badges.push(`<span class="badge badge-green">NSCB Active</span>`);
+
+    const specs = (v.specialties || []).slice(0, 2).map(s => specLabel(s)).join(', ');
+    const location = [addr.city || countyLabel(v.county), addr.state].filter(Boolean).join(', ');
+
+    return `
+    <div class="vendor-card">
+      <div class="vc-name">${esc(v.name)}</div>
+      <div class="vc-sub">${esc(location)}${specs ? ' · ' + esc(specs) : ''}</div>
+      <div class="vc-badges">${badges.join('')}</div>
+      <div class="vc-meta">
+        ${lic.nv_contractor_license ? `<span>NSCB #${esc(lic.nv_contractor_license)}${lic.nv_license_expires ? ' · exp ' + esc(lic.nv_license_expires) : ''}</span>` : lic.nv_license_regime_label ? `<span>${esc(lic.nv_license_regime_label)}</span>` : ''}
+        ${v.contact?.phone ? `<span>${esc(v.contact.phone)}</span>` : ''}
+      </div>
+    </div>`;
+  }
+
+  function openModal(v) {
+    const lic = v.licensing || {};
+    const lbe = v.lbe || {};
+    const demo = v.demographics || {};
+    const addr = v.address || {};
+    const tr = v.track_record || {};
+    const licStatus = (lic.nv_license_status || '').toLowerCase();
+
+    const badges = [];
+    if (lbe.cmd_cert_active) badges.push(`<span class="badge badge-green">ESB Certified</span>`);
+    if (demo.dbe_certified)  badges.push(`<span class="badge badge-blue">DBE</span>`);
+    if (demo.wbe_certified)  badges.push(`<span class="badge badge-blue">WBE</span>`);
+    if (demo.mbe_certified)  badges.push(`<span class="badge badge-blue">MBE</span>`);
+    if (demo.dvbe_certified) badges.push(`<span class="badge badge-blue">DVBE</span>`);
+    if (licStatus === 'active') badges.push(`<span class="badge badge-green">NSCB Active</span>`);
+    else if (licStatus) badges.push(`<span class="badge badge-amber">${esc(licStatus)}</span>`);
+
+    const addressLine = [addr.street, addr.city, addr.state, addr.zip].filter(Boolean).join(', ');
+    const specs = (v.specialties || []);
+    const classes = lic.nv_license_classifications || lic.classifications || [];
+
+    const contractCount = tr.prior_ndot_contracts_count ?? '—';
+    const contractVal   = tr.prior_ndot_contracts_value
+      ? '$' + Number(tr.prior_ndot_contracts_value).toLocaleString()
+      : '—';
+
+    document.getElementById('modalPanel').innerHTML = `
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      <div class="modal-name">${esc(v.name)}</div>
+      <div class="modal-sub">${addressLine ? esc(addressLine) : '—'}${v.county ? ' · ' + esc(countyLabel(v.county)) : ''}</div>
+      <div class="modal-badges">${badges.join('')}</div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">ESB / Certification</div>
+        <div class="modal-rows">
+          <div class="modal-row">
+            <span class="modal-row-label">ESB Status</span>
+            <span class="modal-row-val ${lbe.cmd_cert_active ? 'val-good' : 'val-warn'}">${lbe.cmd_cert_active ? 'Active' : 'Not certified'}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">ESB Number</span>
+            <span class="modal-row-val">${esc(lbe.esb_number || '—')}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Certifying Body</span>
+            <span class="modal-row-val">${lbe.certifying_body_key === 'goed_esb' ? 'GOED (Nevada ESB)' : esc(lbe.certifying_body_key || '—')}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">DBE Certified</span>
+            <span class="modal-row-val">${demo.dbe_certified ? 'Yes' : 'No'}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Women-Owned (WBE)</span>
+            <span class="modal-row-val">${demo.wbe_certified ? 'Yes' : 'No'}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Minority-Owned (MBE)</span>
+            <span class="modal-row-val">${demo.mbe_certified ? 'Yes' : 'No'}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Disabled Veteran (DVBE)</span>
+            <span class="modal-row-val">${demo.dvbe_certified ? 'Yes' : 'No'}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">LBE Tier</span>
+            <span class="modal-row-val">${esc(lbe.tier || 'N/A')}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Licensing</div>
+        <div class="modal-rows">
+          <div class="modal-row">
+            <span class="modal-row-label">NSCB License #</span>
+            <span class="modal-row-val">${lic.nv_contractor_license ? 'NSCB #' + esc(lic.nv_contractor_license) : esc(lic.nv_license_regime_label || '—')}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">License Status</span>
+            <span class="modal-row-val ${licStatus === 'active' ? 'val-good' : 'val-warn'}">${esc(licStatus || '—')}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Expiration</span>
+            <span class="modal-row-val">${esc(lic.nv_license_expires || '—')}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Classifications</span>
+            <span class="modal-row-val">${esc(classes.join(', ') || '—')}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Contract History</div>
+        <div class="modal-rows">
+          <div class="modal-row">
+            <span class="modal-row-label">NDOT Contracts (count)</span>
+            <span class="modal-row-val">${contractCount}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">NDOT Contract Value</span>
+            <span class="modal-row-val">${contractVal}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Date Joined Pool</span>
+            <span class="modal-row-val">${esc(v.date_joined || '—')}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Data Source</span>
+            <span class="modal-row-val">${esc(v.source || '—')}</span>
+          </div>
+        </div>
+      </div>
+
+      ${specs.length ? `
+      <div class="modal-section">
+        <div class="modal-section-title">Specializations</div>
+        <div class="specs-list">${specs.map(s => `<span class="spec-chip">${esc(specLabel(s))}</span>`).join('')}</div>
+      </div>` : ''}
+
+      <div class="modal-section">
+        <div class="modal-section-title">Contact</div>
+        <div class="modal-rows">
+          <div class="modal-row">
+            <span class="modal-row-label">Phone</span>
+            <span class="modal-row-val">${v.contact?.phone ? `<a href="tel:${esc(v.contact.phone)}">${esc(v.contact.phone)}</a>` : '—'}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Email</span>
+            <span class="modal-row-val">${v.contact?.email ? `<a href="mailto:${esc(v.contact.email)}">${esc(v.contact.email)}</a>` : '—'}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Website</span>
+            <span class="modal-row-val">${v.contact?.website ? `<a href="${esc(v.contact.website)}" target="_blank" rel="noopener">${esc(v.contact.website)}</a>` : '—'}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">Address</span>
+            <span class="modal-row-val">${esc(addressLine || '—')}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">County</span>
+            <span class="modal-row-val">${esc(countyLabel(v.county))}</span>
+          </div>
+          <div class="modal-row">
+            <span class="modal-row-label">District</span>
+            <span class="modal-row-val">${esc(v.district || addr.supervisor_district || '—')}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  ['searchInput','filterCounty','filterEsb','filterOwnership'].forEach(id => {
+    document.getElementById(id).addEventListener('input', applyFilters);
+    document.getElementById(id).addEventListener('change', applyFilters);
+  });
+
+  document.getElementById('btnReset').addEventListener('click', () => {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('filterCounty').value = '';
+    document.getElementById('filterEsb').value = '';
+    document.getElementById('filterOwnership').value = '';
+    applyFilters();
+  });
+
+  loadVendors();
+</script>
+</body>
+</html>

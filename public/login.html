@@ -222,6 +222,26 @@
       font-family: 'SF Mono', Menlo, Consolas, monospace;
     }
 
+    /* ── VMS link button ── */
+    .btn-vms {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 11px 16px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      border: 1px solid #c2d8ee;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .btn-vms:hover { background: #d4e8f5; border-color: var(--accent); }
+
     /* ── Footer ── */
     .login-footer {
       text-align: center;
@@ -276,8 +296,10 @@
         </div>
       </div>
 
+      <a href="vms.html" class="btn-vms">View Vendor Directory →</a>
+
       <p class="login-footer">
-        Munifi · SF Admin Code Ch. 14B
+        Munifi · NRS 338.0117 · Nevada ESB Dispatch
       </p>
     </div>
   </div>
