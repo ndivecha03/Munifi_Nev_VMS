@@ -66,7 +66,7 @@
 
     /* ── Scoreboard ── */
     .scoreboard {
-      display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
       padding: 20px 24px;
     }
     .stat-card {
@@ -238,7 +238,6 @@
   <div class="stat-card"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total vendors</div></div>
   <div class="stat-card"><div class="stat-num" id="statEsb">—</div><div class="stat-label">ESB certified</div></div>
   <div class="stat-card"><div class="stat-num" id="statDbe">—</div><div class="stat-label">DBE certified</div></div>
-  <div class="stat-card"><div class="stat-num" id="statWbe">—</div><div class="stat-label">Women-owned</div></div>
   <div class="stat-card"><div class="stat-num" id="statLic">—</div><div class="stat-label">Active NSCB license</div></div>
 </div>
 
@@ -250,11 +249,6 @@
       <option value="">Any ESB status</option>
       <option value="esb">ESB certified</option>
       <option value="dbe">DBE certified</option>
-    </select>
-    <select id="filterOwnership">
-      <option value="">Any ownership</option>
-      <option value="wbe">Women-owned (WBE)</option>
-      <option value="mbe">Minority-owned (MBE)</option>
     </select>
     <button class="btn-reset" id="btnReset">Reset</button>
     <span class="result-count" id="resultCount"></span>
@@ -326,7 +320,6 @@
     document.getElementById('statTotal').textContent = vendors.length;
     document.getElementById('statEsb').textContent   = vendors.filter(v=>v.lbe?.cmd_cert_active).length;
     document.getElementById('statDbe').textContent   = vendors.filter(v=>v.demographics?.dbe_certified).length;
-    document.getElementById('statWbe').textContent   = vendors.filter(v=>v.demographics?.wbe_certified).length;
     document.getElementById('statLic').textContent   = vendors.filter(v=>(v.licensing?.nv_license_status||'').toLowerCase()==='active').length;
   }
 
@@ -334,14 +327,11 @@
     const q      = document.getElementById('searchInput').value.trim().toLowerCase();
     const county = document.getElementById('filterCounty').value;
     const esb    = document.getElementById('filterEsb').value;
-    const own    = document.getElementById('filterOwnership').value;
     filtered = ALL.filter(v => {
       if (q && !v.name.toLowerCase().includes(q)) return false;
       if (county && v.county !== county) return false;
       if (esb === 'esb' && !v.lbe?.cmd_cert_active) return false;
       if (esb === 'dbe' && !v.demographics?.dbe_certified) return false;
-      if (own === 'wbe' && !v.demographics?.wbe_certified) return false;
-      if (own === 'mbe' && !v.demographics?.mbe_certified) return false;
       return true;
     });
     document.getElementById('resultCount').textContent = `${filtered.length} shown`;
@@ -362,8 +352,6 @@
       const badges = [
         lbe.cmd_cert_active  ? `<span class="badge badge-green">ESB</span>` : '',
         demo.dbe_certified   ? `<span class="badge badge-blue">DBE</span>`  : '',
-        demo.wbe_certified   ? `<span class="badge badge-blue">WBE</span>`  : '',
-        demo.mbe_certified   ? `<span class="badge badge-blue">MBE</span>`  : '',
         (lic.nv_license_status||'').toLowerCase()==='active' ? `<span class="badge badge-green">NSCB Active</span>` : '',
       ].filter(Boolean).join('');
       const loc = [addr.city || countyLabel(v.county), addr.state].filter(Boolean).join(', ');
@@ -403,8 +391,6 @@
     const badges = [
       lbe.cmd_cert_active  ? `<span class="badge badge-green">ESB Certified</span>` : '',
       demo.dbe_certified   ? `<span class="badge badge-blue">DBE</span>`  : '',
-      demo.wbe_certified   ? `<span class="badge badge-blue">WBE</span>`  : '',
-      demo.mbe_certified   ? `<span class="badge badge-blue">MBE</span>`  : '',
       demo.dvbe_certified  ? `<span class="badge badge-blue">DVBE</span>` : '',
       licStatus === 'active' ? `<span class="badge badge-green">NSCB Active</span>` : licStatus ? `<span class="badge badge-amber">${esc(licStatus)}</span>` : '',
     ].filter(Boolean);
@@ -421,9 +407,7 @@
         ${row('Certifying Body',  lbe.certifying_body_key==='goed_esb'?'Nevada GOED':esc(lbe.certifying_body_key||'—'))}
         ${row('Cert Expiration',  esc(lbe.cmd_cert_expires_on || '—'))}
         ${row('LBE Tier',         esc(lbe.tier || 'N/A'))}
-        ${row('DBE Certified',    demo.dbe_certified ? 'Yes' : 'No')}
-        ${row('Women-Owned (WBE)',demo.wbe_certified ? 'Yes' : 'No')}
-        ${row('Minority-Owned (MBE)', demo.mbe_certified ? 'Yes' : 'No')}
+        ${row('DBE Certified', demo.dbe_certified ? 'Yes' : 'No')}
       </div>
       <hr class="modal-divider">
       <div class="modal-section-title">Licensing</div>
@@ -466,12 +450,12 @@
   document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id==='modalOverlay') closeModal(); });
   document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 
-  ['searchInput','filterCounty','filterEsb','filterOwnership'].forEach(id => {
+  ['searchInput','filterCounty','filterEsb'].forEach(id => {
     document.getElementById(id).addEventListener('input', applyFilters);
     document.getElementById(id).addEventListener('change', applyFilters);
   });
   document.getElementById('btnReset').addEventListener('click', () => {
-    ['searchInput','filterCounty','filterEsb','filterOwnership'].forEach(id => {
+    ['searchInput','filterCounty','filterEsb'].forEach(id => {
       const el = document.getElementById(id);
       el.tagName === 'INPUT' ? el.value = '' : el.value = '';
     });
