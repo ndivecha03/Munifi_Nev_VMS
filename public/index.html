@@ -688,7 +688,8 @@ function updateCounts(){
 /* ═══════════ HOME ═══════════ */
 function renderHome(){
   const h=new Date().getHours();
-  $('#greeting').innerHTML='Good '+(h<12?'morning':h<18?'afternoon':'evening')+', <em>Nish</em>';
+  const _firstName=(_session?.name||'Nish').split(' ')[0];
+  $('#greeting').innerHTML='Good '+(h<12?'morning':h<18?'afternoon':'evening')+', <em>'+_firstName+'</em>';
   const clark=COMPLAINTS.filter(c=>c.county==='Clark').length;
   const emer=COMPLAINTS.filter(c=>c.severity==='emergency'&&complaintStatus(c)==='open').length;
   const esb=VENDORS.filter(vEsbActive).length;
