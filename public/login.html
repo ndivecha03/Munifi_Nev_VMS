@@ -3,68 +3,67 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign in — NDOT NV ESB Dispatch</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <title>Sign in — Munifi Nevada Dispatch</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-
     :root {
-      --bg:           #f5f6f8;
-      --surface:      #ffffff;
-      --border:       #e1e4e8;
-      --border-strong:#c8ced6;
-      --ink:          #1a2332;
-      --ink-soft:     #4a5568;
-      --ink-mute:     #8a96a7;
-      --accent:       #0077b6;
-      --accent-soft:  #e6f0f8;
-      --accent-dark:  #005f94;
-      --error:        #d64545;
-      --error-soft:   #fce8e8;
-      --success:      #2c8a4a;
+      --white:    #FFFFFF;
+      --orange:   #B8621F;
+      --black:    #111111;
+      --gray-90:  #1A1A1A;
+      --gray-70:  #444444;
+      --gray-50:  #777777;
+      --gray-30:  #BBBBBB;
+      --gray-15:  #DDDDDD;
+      --gray-08:  #EEEEEE;
+      --gray-04:  #F5F5F5;
+      --orange-10: rgba(184,98,31,.10);
+      --orange-06: rgba(184,98,31,.06);
+      --crit:     #B3362B;
+      --crit-10:  rgba(179,54,43,.10);
     }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
+      font-family: 'Satoshi', system-ui, sans-serif;
+      background: var(--gray-04);
+      color: var(--black);
       min-height: 100vh;
-      background: var(--bg);
-      font-family: Inter, system-ui, sans-serif;
-      font-size: 14px;
-      color: var(--ink);
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Top bar ── */
-    .top-bar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+    /* ── Top bar — matches app topbar exactly ── */
+    .topbar {
+      height: 56px;
       display: flex;
       align-items: center;
       gap: 12px;
+      padding: 0 28px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-15);
     }
-    .agency-mark {
-      font-weight: 800;
-      letter-spacing: .04em;
-      font-size: 13px;
-      background: var(--ink);
-      color: #fff;
-      padding: 4px 10px;
-      border-radius: 4px;
+    .brand-mark {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: var(--orange);
+      color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px; letter-spacing: .5px;
+      flex: none;
     }
-    .tool-label {
-      font-weight: 600;
-      font-size: 15px;
-      color: var(--ink);
-      letter-spacing: -.01em;
+    .brand-name {
+      font-weight: 700; font-size: 15px; letter-spacing: .2px;
+      color: var(--black);
+    }
+    .brand-sub {
+      font-size: 11px; color: var(--gray-50);
     }
 
-    /* ── Main layout ── */
-    .login-wrap {
+    /* ── Center layout ── */
+    .wrap {
       flex: 1;
       display: flex;
       align-items: center;
@@ -72,93 +71,93 @@
       padding: 40px 20px;
     }
 
-    .login-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-15);
+      border-radius: 16px;
       padding: 40px 44px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 2px 12px rgba(10,31,61,.06);
+      max-width: 440px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
     }
 
-    .login-eyebrow {
-      font-size: 12px;
+    .eyebrow {
+      font-size: 10px;
       font-weight: 600;
-      letter-spacing: .06em;
+      letter-spacing: 1.4px;
       text-transform: uppercase;
-      color: var(--accent);
-      margin: 0 0 8px;
+      color: var(--orange);
+      margin-bottom: 8px;
     }
-    .login-title {
-      font-size: 22px;
+    .title {
+      font-size: 24px;
       font-weight: 700;
-      letter-spacing: -.02em;
-      color: var(--ink);
-      margin: 0 0 6px;
+      letter-spacing: -.4px;
+      color: var(--black);
+      margin-bottom: 6px;
     }
-    .login-sub {
+    .subtitle {
       font-size: 13px;
-      color: var(--ink-soft);
-      margin: 0 0 28px;
+      color: var(--gray-50);
+      margin-bottom: 28px;
       line-height: 1.5;
     }
 
     /* ── Form ── */
-    .form-group {
-      margin-bottom: 18px;
-    }
+    .form-group { margin-bottom: 16px; }
     label {
       display: block;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      color: var(--ink-soft);
+      color: var(--gray-70);
       margin-bottom: 6px;
+      letter-spacing: .2px;
     }
     input[type="email"],
     input[type="password"] {
       width: 100%;
-      padding: 9px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font: 500 14px/1.4 Inter, sans-serif;
-      color: var(--ink);
-      background: #fff;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-15);
+      border-radius: 10px;
+      font: 500 14px/1.4 'Satoshi', system-ui, sans-serif;
+      color: var(--black);
+      background: var(--white);
       outline: none;
       transition: border-color .15s, box-shadow .15s;
     }
+    input::placeholder { color: var(--gray-30); }
     input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,119,182,.12);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px var(--orange-10);
     }
-    input.error {
-      border-color: var(--error);
-      box-shadow: 0 0 0 3px rgba(214,69,69,.10);
+    input.field-error {
+      border-color: var(--crit);
+      box-shadow: 0 0 0 3px var(--crit-10);
     }
 
     /* ── Error banner ── */
     .error-banner {
       display: none;
-      background: var(--error-soft);
-      border: 1px solid #f5b8b8;
-      border-radius: 6px;
+      background: var(--crit-10);
+      border: 1px solid rgba(179,54,43,.25);
+      border-radius: 10px;
       padding: 10px 14px;
       font-size: 13px;
-      color: var(--error);
+      color: var(--crit);
       font-weight: 500;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
     .error-banner.visible { display: block; }
 
-    /* ── Submit button ── */
+    /* ── Sign-in button — matches .btn.primary ── */
     .btn-signin {
       width: 100%;
-      padding: 10px;
-      background: var(--accent);
-      color: #fff;
+      padding: 11px;
+      background: var(--orange);
+      color: var(--white);
       border: none;
-      border-radius: 6px;
-      font: 600 14px/1 Inter, sans-serif;
+      border-radius: 10px;
+      font: 600 14px/1 'Satoshi', system-ui, sans-serif;
       cursor: pointer;
       transition: background .15s;
       margin-top: 4px;
@@ -167,9 +166,9 @@
       justify-content: center;
       gap: 8px;
     }
-    .btn-signin:hover  { background: var(--accent-dark); }
+    .btn-signin:hover  { background: #a25417; }
     .btn-signin:active { transform: translateY(1px); }
-    .btn-signin:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-signin:disabled { background: var(--gray-30); cursor: not-allowed; transform: none; }
 
     .spinner {
       display: none;
@@ -183,86 +182,128 @@
     .btn-signin.loading .btn-text { opacity: .7; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Demo credentials hint ── */
-    .demo-hint {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
+    /* ── Divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0 16px;
     }
-    .demo-hint-label {
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-15);
+    }
+    .divider span {
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: .05em;
+      letter-spacing: 1px;
       text-transform: uppercase;
-      color: var(--ink-mute);
-      margin-bottom: 10px;
+      color: var(--gray-30);
     }
+
+    /* ── Demo account chips — matches vendor-card style ── */
     .demo-account {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 12px;
+      border: 1.5px solid var(--gray-15);
+      border-radius: 12px;
+      padding: 12px 14px;
       margin-bottom: 8px;
       cursor: pointer;
       transition: border-color .12s, background .12s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
     .demo-account:hover {
-      border-color: var(--accent);
-      background: var(--accent-soft);
+      border-color: var(--orange);
+      background: var(--orange-06);
     }
-    .demo-account-role {
-      font-size: 12px;
+    .demo-avatar {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: var(--gray-04);
+      color: var(--gray-70);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 11px;
+      flex: none;
+      border: 1px solid var(--gray-15);
+    }
+    .demo-account:hover .demo-avatar {
+      background: var(--orange-10);
+      color: var(--orange);
+      border-color: var(--orange);
+    }
+    .demo-info { flex: 1; min-width: 0; }
+    .demo-role {
+      font-size: 13px;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--black);
       margin-bottom: 2px;
     }
-    .demo-account-creds {
-      font-size: 12px;
-      color: var(--ink-soft);
+    .demo-creds {
+      font-size: 11.5px;
+      color: var(--gray-50);
       font-family: 'SF Mono', Menlo, Consolas, monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    .demo-arrow {
+      font-size: 13px;
+      color: var(--gray-30);
+      flex: none;
+    }
+    .demo-account:hover .demo-arrow { color: var(--orange); }
 
     /* ── VMS link button ── */
     .btn-vms {
       display: block;
       width: 100%;
-      margin-top: 12px;
+      margin-top: 20px;
       padding: 11px 16px;
-      background: var(--accent-soft);
-      color: var(--accent-dark);
-      border: 1px solid #c2d8ee;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: inherit;
+      border: 1.5px solid var(--gray-15);
+      border-radius: 10px;
+      font: 500 13px/1 'Satoshi', system-ui, sans-serif;
+      color: var(--gray-70);
+      background: var(--white);
       text-align: center;
       text-decoration: none;
       cursor: pointer;
-      transition: background .15s, border-color .15s;
+      transition: border-color .12s, color .12s, background .12s;
     }
-    .btn-vms:hover { background: #d4e8f5; border-color: var(--accent); }
+    .btn-vms:hover {
+      border-color: var(--orange);
+      color: var(--orange);
+      background: var(--orange-06);
+    }
 
     /* ── Footer ── */
-    .login-footer {
+    .footer {
       text-align: center;
       margin-top: 24px;
-      font-size: 12px;
-      color: var(--ink-mute);
+      font-size: 11.5px;
+      color: var(--gray-30);
+      letter-spacing: .2px;
     }
   </style>
 </head>
 <body>
 
-  <div class="top-bar">
-    <span class="agency-mark">NDOT / NV Public Works</span>
-    <span class="tool-label">NV ESB Dispatch Console</span>
+  <div class="topbar">
+    <div class="brand-mark">NV</div>
+    <div>
+      <div class="brand-name">Munifi Nevada</div>
+      <div class="brand-sub">NDOT ESB Dispatch · Clark County</div>
+    </div>
   </div>
 
-  <div class="login-wrap">
-    <div class="login-card">
-      <p class="login-eyebrow">Nevada ESB Dispatch · NRS 338.0117</p>
-      <h1 class="login-title">Sign in to continue</h1>
-      <p class="login-sub">Access is restricted to authorized NDOT dispatch staff and administrators.</p>
+  <div class="wrap">
+    <div class="card">
+      <p class="eyebrow">Nevada ESB Dispatch · NRS 338.0117</p>
+      <h1 class="title">Sign in to continue</h1>
+      <p class="subtitle">Access is restricted to authorized NDOT dispatch staff and administrators.</p>
 
       <div class="error-banner" id="errorBanner" role="alert"></div>
 
@@ -283,62 +324,62 @@
         </button>
       </form>
 
-      <!-- Demo credentials -->
-      <div class="demo-hint">
-        <div class="demo-hint-label">Demo accounts — click to fill</div>
-        <div class="demo-account" data-email="dispatcher@dot.nv.gov" data-password="NVESB2026!">
-          <div class="demo-account-role">NDOT Dispatcher</div>
-          <div class="demo-account-creds">dispatcher@dot.nv.gov · NVESB2026!</div>
+      <div class="divider"><span>Demo accounts</span></div>
+
+      <div class="demo-account" data-email="dispatcher@dot.nv.gov" data-password="NVESB2026!">
+        <div class="demo-avatar">ND</div>
+        <div class="demo-info">
+          <div class="demo-role">NDOT Dispatcher</div>
+          <div class="demo-creds">dispatcher@dot.nv.gov · NVESB2026!</div>
         </div>
-        <div class="demo-account" data-email="admin@munifi.com" data-password="Munifi2026!">
-          <div class="demo-account-role">Munifi Admin</div>
-          <div class="demo-account-creds">admin@munifi.com · Munifi2026!</div>
+        <span class="demo-arrow">→</span>
+      </div>
+      <div class="demo-account" data-email="admin@munifi.com" data-password="Munifi2026!">
+        <div class="demo-avatar">MA</div>
+        <div class="demo-info">
+          <div class="demo-role">Munifi Admin</div>
+          <div class="demo-creds">admin@munifi.com · Munifi2026!</div>
         </div>
-        <div class="demo-account" data-email="vendor@goed.nv.gov" data-password="GoedESB2026!">
-          <div class="demo-account-role">GOED ESB Reviewer (read-only)</div>
-          <div class="demo-account-creds">vendor@goed.nv.gov · GoedESB2026!</div>
+        <span class="demo-arrow">→</span>
+      </div>
+      <div class="demo-account" data-email="vendor@goed.nv.gov" data-password="GoedESB2026!">
+        <div class="demo-avatar">GE</div>
+        <div class="demo-info">
+          <div class="demo-role">GOED ESB Reviewer</div>
+          <div class="demo-creds">vendor@goed.nv.gov · GoedESB2026!</div>
         </div>
+        <span class="demo-arrow">→</span>
       </div>
 
       <a href="vms.html" class="btn-vms">View Vendor Directory →</a>
 
-      <p class="login-footer">
-        Munifi · NRS 338.0117 · Nevada ESB Dispatch
-      </p>
+      <p class="footer">Munifi · NRS 338.0117 · Nevada ESB Dispatch</p>
     </div>
   </div>
 
   <script>
-    // ── Demo accounts ──────────────────────────────────────────────────────────
-    // In a real deployment these would be verified server-side.
-    // For the demo, credentials are checked client-side only.
     const ACCOUNTS = [
-      { email: 'dispatcher@dot.nv.gov', password: 'NVESB2026!',   name: 'NDOT Dispatcher',     role: 'dispatcher' },
-      { email: 'admin@munifi.com',       password: 'Munifi2026!',   name: 'Munifi Admin',        role: 'admin' },
-      { email: 'vendor@goed.nv.gov',     password: 'GoedESB2026!',  name: 'GOED ESB Reviewer',   role: 'viewer' },
+      { email: 'dispatcher@dot.nv.gov', password: 'NVESB2026!',  name: 'NDOT Dispatcher',   role: 'dispatcher' },
+      { email: 'admin@munifi.com',       password: 'Munifi2026!', name: 'Munifi Admin',       role: 'admin'      },
+      { email: 'vendor@goed.nv.gov',     password: 'GoedESB2026!',name: 'GOED ESB Reviewer',  role: 'viewer'     },
     ];
 
     const SESSION_KEY = 'nvesb_session';
 
-    // ── Redirect if already logged in ─────────────────────────────────────────
     try {
-      const existing = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
-      if (existing?.email) window.location.replace('index.html');
+      const s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+      if (s?.email) window.location.replace('index.html');
     } catch {}
 
-    // ── Fill from demo-account chips ──────────────────────────────────────────
     document.querySelectorAll('.demo-account').forEach(chip => {
       chip.addEventListener('click', () => {
         document.getElementById('email').value    = chip.dataset.email;
         document.getElementById('password').value = chip.dataset.password;
-        document.getElementById('email').classList.remove('error');
-        document.getElementById('password').classList.remove('error');
-        hideError();
+        clearErrors();
         document.getElementById('submitBtn').focus();
       });
     });
 
-    // ── Form submit ───────────────────────────────────────────────────────────
     document.getElementById('loginForm').addEventListener('submit', e => {
       e.preventDefault();
       const email    = document.getElementById('email').value.trim().toLowerCase();
@@ -346,65 +387,20 @@
       const btn      = document.getElementById('submitBtn');
 
       clearErrors();
+      if (!email)    { showFieldError('email',    'Email is required.'); return; }
+      if (!password) { showFieldError('password', 'Password is required.'); return; }
 
-      if (!email) {
-        showFieldError('email', 'Email is required.');
-        return;
-      }
-      if (!password) {
-        showFieldError('password', 'Password is required.');
-        return;
-      }
-
-      // Simulate a brief network delay so it feels real
       btn.disabled = true;
       btn.classList.add('loading');
 
       setTimeout(() => {
-        const account = ACCOUNTS.find(
-          a => a.email === email && a.password === password
-        );
-
+        const account = ACCOUNTS.find(a => a.email === email && a.password === password);
         if (account) {
           localStorage.setItem(SESSION_KEY, JSON.stringify({
-            email:      account.email,
-            name:       account.name,
-            role:       account.role,
+            email: account.email, name: account.name, role: account.role,
             loggedInAt: new Date().toISOString(),
           }));
-          // Also pre-fill the dispatch agent ID so the console doesn't prompt
           try { localStorage.setItem('nvesb_dispatch_agent_id', account.name); } catch {}
-
-          // Audit: capture the login event. Fire-and-forget via sendBeacon
-          // so it survives the location.replace() that follows.
-          try {
-            const payload = {
-              event_type:   'auth.login',
-              actor_type:   'human',
-              actor_id:     account.email,
-              subject_type: 'session',
-              subject_id:   account.email,
-              tenant:       'nevada',
-              source:       'browser:login.html',
-              payload: {
-                name: account.name,
-                role: account.role,
-                user_agent: navigator.userAgent,
-              },
-            };
-            if (navigator.sendBeacon) {
-              const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-              navigator.sendBeacon('/api/audit/event', blob);
-            } else {
-              fetch('/api/audit/event', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-                keepalive: true,
-              }).catch(() => {});
-            }
-          } catch (_) { /* audit-log failure must never block login */ }
-
           window.location.replace('index.html');
         } else {
           btn.disabled = false;
@@ -412,43 +408,23 @@
           showError('Incorrect email or password. Please try again.');
           document.getElementById('password').value = '';
           document.getElementById('password').focus();
-          // Audit: failed login attempt. No correlation_id (no session yet).
-          try {
-            const payload = {
-              event_type:   'auth.login_failed',
-              actor_type:   'human',
-              actor_id:     email || 'unknown',
-              tenant:       'nevada',
-              source:       'browser:login.html',
-              payload:      { user_agent: navigator.userAgent },
-            };
-            fetch('/api/audit/event', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload),
-              keepalive: true,
-            }).catch(() => {});
-          } catch (_) {}
         }
-      }, 600);
+      }, 500);
     });
 
     function showError(msg) {
-      const banner = document.getElementById('errorBanner');
-      banner.textContent = msg;
-      banner.classList.add('visible');
+      const b = document.getElementById('errorBanner');
+      b.textContent = msg;
+      b.classList.add('visible');
     }
-    function hideError() {
-      document.getElementById('errorBanner').classList.remove('visible');
-    }
-    function showFieldError(fieldId, msg) {
-      document.getElementById(fieldId).classList.add('error');
+    function showFieldError(id, msg) {
+      document.getElementById(id).classList.add('field-error');
       showError(msg);
     }
     function clearErrors() {
-      hideError();
-      document.getElementById('email').classList.remove('error');
-      document.getElementById('password').classList.remove('error');
+      document.getElementById('errorBanner').classList.remove('visible');
+      document.getElementById('email').classList.remove('field-error');
+      document.getElementById('password').classList.remove('field-error');
     }
   </script>
 
