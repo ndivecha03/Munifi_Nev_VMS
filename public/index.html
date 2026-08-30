@@ -533,8 +533,8 @@ function scoreVendor(complaint, v){
   if(!vLicenseActive(v)) excluded.push('license_inactive');
   if(miles>POLICY.radiusMiles) excluded.push('outside_radius');
   const specs=(v.specialties||[]).map(s=>s.toLowerCase());
-  const acceptableSpecs=(SUBTYPE_TO_VENDOR_SPECS[(complaint.subtype||'').toLowerCase()]||[complaint.subtype||'']).map(s=>s.toLowerCase());
-  if(specs.length&&!specs.some(s=>acceptableSpecs.includes(s))) excluded.push('cannot_fulfill_specialty');
+  const acceptableSpecs=(SUBTYPE_TO_VENDOR_SPECS[(complaint.subtype||'').toLowerCase()]||[]).map(s=>s.toLowerCase());
+  // specialty is a scoring signal, not a hard gate — NDOT NUCP vendors are certified for all public works
   const req=SPECIALTY_TO_NSCB[(complaint.subtype||'').toLowerCase()]||[];
   const cls=vClasses(v);
   if(cls.length&&req.length&&!req.some(r=>cls.includes(r))&&cls.length>0) excluded.push('nscb_class_mismatch');
@@ -558,8 +558,9 @@ function scoreVendor(complaint, v){
   comps.proximity=SCORING_WEIGHTS.proximity/(1+Math.pow(miles/3,2));
   // reliability (10)
   comps.reliability=vLicenseActive(v)?SCORING_WEIGHTS.reliability:0;
-  // capability (6, binary)
-  comps.capability=(vLicNum(v)&&(vEsbActive(v)||count5>0))?SCORING_WEIGHTS.capability:0;
+  // capability (6): license + specialty match bonus
+  const specialtyMatch=specs.length&&acceptableSpecs.length&&specs.some(s=>acceptableSpecs.includes(s));
+  comps.capability=(vLicNum(v)&&(vEsbActive(v)||count5>0))?SCORING_WEIGHTS.capability:(specialtyMatch?SCORING_WEIGHTS.capability*0.5:0);
   // capacity_headroom (4, inverse of 12-mo value)
   comps.capacity_headroom=SCORING_WEIGHTS.capacity_headroom*(1-Math.min(1,value12/500000));
   let total=0; for(const k in comps){comps[k]=Math.round(comps[k]*10)/10; total+=comps[k];}
