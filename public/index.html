@@ -71,9 +71,11 @@
   .greeting{font-size:30px;font-weight:700;letter-spacing:-.4px;margin-bottom:24px;color:var(--black);}
   .greeting em{font-style:normal;color:var(--orange);}
   .chat-input{display:flex;align-items:center;gap:12px;background:var(--white);border:1.5px solid var(--gray-15);border-radius:99px;padding:14px 20px;text-align:left;transition:border-color .15s,box-shadow .15s;}
+  .chat-input:focus-within{border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-10);}
   .chat-input:hover{border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-10);}
   .chat-input .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);flex:none;}
-  .chat-input span{font-size:14px;color:var(--gray-50);}
+  .chat-input input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:var(--black);font-family:inherit;}
+  .chat-input input::placeholder{color:var(--gray-50);}
   .suggest{margin-top:24px;background:var(--gray-04);border:1px solid var(--gray-08);border-radius:14px;padding:18px 20px;text-align:left;}
   .suggest-label{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--orange);margin-bottom:10px;font-weight:600;}
   .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
@@ -336,7 +338,7 @@
     <section class="page active" id="page-home">
       <div class="home-inner">
         <div class="greeting" id="greeting">Good afternoon, <em>Nish</em></div>
-        <div class="chat-input"><span class="dot"></span><span>Ask about any work order, vendor, county, or SLA</span></div>
+        <div class="chat-input"><span class="dot"></span><input type="text" id="chatInput" placeholder="Ask about any work order, vendor, county, or SLA" autocomplete="off"></div>
         <div class="suggest">
           <div class="suggest-label">Suggested</div>
           <div class="chip-row" id="homeChips"></div>
