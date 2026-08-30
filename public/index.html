@@ -504,7 +504,7 @@ async function verifyChain(){
 
 /* ═══════════ Vendor accessors + flags ═══════════ */
 const vById = Object.fromEntries(VENDORS.map(v=>[v.id,v]));
-function vLicenseActive(v){const s=((v.licensing||{}).nv_license_status||'').toLowerCase();return s==='active'||!!((v.lbe||{}).cmd_cert_active);}
+function vLicenseActive(v){const s=((v.licensing||{}).nv_license_status||'').toLowerCase();return s===''||s==='active'||!!((v.lbe||{}).cmd_cert_active);}
 function vEsbActive(v){return !!((v.lbe||{}).cmd_cert_active);}
 function vEsbEligible(v){return vEsbActive(v)&&vLicenseActive(v);}
 function vClasses(v){return (v.licensing||{}).classifications||[];}

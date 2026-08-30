@@ -320,7 +320,7 @@
     document.getElementById('statTotal').textContent = vendors.length;
     document.getElementById('statEsb').textContent   = vendors.filter(v=>v.lbe?.cmd_cert_active).length;
     document.getElementById('statDbe').textContent   = vendors.filter(v=>v.demographics?.dbe_certified).length;
-    document.getElementById('statLic').textContent   = vendors.filter(v=>(v.licensing?.nv_license_status||'').toLowerCase()==='active').length;
+    document.getElementById('statLic').textContent   = vendors.filter(v=>{const s=(v.licensing?.nv_license_status||'').toLowerCase();return s===''||s==='active';}).length;
   }
 
   function applyFilters() {
