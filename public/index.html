@@ -414,6 +414,19 @@ const COST_RANGES = {pavement_repair:{low:75000,high:350000}, asphalt_overlay:{l
 const SEVERITY_TO_PRIORITY = {emergency:'high', urgent:'high', elevated:'medium', standard:'low'};
 const PRIORITY_DAYS = {high:30, medium:60, low:120};
 const SPECIALTY_TO_NSCB = {pavement_repair:['A-2','A-12','A-16'], asphalt_overlay:['A-2','A-12','A-16'], concrete_repair:['A-16','A-2'], drainage_repair:['A-15','A-7','A-2'], culvert_replacement:['A-15','A-7'], erosion_control:['A-7','A-12','A-2'], striping_markings:['A-8','A-2'], guardrail_installation:['A-2'], sign_installation:['A-2'], bridge_inspection:['A-4','A-2']};
+// Maps complaint subtype → vendor specialties that can fulfill it (vendor pool uses sidewalk/concrete terms)
+const SUBTYPE_TO_VENDOR_SPECS = {
+  pavement_repair:['pavement','asphalt','paving','sidewalk','concrete','curb_cut','driveway_apron'],
+  asphalt_overlay:['asphalt','paving','pavement','sidewalk'],
+  concrete_repair:['concrete','sidewalk','curb_cut','ADA_ramp','driveway_apron','tree_well'],
+  drainage_repair:['drainage','pipeline','utility_work','sidewalk','concrete'],
+  culvert_replacement:['pipeline','utility_work','drainage','concrete'],
+  erosion_control:['erosion_control','grading','excavation','landscaping','concrete'],
+  striping_markings:['striping','pavement','asphalt','sidewalk'],
+  guardrail_installation:['guardrail','concrete','sidewalk'],
+  sign_installation:['sidewalk','concrete','electrical'],
+  bridge_inspection:['concrete','sidewalk','engineering'],
+};
 const CERTIFYING_BODIES = {goed_esb:{name:'GOED ESB',cert_type:'esb',points:9}, usdot_dbe:{name:'USDOT DBE',cert_type:'dbe',points:8}, nmsdc:{name:'NMSDC',cert_type:'mbe',points:7}, wbenc:{name:'WBENC',cert_type:'wbe',points:7}, navoba:{name:'NaVOBA',cert_type:'veteran',points:6}, disability_in:{name:'Disability:IN',cert_type:'dobe',points:5}, nglcc:{name:'NGLCC',cert_type:'lgbtbe',points:4}};
 const CITATION_LONG = 'NRS 338.0117 — Nevada Emerging Small Business (ESB) Preference: State agencies must give priority to ESB-certified firms on public-works contracts. GOED administers ESB certification; recertification required annually. NRS 333.336 grants a 5% bid-price preference to qualified small NV businesses on state purchasing contracts ≤ $1M. Prevailing wage applies to public works contracts ≥ $250,000 under NRS 338.013–338.090.';
 const SUBTYPE_LABELS = {pavement_repair:'Pavement Repair', asphalt_overlay:'Asphalt Overlay', bridge_inspection:'Bridge Inspection', erosion_control:'Erosion Control', guardrail_installation:'Guardrail Installation', sign_installation:'Sign Installation', drainage_repair:'Drainage Repair', striping_markings:'Striping & Markings', concrete_repair:'Concrete Repair', culvert_replacement:'Culvert Replacement'};
@@ -520,7 +533,8 @@ function scoreVendor(complaint, v){
   if(!vLicenseActive(v)) excluded.push('license_inactive');
   if(miles>POLICY.radiusMiles) excluded.push('outside_radius');
   const specs=(v.specialties||[]).map(s=>s.toLowerCase());
-  if(!specs.includes((complaint.subtype||'').toLowerCase())) excluded.push('cannot_fulfill_specialty');
+  const acceptableSpecs=(SUBTYPE_TO_VENDOR_SPECS[(complaint.subtype||'').toLowerCase()]||[complaint.subtype||'']).map(s=>s.toLowerCase());
+  if(specs.length&&!specs.some(s=>acceptableSpecs.includes(s))) excluded.push('cannot_fulfill_specialty');
   const req=SPECIALTY_TO_NSCB[(complaint.subtype||'').toLowerCase()]||[];
   const cls=vClasses(v);
   if(cls.length&&req.length&&!req.some(r=>cls.includes(r))) excluded.push('nscb_class_mismatch');
