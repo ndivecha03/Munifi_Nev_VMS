@@ -1613,6 +1613,37 @@ $('#resetDemo').addEventListener('click',()=>{
 });
 $('#modalBack').addEventListener('click',e=>{if(e.target.id==='modalBack')closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// ── Home search bar — Enter to navigate ──────────────────────────────────────
+$('#chatInput').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.trim().toLowerCase();
+  if (!q) return;
+  e.target.value = '';
+
+  if (/vendor|firm|contractor|directory|nscb|esb|license/.test(q)) {
+    showPage('vendors'); showVendorsSub('directory');
+  } else if (/flag|expir|compli|missing|warning/.test(q)) {
+    showPage('vendors'); showVendorsSub('flagged');
+  } else if (/audit|trail|chain|log|hash/.test(q)) {
+    showPage('audit');
+  } else if (/map|county|location|clark|washoe|elko/.test(q)) {
+    showPage('map');
+  } else if (/emergency|urgent/.test(q)) {
+    state.dfilters.sev = 'emergency'; goDispatch();
+  } else if (/dispatch|work order|complaint|queue|inprogress|in.progress/.test(q)) {
+    goDispatch();
+  } else if (/complet/.test(q)) {
+    showPage('complaints'); showComplaintsSub('completed');
+  } else {
+    // Default: go to complaints with the query pre-filled in the search box
+    goDispatch();
+    setTimeout(() => {
+      const dq = document.getElementById('dq');
+      if (dq) { dq.value = e.target.value || q; dq.dispatchEvent(new Event('input')); }
+    }, 50);
+  }
+});
 let resizeRaf=null;
 window.addEventListener('resize',()=>{
   if(state.page!=='map') return;
