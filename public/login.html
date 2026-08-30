@@ -260,9 +260,9 @@
 
   <div class="login-wrap">
     <div class="login-card">
-      <p class="login-eyebrow">Sidewalk Inspection & Repair Program</p>
+      <p class="login-eyebrow">Nevada ESB Dispatch · NRS 338.0117</p>
       <h1 class="login-title">Sign in to continue</h1>
-      <p class="login-sub">Access is restricted to authorized DPW dispatch staff and administrators.</p>
+      <p class="login-sub">Access is restricted to authorized NDOT dispatch staff and administrators.</p>
 
       <div class="error-banner" id="errorBanner" role="alert"></div>
 
@@ -270,7 +270,7 @@
         <div class="form-group">
           <label for="email">Email address</label>
           <input type="email" id="email" name="email"
-            placeholder="you@dpw.sfgov.org" autocomplete="email" spellcheck="false">
+            placeholder="you@dot.nv.gov" autocomplete="email" spellcheck="false">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
@@ -294,6 +294,10 @@
           <div class="demo-account-role">Munifi Admin</div>
           <div class="demo-account-creds">admin@munifi.com · Munifi2026!</div>
         </div>
+        <div class="demo-account" data-email="vendor@goed.nv.gov" data-password="GoedESB2026!">
+          <div class="demo-account-role">GOED ESB Reviewer (read-only)</div>
+          <div class="demo-account-creds">vendor@goed.nv.gov · GoedESB2026!</div>
+        </div>
       </div>
 
       <a href="vms.html" class="btn-vms">View Vendor Directory →</a>
@@ -309,8 +313,9 @@
     // In a real deployment these would be verified server-side.
     // For the demo, credentials are checked client-side only.
     const ACCOUNTS = [
-      { email: 'dispatcher@dot.nv.gov', password: 'NVESB2026!', name: 'NDOT Dispatcher', role: 'dispatcher' },
-      { email: 'admin@munifi.com', password: 'Munifi2026!',  name: 'Munifi Admin',      role: 'admin' },
+      { email: 'dispatcher@dot.nv.gov', password: 'NVESB2026!',   name: 'NDOT Dispatcher',     role: 'dispatcher' },
+      { email: 'admin@munifi.com',       password: 'Munifi2026!',   name: 'Munifi Admin',        role: 'admin' },
+      { email: 'vendor@goed.nv.gov',     password: 'GoedESB2026!',  name: 'GOED ESB Reviewer',   role: 'viewer' },
     ];
 
     const SESSION_KEY = 'nvesb_session';
@@ -379,7 +384,7 @@
               actor_id:     account.email,
               subject_type: 'session',
               subject_id:   account.email,
-              tenant:       'sf',
+              tenant:       'nevada',
               source:       'browser:login.html',
               payload: {
                 name: account.name,
@@ -413,7 +418,7 @@
               event_type:   'auth.login_failed',
               actor_type:   'human',
               actor_id:     email || 'unknown',
-              tenant:       'sf',
+              tenant:       'nevada',
               source:       'browser:login.html',
               payload:      { user_agent: navigator.userAgent },
             };

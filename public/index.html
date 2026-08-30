@@ -325,19 +325,19 @@
   <main class="main">
     <div class="topbar">
       <span class="topbar-title" id="crumb">Home</span>
-      <button class="profile-btn" id="profileBtn"><span class="avatar">ND</span>Nish Divecha</button>
+      <button class="profile-btn" id="profileBtn"><span class="avatar" id="headerAvatar">ND</span><span id="headerName">Nish Divecha</span></button>
     </div>
     <div class="profile-menu" id="profileMenu">
-      <div class="who"><b>Nish Divecha</b><span>Munifi Technologies · Admin</span></div>
+      <div class="who"><b id="menuName">Nish Divecha</b><span id="menuRole">Munifi Technologies · Admin</span></div>
       <button class="menu-item" data-page="audit">Audit trail</button>
       <button class="menu-item" id="resetDemo">Reset demo data</button>
-      <button class="menu-item">Log out</button>
+      <button class="menu-item" id="signOutBtn">Sign out</button>
     </div>
 
     <!-- HOME -->
     <section class="page active" id="page-home">
       <div class="home-inner">
-        <div class="greeting" id="greeting">Good afternoon, <em>Nish</em></div>
+        <div class="greeting" id="greeting">Good afternoon, <em id="greetingName">Nish</em></div>
         <div class="chat-input"><span class="dot"></span><input type="text" id="chatInput" placeholder="Ask about any work order, vendor, county, or SLA" autocomplete="off"></div>
         <div class="suggest">
           <div class="suggest-label">Suggested</div>
@@ -462,6 +462,36 @@ function costRange(c){return COST_RANGES[(c.subtype||'pavement_repair').toLowerC
 const COMPLAINTS = COMPLAINTS_RAW.map(c=>({...c, priority:SEVERITY_TO_PRIORITY[(c.severity||'').toLowerCase()]||'low', estimatedCost:estCost(c)}));
 const byId = Object.fromEntries(COMPLAINTS.map(c=>[c.id,c]));
 const PRIORITY_ORDER = {high:0, medium:1, low:2};
+
+/* ═══════════ Session auth guard ═══════════ */
+const SESSION_KEY = 'nvesb_session';
+let _session = null;
+try { _session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch {}
+if (!_session?.email) { window.location.replace('login.html'); throw new Error('unauthenticated'); }
+
+// Populate header + greeting from session
+(function applySession(s) {
+  const firstName = (s.name || '').split(' ')[0];
+  const initials  = (s.name || 'ND').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const hour = new Date().getHours();
+  const salutation = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const roleLabel = {dispatcher:'NDOT Dispatcher · Clark County', admin:'Munifi Technologies · Admin', viewer:'GOED ESB · Reviewer'}[s.role] || s.role;
+  const el = id => document.getElementById(id);
+  if(el('headerAvatar'))  el('headerAvatar').textContent  = initials;
+  if(el('headerName'))    el('headerName').textContent    = s.name;
+  if(el('menuName'))      el('menuName').textContent      = s.name;
+  if(el('menuRole'))      el('menuRole').textContent      = roleLabel;
+  if(el('greetingName'))  el('greetingName').textContent  = firstName;
+  if(el('greeting')) {
+    const g = el('greeting');
+    g.innerHTML = salutation + ', <em id="greetingName">' + firstName + '</em>';
+  }
+  const signOutBtn = document.getElementById('signOutBtn');
+  if(signOutBtn) signOutBtn.addEventListener('click', () => {
+    localStorage.removeItem(SESSION_KEY);
+    window.location.replace('login.html');
+  });
+})(_session);
 
 /* ═══════════ Journal + lifecycle state (populated only by demo actions) ═══════════ */
 let journal = load('nvdemo_journal_v1', []);
