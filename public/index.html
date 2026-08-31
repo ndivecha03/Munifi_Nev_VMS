@@ -406,7 +406,7 @@
 
     <!-- VENDORS -->
     <section class="page" id="page-vendors">
-      <div class="page-head"><h1>Vendors</h1><p>46 NDOT NUCP-certified firms · GOED ESB and USDOT DBE certifications · NSCB licensing on file</p></div>
+      <div class="page-head"><h1>Vendors</h1><p id="vendorsPageSub">46 firms from the NDOT NUCP 2025 registry · 30 GOED ESB · 16 USDOT DBE · 27 active NSCB licenses · 19 without NSCB license on file</p></div>
       <div class="subnav" id="vendorsSubnav">
         <button class="subtab active" data-sub="directory">Vendors</button>
         <button class="subtab" data-sub="classes">Classes</button>
@@ -583,9 +583,13 @@ async function verifyChain(){
 const vById = Object.fromEntries(VENDORS.map(v=>[v.id,v]));
 function vLicenseActive(v){const s=((v.licensing||{}).nv_license_status||'').toLowerCase();return s===''||s==='active'||!!((v.lbe||{}).cmd_cert_active);}
 function vEsbActive(v){return !!((v.lbe||{}).cmd_cert_active);}
+function vGoedEsb(v){return ((v.lbe||{}).certifying_body_key)==='goed_esb'&&!!((v.lbe||{}).cmd_cert_active);}
+function vCertBody(v){return (CERTIFYING_BODIES[(v.lbe||{}).certifying_body_key]||{}).name||null;}
 function vEsbEligible(v){return vEsbActive(v)&&vLicenseActive(v);}
 function vClasses(v){return (v.licensing||{}).classifications||[];}
 function vLicNum(v){return (v.licensing||{}).nv_contractor_license||null;}
+function vRegime(v){return (v.licensing||{}).nv_license_regime_label||null;}
+function vNscbActive(v){return !!vLicNum(v)&&((v.licensing||{}).nv_license_status||'')==='active';}
 function vExpiry(v){const e=(v.licensing||{}).nv_license_expires;if(!e)return null;const m=e.split('-');if(m.length===3){const d=new Date(+m[2],+m[0]-1,+m[1]);return isNaN(d)?null:d;}const d=new Date(e);return isNaN(d)?null:d;}
 function vendorFlags(v){
   const flags=[];
@@ -596,7 +600,7 @@ function vendorFlags(v){
     else if(days<=60) flags.push({k:'exp60',label:'License expires in '+days+' days',cls:'crit'});
     else if(days<=180) flags.push({k:'exp180',label:'License expires in '+Math.round(days/30)+' mo',cls:'warn'});
   }
-  if(!vLicNum(v)) flags.push({k:'nolic',label:'NSCB license not on file',cls:'warn'});
+  if(!vLicNum(v)) flags.push({k:'nolic',label:vRegime(v)?'No NSCB license — '+vRegime(v):'NSCB license not on file',cls:'warn'});
   if(!((v.contact||{}).email)) flags.push({k:'noemail',label:'No email on file',cls:'warn'});
   if(!((v.contact||{}).phone)) flags.push({k:'nophone',label:'No phone on file',cls:'warn'});
   if(((v.licensing||{}).nv_license_status||'')!=='active'&&vLicNum(v)) flags.push({k:'inactive',label:'License status: '+((v.licensing||{}).nv_license_status||'unknown'),cls:'crit'});
@@ -642,7 +646,7 @@ function scoreVendor(complaint, v){
   comps.capacity_headroom=SCORING_WEIGHTS.capacity_headroom*(1-Math.min(1,value12/500000));
   let total=0; for(const k in comps){comps[k]=Math.round(comps[k]*10)/10; total+=comps[k];}
   const badges=[];
-  if(vEsbActive(v)) badges.push({t:'GOED ESB',c:'green'}); else badges.push({t:'ESB cert unverified',c:'amber'});
+  if(vGoedEsb(v)) badges.push({t:'GOED ESB',c:'green'}); else if(!demo.dbe_certified) badges.push({t:'Cert unverified',c:'amber'});
   if(demo.dbe_certified) badges.push({t:'USDOT DBE',c:'blue'});
   if(comps.esb_eligibility>0) badges.push({t:'Set-aside eligible',c:'green'});
   if(count5===0) badges.push({t:'Overlooked',c:'orange'});
@@ -735,6 +739,8 @@ function updateCounts(){
   $('#cntCompleted').textContent=comp.length;
   $('#cntRequests').textContent=fu;
   $('#cntFlagged').textContent=VENDORS.filter(v=>vendorFlags(v).length).length;
+  const _ps=$('#vendorsPageSub');
+  if(_ps) _ps.textContent=VENDORS.length+' firms from the NDOT NUCP 2025 registry · '+VENDORS.filter(vGoedEsb).length+' GOED ESB · '+VENDORS.filter(v=>(v.demographics||{}).dbe_certified).length+' USDOT DBE · '+VENDORS.filter(vNscbActive).length+' active NSCB licenses · '+VENDORS.filter(v=>!vLicNum(v)).length+' without NSCB license on file';
 }
 
 /* ═══════════ HOME ═══════════ */
@@ -743,7 +749,7 @@ function renderHome(){
   const _firstName=(_session?.name||'Nish').split(' ')[0];
   $('#greeting').innerHTML='Good '+(h<12?'morning':h<18?'afternoon':'evening')+', <em>'+_firstName+'</em>';
   const emer=CLARK_COMPLAINTS.filter(c=>c.severity==='emergency'&&complaintStatus(c)==='open').length;
-  const esb=VENDORS.filter(vEsbActive).length;
+  const esb=VENDORS.filter(vGoedEsb).length;
   $('#homeStats').innerHTML=
     '<div class="home-stat"><b>'+CLARK_COMPLAINTS.length+'</b><span>open Clark County work orders</span></div>'+
     '<div class="home-stat"><b>'+emer+'</b><span>emergency severity</span></div>'+
@@ -785,7 +791,7 @@ function renderQuickLinks(){
     {t:emer+' emergency work orders open', go:()=>{state.dfilters={type:'',sev:'emergency',city:'',days:''};goDispatch();}},
     {t:exp60+' license'+(exp60===1?'':'s')+' expiring ≤ 60 days', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
     {t:exp180+' licenses expiring ≤ 6 months', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
-    {t:nolic+' vendors missing NSCB license data', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
+    {t:nolic+' vendors without NSCB contractor licenses on file', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
     {t:journal.length+' dispatch'+(journal.length===1?'':'es')+' recorded this demo', go:()=>{showPage('complaints');showComplaintsSub('inprogress');}},
   ];
   $('#quickLinks').innerHTML=links.map((l,i)=>'<button class="recent" data-i="'+i+'">'+esc(l.t)+'</button>').join('');
@@ -888,17 +894,17 @@ function renderDispatchStep2(){
     return '<div class="rank-card'+(sel?' selected':'')+'" data-v="'+esc(p.vendor_id)+'">'+
       '<div class="rank-head"><div class="rank-num">'+p.rank+'</div>'+
       '<div style="min-width:0"><div class="rank-name">'+esc(v.name)+'</div>'+
-      '<div class="rank-meta">'+(vLicNum(v)?'NSCB #'+esc(vLicNum(v)):'License not on file')+' · '+esc((v.lbe||{}).esb_number||'—')+' · '+p.distance_miles+' mi'+(p.beyondGate?' — beyond the '+PROXIMITY_GATE_MILES+'-mile gate':'')+'</div>'+
+      '<div class="rank-meta">'+(vLicNum(v)?'NSCB #'+esc(vLicNum(v)):esc(vRegime(v)||'License not on file'))+' · '+esc((v.lbe||{}).esb_number||'—')+' · '+p.distance_miles+' mi'+(p.beyondGate?' — beyond the '+PROXIMITY_GATE_MILES+'-mile gate':'')+'</div>'+
       '<div class="badges">'+p.badges.map(b=>'<span class="badge '+b.c+'">'+esc(b.t)+'</span>').join('')+(p.beyondGate?'<span class="badge amber">Outside proximity gate</span>':'')+'</div></div>'+
       '<div class="rank-score"><b>'+p.total+'</b><span> / 100</span></div></div>'+
       (veh&&vEsbEligible(v)?'<div class="vehicle'+(veh.quote?' quote':'')+'"><b>'+esc(veh.label)+'</b> · '+esc(veh.detail)+'</div>':'')+
       '<details class="why"'+(p.rank===1||sel?' open':'')+'><summary>Vendor details</summary>'+
       '<div class="why-row" style="margin-top:8px"><span class="k">Contact</span><span>'+esc((v.contact||{}).phone||'no phone on file')+' · '+esc((v.contact||{}).email||'no email on file')+'</span></div>'+
-      '<div class="why-row"><span class="k">NV license</span><span>'+(vLicNum(v)?('NSCB #'+esc(vLicNum(v))+' · '+esc((v.licensing||{}).nv_license_status||'—')+' · exp '+esc((v.licensing||{}).nv_license_expires||'not on file')+' · Classes: '+esc(vClasses(v).join(', ')||'—')+' (NAC 624)'):'NSCB contractor license not on file')+'</span></div>'+
-      '<div class="why-row"><span class="k">GOED ESB</span><span>'+(vEsbActive(v)?esc(((v.lbe||{}).esb_number||'Active certification'))+' · Active':'Not active in our records')+'</span></div>'+
+      '<div class="why-row"><span class="k">NV license</span><span>'+(vLicNum(v)?('NSCB #'+esc(vLicNum(v))+' · '+esc((v.licensing||{}).nv_license_status||'—')+' · exp '+esc((v.licensing||{}).nv_license_expires||'not on file')+' · Classes: '+esc(vClasses(v).join(', ')||'—')+' (NAC 624)'):(vRegime(v)?esc(vRegime(v))+' — no NSCB contractor license':'NSCB contractor license not on file'))+'</span></div>'+
+      '<div class="why-row"><span class="k">'+esc(vCertBody(v)||'Certification')+'</span><span>'+(vEsbActive(v)?esc(((v.lbe||{}).esb_number||'Active certification'))+' · Active':'Not active in our records')+'</span></div>'+
       '<div class="why-row"><span class="k">Location</span><span>'+esc([(v.address||{}).street,(v.address||{}).city,(v.address||{}).state].filter(Boolean).join(', '))+' · '+esc(COUNTY_LABELS[v.county]||v.county)+' · '+p.distance_miles+' mi from work order</span></div>'+
       '</details></div>';
-  }).join(''):'<div class="empty"><b>No vendors passed the hard filters for this work order.</b><br>Filters applied: active license or GOED ESB cert · within '+PROXIMITY_GATE_MILES+' miles of the work order · NSCB class '+esc((SPECIALTY_TO_NSCB[c.subtype]||[]).join(' / '))+'. This reflects the real 46-vendor pool — no fallback records are invented.</div>')+
+  }).join(''):'<div class="empty"><b>No vendors passed the hard filters for this work order.</b><br>Filters applied: active license or GOED ESB cert · within '+PROXIMITY_GATE_MILES+' miles of the work order · NSCB class '+esc((SPECIALTY_TO_NSCB[c.subtype]||[]).join(' / '))+'. This reflects the real '+VENDORS.length+'-vendor pool — no fallback records are invented.</div>')+
   '<div class="toolbar no-print" style="margin-top:16px">'+
     '<button class="btn" id="backTo1b">← Back to complaints list</button>'+
     '<button class="btn primary" id="toStep3" '+(state.flow.vendorId?'':'disabled')+'>Continue to dispatch summary →</button>'+
@@ -966,9 +972,9 @@ function renderDispatchStep3(){
       '<div style="font-size:16px;font-weight:700">'+esc(v.name)+'</div>'+
       '<div class="mini-note" style="margin:2px 0 8px">'+esc([(v.address||{}).street,(v.address||{}).city,(v.address||{}).state,(v.address||{}).zip].filter(Boolean).join(', '))+' · '+p.distance_miles+' mi from work order</div>'+
       '<div class="badges">'+p.badges.map(b=>'<span class="badge '+b.c+'">'+esc(b.t)+'</span>').join('')+'</div>'+
-      '<div class="kv"><span>NSCB license</span><b>'+(vLicNum(v)?'#'+esc(vLicNum(v))+' · '+esc((v.licensing||{}).nv_license_status||'—')+' · exp '+esc((v.licensing||{}).nv_license_expires||'—'):'Not on file')+'</b></div>'+
+      '<div class="kv"><span>NSCB license</span><b>'+(vLicNum(v)?'#'+esc(vLicNum(v))+' · '+esc((v.licensing||{}).nv_license_status||'—')+' · exp '+esc((v.licensing||{}).nv_license_expires||'—'):esc(vRegime(v)||'Not on file'))+'</b></div>'+
       '<div class="kv"><span>Classifications (NAC 624)</span><b>'+esc(vClasses(v).join(', ')||'—')+'</b></div>'+
-      '<div class="kv"><span>GOED ESB</span><b>'+(vEsbActive(v)?esc((v.lbe||{}).esb_number||'Active'):'Not active')+'</b></div>'+
+      '<div class="kv"><span>GOED ESB</span><b>'+(vGoedEsb(v)?esc((v.lbe||{}).esb_number||'Active'):'Not GOED-certified')+'</b></div>'+
       '<div class="kv"><span>USDOT DBE</span><b>'+((v.demographics||{}).dbe_certified?'Certified':'No')+'</b></div>'+
       '<div class="kv"><span>NDOT contract history</span><b>'+(tr.prior_ndot_contracts_count||0)+' contracts · '+money(tr.prior_ndot_contracts_value||0)+'</b></div>'+
       '<div class="kv"><span>Contact</span><b>'+esc((v.contact||{}).phone||'—')+' · '+esc((v.contact||{}).email||'—')+'</b></div>'+
@@ -987,7 +993,7 @@ function renderDispatchStep3(){
     '</div>'+
     '<div class="panel"><h3>Docs ready</h3>'+
       '<div class="check"><span class="ic">✓</span>NRS 338.0117 / 333.336 citation included</div>'+
-      '<div class="check"><span class="ic">'+(vEsbActive(v)?'✓':'⚠')+'</span>'+(vEsbActive(v)?'Active GOED ESB cert on record ('+esc((v.lbe||{}).esb_number||'')+')':'GOED ESB cert NOT verified — confirm before award')+'</div>'+
+      '<div class="check"><span class="ic">'+(vEsbActive(v)?'✓':'⚠')+'</span>'+(vEsbActive(v)?'Active '+esc(vCertBody(v)||'')+' cert on record ('+esc((v.lbe||{}).esb_number||'')+')':'Certification NOT verified — confirm before award')+'</div>'+
       '<div class="check"><span class="ic">'+(c.estimatedCost<=POLICY.setAsideCeiling?'✓':'⚠')+'</span>Amount '+money(c.estimatedCost)+' '+(c.estimatedCost<=POLICY.setAsideCeiling?'confirmed ≤':'EXCEEDS')+' $500,000 ceiling</div>'+
       (c.estimatedCost>=POLICY.prevailingWageThreshold?'<div class="check"><span class="ic">⚠</span>≥ $250,000 — prevailing wage applies (NRS 338.013–338.090)</div>':'')+
       (m.veh&&m.veh.quote?'<div class="check"><span class="ic">○</span>Three ESB quotes required (NRS 333.335) — form attached</div>':'')+
@@ -1326,16 +1332,17 @@ function vendorMatches(v){
   const q=state.vq.toLowerCase(), f=state.vfilters;
   if(q&&!(v.name+' '+((v.address||{}).city||'')+' '+(v.specialties||[]).map(typeLabel).join(' ')).toLowerCase().includes(q)) return false;
   if(f.county&&v.county!==f.county) return false;
-  if(f.esb==='esb'&&!vEsbActive(v)) return false;
+  if(f.esb==='esb'&&!vGoedEsb(v)) return false;
   if(f.esb==='dbe'&&!((v.demographics||{}).dbe_certified)) return false;
   if(f.spec&&!(v.specialties||[]).includes(f.spec)) return false;
   return true;
 }
 function vendorBadgesHTML(v){
   const badges=[];
-  if(vEsbActive(v)) badges.push('<span class="badge green">ESB</span>');
+  if(vGoedEsb(v)) badges.push('<span class="badge green">ESB</span>');
   if((v.demographics||{}).dbe_certified) badges.push('<span class="badge blue">DBE</span>');
-  if(((v.licensing||{}).nv_license_status||'')==='active') badges.push('<span class="badge green">NSCB Active</span>');
+  if(vNscbActive(v)) badges.push('<span class="badge green">NSCB Active</span>');
+  else if(vRegime(v)) badges.push('<span class="badge gray">'+esc(vRegime(v))+'</span>');
   if(!badges.length) badges.push('<span class="badge gray">Unverified</span>');
   const flags=vendorFlags(v);
   if(flags.length) badges.push('<span class="badge amber">'+flags.length+' flag'+(flags.length>1?'s':'')+'</span>');
@@ -1360,9 +1367,9 @@ function renderDirectory(){
   $('#sub-directory').innerHTML=
   '<div class="stat-row">'+
     '<div class="stat"><div class="num">'+VENDORS.length+'</div><div class="lbl">Total vendors</div></div>'+
-    '<div class="stat"><div class="num">'+VENDORS.filter(vEsbActive).length+'</div><div class="lbl">GOED ESB certified</div></div>'+
+    '<div class="stat"><div class="num">'+VENDORS.filter(vGoedEsb).length+'</div><div class="lbl">GOED ESB certified</div></div>'+
     '<div class="stat"><div class="num">'+VENDORS.filter(v=>(v.demographics||{}).dbe_certified).length+'</div><div class="lbl">USDOT DBE certified</div></div>'+
-    '<div class="stat"><div class="num">'+VENDORS.filter(v=>((v.licensing||{}).nv_license_status||'')==='active').length+'</div><div class="lbl">Active NSCB license</div></div>'+
+    '<div class="stat"><div class="num">'+VENDORS.filter(vNscbActive).length+'</div><div class="lbl">Active NSCB licenses</div></div>'+
   '</div>'+
   '<div class="toolbar">'+
     '<input type="search" id="vq" placeholder="Search vendor name, city, specialty…" value="'+esc(state.vq)+'">'+
@@ -1373,7 +1380,7 @@ function renderDirectory(){
     '<span class="count-note">'+list.length+' shown</span>'+
   '</div>'+
   (list.length?'<div class="table-wrap"><table>'+VENDOR_TABLE_HEAD+'<tbody>'+list.map(vendorRowHTML).join('')+'</tbody></table></div>':'<div class="empty">No vendors match your filters.</div>')+
-  '<p class="data-note">Source: NDOT NUCP 2025 registry (baked-vendors-v2) — real NSCB license numbers, GOED ESB numbers, and USDOT DBE flags. 46 firms; a formal request for the full GOED ESB directory (~990 statewide firms) is pending.</p>';
+  '<p class="data-note">Source: NDOT NUCP 2025 registry (baked-vendors-v2) — real NSCB license numbers, GOED ESB numbers, and USDOT DBE flags. '+VENDORS.length+' firms; a formal request for the full GOED ESB directory (~990 statewide firms) is pending.</p>';
   $('#vq').addEventListener('input',e=>{state.vq=e.target.value;renderDirectory();const el=$('#vq');el.focus();el.setSelectionRange(el.value.length,el.value.length);});
   [['vfCounty','county'],['vfEsb','esb'],['vfSpec','spec']].forEach(([id,k])=>$('#'+id).addEventListener('change',e=>{state.vfilters[k]=e.target.value;renderDirectory();}));
   $('#vfReset').addEventListener('click',()=>{state.vq='';state.vfilters={county:'',esb:'',spec:''};renderDirectory();});
@@ -1388,17 +1395,18 @@ function openVendorModal(vid){
   const flags=vendorFlags(v);
   $('#modalBox').innerHTML='<button class="close-x" id="mClose">✕</button>'+
   '<h2>'+esc(v.name)+'</h2><div class="sub">'+esc([(v.address||{}).street,(v.address||{}).city,(v.address||{}).state,(v.address||{}).zip].filter(Boolean).join(', '))+' · '+esc(COUNTY_LABELS[v.county]||v.county)+'</div>'+
-  '<div class="badges">'+(vEsbActive(v)?'<span class="badge green">ESB Certified</span>':'<span class="badge amber">ESB not verified</span>')+
+  '<div class="badges">'+(vGoedEsb(v)?'<span class="badge green">ESB Certified</span>':(demo.dbe_certified?'':'<span class="badge amber">Cert not verified</span>'))+
   (demo.dbe_certified?'<span class="badge blue">DBE</span>':'')+(demo.dvbe_certified?'<span class="badge blue">DVBE</span>':'')+
-  ((lic.nv_license_status||'')==='active'?'<span class="badge green">NSCB Active</span>':(vLicNum(v)?'<span class="badge amber">'+esc(lic.nv_license_status||'status unknown')+'</span>':''))+'</div>'+
+  (vNscbActive(v)?'<span class="badge green">NSCB Active</span>':(vLicNum(v)?'<span class="badge amber">'+esc(lic.nv_license_status||'status unknown')+'</span>':(vRegime(v)?'<span class="badge gray">'+esc(vRegime(v))+'</span>':'')))+'</div>'+
   (flags.length?'<div class="callout amber" style="margin-top:8px"><b>Flags:</b> '+flags.map(f=>esc(f.label)).join(' · ')+'</div>':'')+
   '<div class="msec"><h3>ESB / Certification</h3>'+
-    '<div class="kv"><span>ESB status</span><b>'+(vEsbActive(v)?'Active — GOED certified':'Not certified')+'</b></div>'+
+    '<div class="kv"><span>ESB status</span><b>'+(vGoedEsb(v)?'Active — GOED certified':'Not GOED-certified')+'</b></div>'+
     '<div class="kv"><span>ESB number</span><b>'+esc(lbe.esb_number||'—')+'</b></div>'+
     '<div class="kv"><span>Certifying body</span><b>'+esc((CERTIFYING_BODIES[lbe.certifying_body_key]||{}).name||lbe.certifying_body_key||'—')+'</b></div>'+
     '<div class="kv"><span>DBE certified</span><b>'+(demo.dbe_certified?'Yes':'No')+'</b></div></div>'+
   '<div class="msec"><h3>Licensing</h3>'+
     '<div class="kv"><span>NSCB license #</span><b>'+(vLicNum(v)?esc(vLicNum(v)):'Not on file')+'</b></div>'+
+    (vRegime(v)?'<div class="kv"><span>License regime</span><b>'+esc(vRegime(v))+'</b></div>':'')+
     '<div class="kv"><span>Status</span><b>'+esc(lic.nv_license_status||'—')+'</b></div>'+
     '<div class="kv"><span>Expires</span><b>'+esc(lic.nv_license_expires||'—')+'</b></div>'+
     '<div class="kv"><span>Classifications</span><b>'+esc((lic.classifications||[]).join(', ')||'—')+'</b></div>'+
@@ -1468,8 +1476,8 @@ function renderFlagged(){
 
 /* ═══════════ VENDORS — COMPLIANCE ═══════════ */
 function renderVendorCompliance(){
-  const esb=VENDORS.filter(vEsbActive).length, dbe=VENDORS.filter(v=>(v.demographics||{}).dbe_certified).length;
-  const act=VENDORS.filter(v=>((v.licensing||{}).nv_license_status||'')==='active').length;
+  const esb=VENDORS.filter(vGoedEsb).length, dbe=VENDORS.filter(v=>(v.demographics||{}).dbe_certified).length;
+  const act=VENDORS.filter(vNscbActive).length;
   $('#sub-vcompliance').innerHTML=
   '<div class="stat-row">'+
     '<div class="stat"><div class="num">'+esb+'</div><div class="lbl">GOED ESB certified ('+Math.round(esb/VENDORS.length*100)+'%)</div></div>'+
@@ -1498,7 +1506,7 @@ function renderVendorCompliance(){
     '<p class="mini-note" style="margin-top:8px">Point values feed the demographic-equity component of the dispatch matrix. Pool holds GOED ESB ('+VENDORS.filter(v=>(v.lbe||{}).certifying_body_key==='goed_esb').length+') and USDOT DBE ('+VENDORS.filter(v=>(v.lbe||{}).certifying_body_key==='usdot_dbe').length+') certifications.</p></div>'+
   '<div class="panel"><h3>Certification mix</h3>'+
     ['goed_esb','usdot_dbe'].map(k=>{const n=VENDORS.filter(v=>(v.lbe||{}).certifying_body_key===k).length;
-    return '<div class="bar-block"><div class="bar-top"><span>'+esc(CERTIFYING_BODIES[k].name)+'</span><span>'+n+' of 46</span></div><div class="bar"><i style="width:'+(n/46*100)+'%"></i></div></div>';}).join('')+
+    return '<div class="bar-block"><div class="bar-top"><span>'+esc(CERTIFYING_BODIES[k].name)+'</span><span>'+n+' of '+VENDORS.length+'</span></div><div class="bar"><i style="width:'+(n/VENDORS.length*100)+'%"></i></div></div>';}).join('')+
   '</div></div></div>';
 }
 
