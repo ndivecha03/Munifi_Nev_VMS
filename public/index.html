@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--ARTIFACT-HEAD-START--><title>Munifi Nevada Dispatch</title>
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --white:#FFFFFF;
@@ -67,7 +69,10 @@
   .page{display:none;flex:1;overflow-y:auto;min-height:0;}
   .page.active{display:flex;flex-direction:column;}
   #page-home.active{align-items:center;justify-content:center;}
-  .home-inner{width:min(640px,88%);text-align:center;margin-top:-30px;}
+  .home-inner{width:min(980px,92%);margin-top:-30px;}
+  .home-grid{display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start;}
+  @media (max-width:900px){.home-grid{grid-template-columns:1fr;}}
+  .home-left{text-align:center;}
   .greeting{font-size:30px;font-weight:700;letter-spacing:-.4px;margin-bottom:24px;color:var(--black);}
   .greeting em{font-style:normal;color:var(--orange);}
   .chat-input{display:flex;align-items:center;gap:12px;background:var(--white);border:1.5px solid var(--gray-15);border-radius:99px;padding:14px 20px;text-align:left;transition:border-color .15s,box-shadow .15s;}
@@ -76,8 +81,20 @@
   .chat-input .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);flex:none;}
   .chat-input input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:var(--black);font-family:inherit;}
   .chat-input input::placeholder{color:var(--gray-50);}
-  .suggest{margin-top:24px;background:var(--gray-04);border:1px solid var(--gray-08);border-radius:14px;padding:18px 20px;text-align:left;}
+  .suggest{background:var(--gray-04);border:1px solid var(--gray-08);border-radius:14px;padding:18px 20px;text-align:left;}
   .suggest-label{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--orange);margin-bottom:10px;font-weight:600;}
+  .suggest-sec{margin-bottom:14px;}
+  .suggest-sec:last-child{margin-bottom:0;}
+  .suggest-sec h4{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--gray-50);font-weight:600;margin-bottom:5px;}
+  .suggest-sec .recent{color:var(--gray-70);padding:6px 8px;}
+  .suggest-sec .recent:hover{color:var(--orange);background:var(--orange-06);}
+  .chat-wrap{position:relative;}
+  .chat-drop{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--white);border:1px solid var(--gray-15);border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.12);z-index:55;max-height:300px;overflow-y:auto;text-align:left;display:none;padding:6px;}
+  .chat-drop.open{display:block;}
+  .chat-opt{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;padding:9px 13px;border-radius:9px;font-size:13px;color:var(--gray-70);align-items:baseline;}
+  .chat-opt .sec{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-30);flex:none;}
+  .chat-opt:hover,.chat-opt.sel{background:var(--orange-06);color:var(--orange);}
+  .chat-drop .chat-none{padding:10px 13px;font-size:12px;color:var(--gray-50);}
   .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
   .chip{padding:8px 14px;border-radius:99px;font-size:12.5px;border:1px solid var(--gray-15);color:var(--gray-70);background:var(--white);transition:border-color .12s,color .12s,background .12s;}
   .chip:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-06);}
@@ -215,9 +232,12 @@
   .paper .subtitle{font-size:11.5px;color:var(--gray-50);margin-bottom:14px;}
   .paper h4{font-size:11px;letter-spacing:1.1px;text-transform:uppercase;background:var(--gray-04);padding:6px 10px;margin:16px 0 8px;border-left:3px solid var(--orange);}
   .paper .grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px 22px;}
-  .paper .f{display:flex;gap:8px;padding:2.5px 0;font-size:12px;}
+  .paper .f{display:flex;gap:8px;padding:2.5px 0;font-size:12px;align-items:baseline;}
+  .paper .f.fill{flex-wrap:wrap;}
   .paper .f span{color:var(--gray-50);min-width:150px;}
   .paper .f b{font-weight:600;}
+  .paper .f.fill{grid-column:1 / -1;}
+  .paper .f .f-note{flex-basis:100%;font-size:11px;color:#888;padding-left:158px;min-width:0;}
   .paper .blank{border-bottom:1px solid var(--gray-30);display:inline-block;min-width:170px;height:14px;}
   .paper .cbx{display:flex;gap:8px;padding:2px 0;align-items:baseline;}
   .paper .cbx::before{content:"☐";color:var(--gray-50);}
@@ -225,22 +245,31 @@
   .paper .sig{border-top:1px solid var(--black);padding-top:4px;font-size:11px;color:var(--gray-50);}
   .paper .foot{margin-top:18px;border-top:1px solid var(--gray-08);padding-top:8px;font-size:10px;color:var(--gray-30);}
 
+  .form-tabs{display:flex;gap:6px;flex-wrap:wrap;background:var(--gray-04);border:1px solid var(--gray-08);border-radius:12px;padding:6px;margin-bottom:14px;}
+  .form-tab{padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:500;color:var(--gray-50);}
+  .form-tab:hover{color:var(--black);background:var(--white);}
+  .form-tab.active{background:var(--white);color:var(--orange);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .policy-big{font-weight:700;font-size:19px;letter-spacing:-.2px;color:var(--orange);line-height:1.25;}
+  .paper[contenteditable=true]{outline:none;cursor:text;}
+  .paper[contenteditable=true]:focus{box-shadow:0 0 0 3px var(--orange-10);border-color:var(--orange);}
+  .edit-hint{font-size:11.5px;color:var(--gray-50);background:var(--orange-06);border-radius:9px;padding:8px 13px;margin-bottom:10px;}
+
   .map-layout{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start;}
   @media (max-width:1000px){.map-layout{grid-template-columns:1fr;}}
   .map-wrap{background:var(--gray-04);border:1px solid var(--gray-08);border-radius:16px;padding:10px;position:relative;}
-  .map-wrap svg{width:100%;height:auto;display:block;border-radius:10px;background:#FAFAFA;}
-  .map-legend{position:absolute;bottom:20px;left:22px;background:var(--white);border:1px solid var(--gray-15);border-radius:10px;padding:9px 13px;font-size:11.5px;color:var(--gray-70);box-shadow:0 4px 12px rgba(0,0,0,.06);}
+  #leafletMap{width:100%;height:560px;border-radius:10px;background:#FAFAFA;z-index:1;}
+  .map-legend{position:absolute;bottom:20px;left:22px;background:var(--white);border:1px solid var(--gray-15);border-radius:10px;padding:9px 13px;font-size:11.5px;color:var(--gray-70);box-shadow:0 4px 12px rgba(0,0,0,.06);z-index:1001;}
   .map-legend div{display:flex;align-items:center;gap:8px;padding:2px 0;}
-  .map-controls{position:absolute;top:22px;right:22px;background:var(--white);border:1px solid var(--gray-15);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;overflow:hidden;}
-  .map-controls button{width:34px;height:34px;font-size:15px;font-weight:600;color:var(--gray-70);display:flex;align-items:center;justify-content:center;}
-  .map-controls button:hover{background:var(--orange-06);color:var(--orange);}
-  .map-controls-div{height:1px;background:var(--gray-15);margin:1px 5px;}
-  .map-hint{position:absolute;bottom:20px;right:22px;font-size:11px;color:var(--gray-50);background:rgba(255,255,255,.85);padding:4px 9px;border-radius:99px;pointer-events:none;}
-  .map-wrap svg{touch-action:none;}
   .pin-dot{width:9px;height:9px;border-radius:50%;flex:none;}
   .pin-sq{width:9px;height:9px;flex:none;}
-  .map-dot{cursor:pointer;}
-  .map-dot:hover{stroke:var(--black);stroke-width:1.5;}
+  .lf-dot{background:none;border:none;}
+  .lf-dot-inner{width:100%;height:100%;border-radius:50%;background:var(--orange);border:2px solid #fff;color:#fff;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 5px rgba(0,0,0,.3);font-family:'Satoshi','Hanken Grotesk',system-ui,sans-serif;}
+  .lf-dot-inner.dispatched{background:#111111;}
+  .lf-dot-inner.completed{background:var(--gray-30);}
+  .lf-dot-inner.sel{border-color:var(--black);box-shadow:0 0 0 3px var(--orange-15);}
+  .lf-vendor{background:none;border:none;}
+  .lf-vendor-inner{width:100%;height:100%;background:var(--good);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+  .lf-vendor-label{background:rgba(255,255,255,.92);border-radius:6px;padding:1px 6px;font-size:10.5px;font-weight:600;color:var(--good);white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.15);font-family:'Satoshi','Hanken Grotesk',system-ui,sans-serif;}
 
   .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--black);color:var(--white);padding:11px 20px;border-radius:99px;font-size:13px;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;max-width:80%;}
   .toast.show{opacity:1;}
@@ -280,6 +309,8 @@
     body.print-forms .sidebar,body.print-forms .topbar,body.print-forms .steps,
     body.print-forms .subnav,body.print-forms .page-head,body.print-forms .no-print{display:none !important;}
     body.print-forms .page{overflow:visible;}
+    body.print-forms .form-tabs{display:none !important;}
+    body.print-forms .paper{display:block !important;}
     .paper{box-shadow:none;border:none;page-break-after:always;}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
@@ -337,13 +368,20 @@
     <!-- HOME -->
     <section class="page active" id="page-home">
       <div class="home-inner">
-        <div class="greeting" id="greeting">Good afternoon, <em id="greetingName">Nish</em></div>
-        <div class="chat-input"><span class="dot"></span><input type="text" id="chatInput" placeholder="Ask about any work order, vendor, county, or SLA" autocomplete="off"></div>
-        <div class="suggest">
-          <div class="suggest-label">Suggested</div>
-          <div class="chip-row" id="homeChips"></div>
+        <div class="home-grid">
+          <div class="home-left">
+            <div class="greeting" id="greeting">Good afternoon, <em id="greetingName">Nish</em></div>
+            <div class="chat-wrap">
+              <div class="chat-input"><span class="dot"></span><input type="text" id="chatInput" placeholder="Search work orders, vendors, pages, actions…" autocomplete="off"></div>
+              <div class="chat-drop" id="chatDrop"></div>
+            </div>
+            <div class="home-stats" id="homeStats"></div>
+          </div>
+          <aside class="suggest">
+            <div class="suggest-label">Suggested</div>
+            <div id="suggestSections"></div>
+          </aside>
         </div>
-        <div class="home-stats" id="homeStats"></div>
       </div>
     </section>
 
@@ -462,6 +500,15 @@ function costRange(c){return COST_RANGES[(c.subtype||'pavement_repair').toLowerC
 const COMPLAINTS = COMPLAINTS_RAW.map(c=>({...c, priority:SEVERITY_TO_PRIORITY[(c.severity||'').toLowerCase()]||'low', estimatedCost:estCost(c)}));
 const byId = Object.fromEntries(COMPLAINTS.map(c=>[c.id,c]));
 const PRIORITY_ORDER = {high:0, medium:1, low:2};
+/* Demo scope: Clark County only. City = nearest incorporated Clark County city to the
+   recorded work-order coordinates (geographic derivation, not stored data). */
+const CLARK_CITIES = [['Las Vegas',36.1699,-115.1398],['North Las Vegas',36.1989,-115.1175],['Henderson',36.0395,-114.9817],['Boulder City',35.9789,-114.8342],['Mesquite',36.8055,-114.0672]];
+function cityFor(c){
+  let best='Las Vegas', bd=Infinity;
+  for(const [n,la,lo] of CLARK_CITIES){const d=haversineMiles(c.lat,c.lng,la,lo);if(d<bd){bd=d;best=n;}}
+  return best;
+}
+const CLARK_COMPLAINTS = COMPLAINTS.filter(c=>c.county==='Clark').map(c=>Object.assign(c,{city:cityFor(c)}));
 
 /* ═══════════ Session auth guard ═══════════ */
 const SESSION_KEY = 'nvesb_session';
@@ -603,22 +650,27 @@ function scoreVendor(complaint, v){
   if(cls.length) badges.push({t:'NSCB '+cls.slice(0,2).join(' '),c:'gray'});
   return {vendor_id:v.id, vendor_name:v.name, eligible:true, distance_miles:Math.round(miles*10)/10, total:Math.round(total*10)/10, components:comps, badges};
 }
+/* Proximity gate: only suggest vendors near the work order. A literal 13-point
+   proximity component (= within 1.2 mi) empties the pool for 7 of 8 Clark corridors,
+   so the gate is applied as a 13-mile radius; vendors beyond it appear only as an
+   explicit nearest-available fallback when nobody local qualifies. */
+const PROXIMITY_GATE_MILES = 13;
 function rankTop(complaint, topN){
   topN=topN||5;
-  const scored=[], tier2=[], tier3=[];
+  const near=[], nearTier2=[], far=[];
   for(const v of VENDORS){
     const r=scoreVendor(complaint,v);
     if(!r.eligible) continue;
-    if(vEsbEligible(v)) scored.push(r);
-    else if(vLicenseActive(v)) tier2.push(r);
-    else tier3.push(r);
+    if(r.distance_miles<=PROXIMITY_GATE_MILES){
+      if(vEsbEligible(v)) near.push(r); else nearTier2.push(r);
+    } else far.push(r);
   }
   const sortT=a=>a.sort((x,y)=>y.total-x.total);
-  sortT(scored); sortT(tier2); sortT(tier3);
-  let pool=scored.slice(), poolUsed='eligible-only';
-  if(pool.length<topN&&tier2.length){pool=sortT(pool.concat(tier2));poolUsed='eligible-plus-almost';}
-  if(pool.length<topN&&tier3.length){pool=sortT(pool.concat(tier3));poolUsed='full-pool';}
-  return {picks:pool.slice(0,topN).map((p,i)=>({...p,rank:i+1})), poolUsed, poolStats:{tier1:scored.length,tier2:tier2.length,tier3:tier3.length}};
+  sortT(near); sortT(nearTier2); far.sort((x,y)=>x.distance_miles-y.distance_miles);
+  let pool=near.slice(), poolUsed='near-eligible';
+  if(pool.length<topN&&nearTier2.length){pool=sortT(pool.concat(nearTier2));poolUsed='near-expanded';}
+  if(pool.length<topN&&far.length){pool=pool.concat(far.slice(0,topN-pool.length));poolUsed='beyond-gate-fallback';}
+  return {picks:pool.slice(0,topN).map((p,i)=>({...p,rank:i+1,beyondGate:p.distance_miles>PROXIMITY_GATE_MILES})), poolUsed, poolStats:{tier1:near.length,tier2:nearTier2.length,tier3:far.length}};
 }
 function procurementVehicle(cost){
   if(cost<=POLICY.setAsideFloor) return {label:'Informal quote (NRS 333.335)', detail:'1–3 days vs ~90 days standard · 87 days saved', quote:false};
@@ -633,7 +685,7 @@ function policyAuthority(cost, vendorEligible){
 }
 
 /* ═══════════ Routing ═══════════ */
-const state = {page:'home', complaintsSub:'dispatch', vendorsSub:'directory', flow:{step:1, complaintId:null, ranked:null, vendorId:null}, mapCamera:null, mapSel:null, mapSelId:null, dq:'', dfilters:{type:'',sev:'',county:'',district:'',days:''}, vq:'', vfilters:{county:'',esb:'',spec:''}, classBy:'spec', flagQ:'', compQ:'', auditQ:''};
+const state = {page:'home', complaintsSub:'dispatch', vendorsSub:'directory', flow:{step:1, complaintId:null, ranked:null, vendorId:null, formEdits:{}, formTab:'workorder'}, mapSel:null, mapSelId:null, dq:'', dfilters:{type:'',sev:'',city:'',days:''}, vq:'', vfilters:{county:'',esb:'',spec:''}, classBy:'spec', flagQ:'', compQ:'', auditQ:'', typeQ:''};
 const PAGE_LABELS = {home:'Home', complaints:'Complaints', vendors:'Vendors', map:'Map', audit:'Compliance · Audit Trail'};
 function showPage(p){
   state.page=p;
@@ -690,22 +742,37 @@ function renderHome(){
   const h=new Date().getHours();
   const _firstName=(_session?.name||'Nish').split(' ')[0];
   $('#greeting').innerHTML='Good '+(h<12?'morning':h<18?'afternoon':'evening')+', <em>'+_firstName+'</em>';
-  const clark=COMPLAINTS.filter(c=>c.county==='Clark').length;
-  const emer=COMPLAINTS.filter(c=>c.severity==='emergency'&&complaintStatus(c)==='open').length;
+  const emer=CLARK_COMPLAINTS.filter(c=>c.severity==='emergency'&&complaintStatus(c)==='open').length;
   const esb=VENDORS.filter(vEsbActive).length;
   $('#homeStats').innerHTML=
-    '<div class="home-stat"><b>'+COMPLAINTS.length+'</b><span>open NDOT work orders</span></div>'+
-    '<div class="home-stat"><b>'+clark+'</b><span>in Clark County</span></div>'+
+    '<div class="home-stat"><b>'+CLARK_COMPLAINTS.length+'</b><span>open Clark County work orders</span></div>'+
+    '<div class="home-stat"><b>'+emer+'</b><span>emergency severity</span></div>'+
     '<div class="home-stat"><b>'+VENDORS.length+'</b><span>NUCP vendors</span></div>'+
     '<div class="home-stat"><b>'+esb+'</b><span>GOED ESB certified</span></div>';
-  const chips=[
-    {t:'Dispatch an emergency work order ('+emer+' open)', go:()=>{state.dfilters.sev='emergency';goDispatch();}},
-    {t:'Show Clark County queue', go:()=>{state.dfilters.county='Clark';goDispatch();}},
-    {t:'Which licenses expire soon?', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
-    {t:'Open the county map', go:()=>showPage('map')}
+  const secs=[
+    {h:'Dispatch', links:[
+      {t:'Dispatch an emergency work order ('+emer+' open)', go:()=>{state.dfilters.sev='emergency';goDispatch();}},
+      {t:'Open the Clark County queue', go:goDispatch},
+      {t:'Browse complaint types', go:()=>{showPage('complaints');showComplaintsSub('types');}},
+    ]},
+    {h:'In Progress', links:[
+      {t:'In Progress work orders', go:()=>{showPage('complaints');showComplaintsSub('inprogress');}},
+      {t:'Completed work orders', go:()=>{showPage('complaints');showComplaintsSub('completed');}},
+      {t:'Requests & follow-ups', go:()=>{showPage('complaints');showComplaintsSub('requests');}},
+    ]},
+    {h:'Vendors', links:[
+      {t:'Vendor directory', go:()=>{showPage('vendors');showVendorsSub('directory');}},
+      {t:'Which licenses expire soon?', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
+      {t:'NSCB classes & specialties', go:()=>{showPage('vendors');showVendorsSub('classes');}},
+    ]},
+    {h:'Map & Compliance', links:[
+      {t:'Open the Clark County map', go:()=>showPage('map')},
+      {t:'Audit trail by case', go:()=>showPage('audit')},
+    ]},
   ];
-  $('#homeChips').innerHTML=chips.map((c,i)=>'<button class="chip" data-i="'+i+'">'+esc(c.t)+'</button>').join('');
-  $$('#homeChips .chip').forEach(b=>b.addEventListener('click',()=>chips[+b.dataset.i].go()));
+  $('#suggestSections').innerHTML=secs.map((s,si)=>'<div class="suggest-sec"><h4>'+esc(s.h)+'</h4>'+
+    s.links.map((l,li)=>'<button class="recent" data-s="'+si+'" data-l="'+li+'">'+esc(l.t)+'</button>').join('')+'</div>').join('');
+  $$('#suggestSections .recent').forEach(b=>b.addEventListener('click',()=>secs[+b.dataset.s].links[+b.dataset.l].go()));
   renderQuickLinks();
 }
 function goDispatch(){showPage('complaints');showComplaintsSub('dispatch');}
@@ -713,9 +780,9 @@ function renderQuickLinks(){
   const exp60=VENDORS.filter(v=>vendorFlags(v).some(f=>f.k==='exp60')).length;
   const exp180=VENDORS.filter(v=>vendorFlags(v).some(f=>f.k==='exp180')).length;
   const nolic=VENDORS.filter(v=>vendorFlags(v).some(f=>f.k==='nolic')).length;
-  const emer=COMPLAINTS.filter(c=>c.severity==='emergency').length;
+  const emer=CLARK_COMPLAINTS.filter(c=>c.severity==='emergency').length;
   const links=[
-    {t:emer+' emergency work orders open', go:()=>{state.dfilters={type:'',sev:'emergency',county:'',district:'',days:''};goDispatch();}},
+    {t:emer+' emergency work orders open', go:()=>{state.dfilters={type:'',sev:'emergency',city:'',days:''};goDispatch();}},
     {t:exp60+' license'+(exp60===1?'':'s')+' expiring ≤ 60 days', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
     {t:exp180+' licenses expiring ≤ 6 months', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
     {t:nolic+' vendors missing NSCB license data', go:()=>{showPage('vendors');showVendorsSub('flagged');}},
@@ -742,12 +809,11 @@ function renderDispatch(){
 }
 function dispatchQueue(){
   const fl=state.dfilters, q=state.dq.toLowerCase();
-  let list=COMPLAINTS.filter(c=>complaintStatus(c)==='open');
-  if(q) list=list.filter(c=>(c.id+' '+c.location+' '+c.description+' '+typeLabel(c.subtype)+' '+c.county+' '+c.district).toLowerCase().includes(q));
+  let list=CLARK_COMPLAINTS.filter(c=>complaintStatus(c)==='open');
+  if(q) list=list.filter(c=>(c.id+' '+c.location+' '+c.description+' '+typeLabel(c.subtype)+' '+c.city+' '+c.district).toLowerCase().includes(q));
   if(fl.type) list=list.filter(c=>c.subtype===fl.type);
   if(fl.sev) list=list.filter(c=>c.severity===fl.sev);
-  if(fl.county) list=list.filter(c=>c.county===fl.county);
-  if(fl.district) list=list.filter(c=>c.district===fl.district);
+  if(fl.city) list=list.filter(c=>c.city===fl.city);
   if(fl.days){const d=daysOpen;
     if(fl.days==='30') list=list.filter(c=>d(c)<=30);
     else if(fl.days==='60') list=list.filter(c=>d(c)>30&&d(c)<=60);
@@ -758,33 +824,37 @@ function dispatchQueue(){
 function renderDispatchStep1(){
   const fl=state.dfilters;
   const list=dispatchQueue();
-  const counties=[...new Set(COMPLAINTS.map(c=>c.county))].sort();
-  const districts=[...new Set(COMPLAINTS.map(c=>c.district))].sort((a,b)=>+a.slice(1)-+b.slice(1));
+  const openClark=CLARK_COMPLAINTS.filter(c=>complaintStatus(c)==='open');
+  const cities=[...new Set(CLARK_COMPLAINTS.map(c=>c.city))].sort();
+  const cityCounts={}; openClark.forEach(c=>cityCounts[c.city]=(cityCounts[c.city]||0)+1);
   const opt=(v,l,cur)=>'<option value="'+esc(v)+'"'+(cur===v?' selected':'')+'>'+esc(l)+'</option>';
   $('#sub-dispatch').innerHTML=stepsBar(1)+
   '<div class="toolbar">'+
-    '<input type="search" id="dq" placeholder="Search work orders — ID, route, description…" value="'+esc(state.dq)+'">'+
+    cities.map(ct=>'<button class="chip'+(fl.city===ct?'"  style="border-color:var(--orange);color:var(--orange);background:var(--orange-06)':'"')+' data-city="'+esc(ct)+'">'+esc(ct)+' ('+(cityCounts[ct]||0)+')</button>').join('')+
+    '<button class="chip" data-city="">All Clark County ('+openClark.length+')</button>'+
+  '</div>'+
+  '<div class="toolbar">'+
+    '<input type="search" id="dq" placeholder="Search Clark County work orders — ID, route, description…" value="'+esc(state.dq)+'">'+
     '<select id="fType">'+opt('','All types',fl.type)+Object.keys(SUBTYPE_LABELS).map(t=>opt(t,SUBTYPE_LABELS[t],fl.type)).join('')+'</select>'+
     '<select id="fSev">'+opt('','All severities',fl.sev)+['emergency','urgent','elevated','standard'].map(s=>opt(s,s[0].toUpperCase()+s.slice(1),fl.sev)).join('')+'</select>'+
-    '<select id="fCounty">'+opt('','All counties',fl.county)+counties.map(c=>opt(c,c+' County',fl.county)).join('')+'</select>'+
-    '<select id="fDistrict">'+opt('','All NDOT districts',fl.district)+districts.map(d=>opt(d,'District '+d.slice(1),fl.district)).join('')+'</select>'+
     '<select id="fDays">'+opt('','Days outstanding',fl.days)+opt('30','≤ 30 days',fl.days)+opt('60','31–60 days',fl.days)+opt('90','61–90 days',fl.days)+opt('90+','Over 90 days',fl.days)+'</select>'+
-    '<span class="count-note">'+list.length+' of '+COMPLAINTS.filter(c=>complaintStatus(c)==='open').length+' open</span>'+
+    '<span class="count-note">'+list.length+' of '+openClark.length+' open in Clark County</span>'+
   '</div>'+
-  '<div class="table-wrap"><table><thead><tr><th>ID</th><th>Type</th><th>Location</th><th>County</th><th>Dist.</th><th>Severity</th><th>Days out</th><th>Est. cost</th></tr></thead><tbody>'+
-  list.map(c=>'<tr class="rowlink" data-id="'+esc(c.id)+'"><td class="id">'+esc(c.id)+'</td><td>'+esc(typeLabel(c.subtype))+'</td><td>'+esc(c.location)+'</td><td>'+esc(c.county)+'</td><td class="num">'+esc(c.district)+'</td><td><span class="status sev-'+esc(c.severity)+'">'+esc(c.severity)+'</span></td><td class="num">'+daysOpen(c)+'d</td><td class="num">'+moneyK(c.estimatedCost)+'</td></tr>').join('')+
+  '<div class="table-wrap"><table><thead><tr><th>ID</th><th>Type</th><th>Location</th><th>City</th><th>Severity</th><th>Days out</th><th>Est. cost</th></tr></thead><tbody>'+
+  list.map(c=>'<tr class="rowlink" data-id="'+esc(c.id)+'"><td class="id">'+esc(c.id)+'</td><td>'+esc(typeLabel(c.subtype))+'</td><td>'+esc(c.location)+'</td><td>'+esc(c.city)+'</td><td><span class="status sev-'+esc(c.severity)+'">'+esc(c.severity)+'</span></td><td class="num">'+daysOpen(c)+'d</td><td class="num">'+moneyK(c.estimatedCost)+'</td></tr>').join('')+
   '</tbody></table></div>'+
   (list.length?'':'<div class="empty" style="margin-top:14px">No open work orders match the current filters.</div>')+
-  '<p class="data-note">Source: NDOT work-order feed (ndot_work_order_system) · '+COMPLAINTS.length+' records · severities map to priority per NRS-aligned dispatch rules (emergency/urgent → high, elevated → medium, standard → low). Estimated cost = severity base from the NDOT-calibrated cost model.</p>';
+  '<p class="data-note">Source: NDOT work-order feed (ndot_work_order_system) · scoped to Clark County ('+CLARK_COMPLAINTS.length+' of '+COMPLAINTS.length+' records) · city = nearest incorporated Clark County city to the recorded coordinates · severities map to priority per NRS-aligned dispatch rules. Estimated cost = severity base from the NDOT-calibrated cost model.</p>';
+  $$('#sub-dispatch [data-city]').forEach(b=>b.addEventListener('click',()=>{state.dfilters.city=b.dataset.city;renderDispatchStep1();}));
   $('#dq').addEventListener('input',e=>{state.dq=e.target.value;renderDispatchStep1();const el=$('#dq');el.focus();el.setSelectionRange(el.value.length,el.value.length);});
-  [['fType','type'],['fSev','sev'],['fCounty','county'],['fDistrict','district'],['fDays','days']].forEach(([id,k])=>{
+  [['fType','type'],['fSev','sev'],['fDays','days']].forEach(([id,k])=>{
     $('#'+id).addEventListener('change',e=>{state.dfilters[k]=e.target.value;renderDispatchStep1();});
   });
   $$('#sub-dispatch tr.rowlink').forEach(tr=>tr.addEventListener('click',()=>selectComplaint(tr.dataset.id)));
 }
 function selectComplaint(id){
   const c=byId[id]; if(!c) return;
-  state.flow={step:2, complaintId:id, ranked:rankTop(c,5), vendorId:null};
+  state.flow={step:2, complaintId:id, ranked:rankTop(c,5), vendorId:null, formEdits:{}, formTab:'workorder'};
   audit('dispatch.scored', id, {pool_used:state.flow.ranked.poolUsed, eligible_pool:state.flow.ranked.poolStats.tier1, top_score:state.flow.ranked.picks[0]?state.flow.ranked.picks[0].total:null});
   goDispatch(); renderDispatch();
 }
@@ -801,14 +871,16 @@ function complaintHeader(c){
 }
 function renderDispatchStep2(){
   const c=byId[state.flow.complaintId], rk=state.flow.ranked;
-  const poolMsg = rk.poolUsed==='eligible-only'
-    ? 'Scored against '+rk.poolStats.tier1+' ESB-eligible vendors within '+POLICY.radiusMiles+' miles'
-    : rk.poolUsed==='eligible-plus-almost'
-    ? 'Only '+rk.poolStats.tier1+' ESB-eligible vendors passed the hard filters — pool expanded to licensed non-ESB firms'
-    : 'Eligible pool exhausted — showing the full pool that passed hard filters';
-  $('#sub-dispatch').innerHTML=stepsBar(2)+complaintHeader(c)+
+  const poolMsg = rk.poolUsed==='near-eligible'
+    ? rk.poolStats.tier1+' ESB-eligible vendors within the '+PROXIMITY_GATE_MILES+'-mile proximity gate'
+    : rk.poolUsed==='near-expanded'
+    ? 'Only '+rk.poolStats.tier1+' ESB-eligible vendors inside the '+PROXIMITY_GATE_MILES+'-mile proximity gate — expanded to licensed non-ESB firms nearby'
+    : 'No vendors inside the '+PROXIMITY_GATE_MILES+'-mile proximity gate — showing nearest available (distances marked)';
+  $('#sub-dispatch').innerHTML=stepsBar(2)+
+  '<div class="toolbar no-print" style="margin-bottom:10px"><button class="btn" id="backTo1">← Back to complaints list</button></div>'+
+  complaintHeader(c)+
   '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin:2px 0 12px">'+
-    '<div style="font-size:14px;font-weight:700">Top vendors — equity matrix</div>'+
+    '<div style="font-size:14px;font-weight:700">Suggested vendors</div>'+
     '<span class="mini-note">'+esc(poolMsg)+'</span></div>'+
   (rk.picks.length?rk.picks.map(p=>{
     const v=vById[p.vendor_id], veh=procurementVehicle(c.estimatedCost);
@@ -816,31 +888,28 @@ function renderDispatchStep2(){
     return '<div class="rank-card'+(sel?' selected':'')+'" data-v="'+esc(p.vendor_id)+'">'+
       '<div class="rank-head"><div class="rank-num">'+p.rank+'</div>'+
       '<div style="min-width:0"><div class="rank-name">'+esc(v.name)+'</div>'+
-      '<div class="rank-meta">'+(vLicNum(v)?'NSCB #'+esc(vLicNum(v)):'License not on file')+' · '+esc((v.lbe||{}).esb_number||'—')+' · '+p.distance_miles+' mi</div>'+
-      '<div class="badges">'+p.badges.map(b=>'<span class="badge '+b.c+'">'+esc(b.t)+'</span>').join('')+'</div></div>'+
+      '<div class="rank-meta">'+(vLicNum(v)?'NSCB #'+esc(vLicNum(v)):'License not on file')+' · '+esc((v.lbe||{}).esb_number||'—')+' · '+p.distance_miles+' mi'+(p.beyondGate?' — beyond the '+PROXIMITY_GATE_MILES+'-mile gate':'')+'</div>'+
+      '<div class="badges">'+p.badges.map(b=>'<span class="badge '+b.c+'">'+esc(b.t)+'</span>').join('')+(p.beyondGate?'<span class="badge amber">Outside proximity gate</span>':'')+'</div></div>'+
       '<div class="rank-score"><b>'+p.total+'</b><span> / 100</span></div></div>'+
       (veh&&vEsbEligible(v)?'<div class="vehicle'+(veh.quote?' quote':'')+'"><b>'+esc(veh.label)+'</b> · '+esc(veh.detail)+'</div>':'')+
-      '<details class="why"'+(p.rank===1||sel?' open':'')+'><summary>Why this contractor?</summary>'+
-      '<div style="margin-top:7px">'+Object.entries(p.components).map(([k,val])=>{
-        const w=SCORING_WEIGHTS[k]||1;
-        return '<div class="comp-row"><span class="lbl">'+esc(k.replace(/_/g,' '))+'</span><span class="bar"><i style="width:'+Math.min(100,val/w*100)+'%"></i></span><span class="val">'+val+' / '+w+'</span></div>';
-      }).join('')+'</div>'+
-      '<div class="why-row" style="margin-top:8px"><span class="k">NDOT history</span><span>'+((v.track_record||{}).prior_ndot_contracts_count?((v.track_record||{}).prior_ndot_contracts_count+' prior NDOT contracts ('+money((v.track_record||{}).prior_ndot_contracts_value)+')'):'No prior NDOT prime or sub contracts on record — overlooked vendor')+'</span></div>'+
+      '<details class="why"'+(p.rank===1||sel?' open':'')+'><summary>Vendor details</summary>'+
+      '<div class="why-row" style="margin-top:8px"><span class="k">Contact</span><span>'+esc((v.contact||{}).phone||'no phone on file')+' · '+esc((v.contact||{}).email||'no email on file')+'</span></div>'+
       '<div class="why-row"><span class="k">NV license</span><span>'+(vLicNum(v)?('NSCB #'+esc(vLicNum(v))+' · '+esc((v.licensing||{}).nv_license_status||'—')+' · exp '+esc((v.licensing||{}).nv_license_expires||'not on file')+' · Classes: '+esc(vClasses(v).join(', ')||'—')+' (NAC 624)'):'NSCB contractor license not on file')+'</span></div>'+
       '<div class="why-row"><span class="k">GOED ESB</span><span>'+(vEsbActive(v)?esc(((v.lbe||{}).esb_number||'Active certification'))+' · Active':'Not active in our records')+'</span></div>'+
-      '<div class="why-row"><span class="k">Base</span><span>'+esc([(v.address||{}).street,(v.address||{}).city,(v.address||{}).state].filter(Boolean).join(', '))+' · '+esc(COUNTY_LABELS[v.county]||v.county)+'</span></div>'+
-      '<div class="why-row"><span class="k">Contact</span><span>'+esc((v.contact||{}).phone||'no phone on file')+' · '+esc((v.contact||{}).email||'no email on file')+'</span></div>'+
+      '<div class="why-row"><span class="k">Location</span><span>'+esc([(v.address||{}).street,(v.address||{}).city,(v.address||{}).state].filter(Boolean).join(', '))+' · '+esc(COUNTY_LABELS[v.county]||v.county)+' · '+p.distance_miles+' mi from work order</span></div>'+
       '</details></div>';
-  }).join(''):'<div class="empty"><b>No vendors passed the hard filters for this work order.</b><br>Filters applied: active license or GOED ESB cert · within '+POLICY.radiusMiles+' miles · specialty match ('+esc(typeLabel(c.subtype))+') · NSCB class '+esc((SPECIALTY_TO_NSCB[c.subtype]||[]).join(' / '))+'. This reflects the real 46-vendor pool — no fallback records are invented.</div>')+
+  }).join(''):'<div class="empty"><b>No vendors passed the hard filters for this work order.</b><br>Filters applied: active license or GOED ESB cert · within '+PROXIMITY_GATE_MILES+' miles of the work order · NSCB class '+esc((SPECIALTY_TO_NSCB[c.subtype]||[]).join(' / '))+'. This reflects the real 46-vendor pool — no fallback records are invented.</div>')+
   '<div class="toolbar no-print" style="margin-top:16px">'+
-    '<button class="btn" id="backTo1">← Back to queue</button>'+
+    '<button class="btn" id="backTo1b">← Back to complaints list</button>'+
     '<button class="btn primary" id="toStep3" '+(state.flow.vendorId?'':'disabled')+'>Continue to dispatch summary →</button>'+
   '</div>';
   $$('#sub-dispatch .rank-card').forEach(card=>card.addEventListener('click',e=>{
     if(e.target.closest('summary')) return;
     state.flow.vendorId=card.dataset.v; renderDispatchStep2();
   }));
-  $('#backTo1').addEventListener('click',()=>{state.flow.step=1;state.flow.vendorId=null;renderDispatch();});
+  const back1=()=>{state.flow.step=1;state.flow.vendorId=null;renderDispatch();};
+  $('#backTo1').addEventListener('click',back1);
+  $('#backTo1b').addEventListener('click',back1);
   $('#toStep3').addEventListener('click',()=>{
     if(!state.flow.vendorId) return;
     const p=state.flow.ranked.picks.find(x=>x.vendor_id===state.flow.vendorId);
@@ -848,14 +917,50 @@ function renderDispatchStep2(){
     state.flow.step=3; renderDispatch();
   });
 }
+/* Shared builders for the outgoing package — used by the Summary preview (editable)
+   and Forms & confirm (final). Edits made on the Summary page persist in
+   state.flow.formEdits and carry into step 4. */
+function dispatchDocMeta(c,v){
+  return {
+    veh:procurementVehicle(c.estimatedCost),
+    auth:policyAuthority(c.estimatedCost, vEsbEligible(v)),
+    wo:'NDOT-WO-'+c.id.replace('NDOT-',''),
+    memoRef:'ESB-'+c.id.replace('NDOT-',''),
+    today:new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})
+  };
+}
+function formTabsList(c){
+  const veh=procurementVehicle(c.estimatedCost);
+  return [
+    {key:'workorder', label:'Work Order'},
+    {key:'memo', label:'ESB Set-Aside Authorization'+(veh&&veh.quote?' + Quotes':'')}
+  ];
+}
+function formHTMLFor(key,c,p,v,m){
+  const edited=(state.flow.formEdits||{})[key];
+  if(edited) return edited;
+  return key==='workorder'?woPaperHTML(c,p,v,m):memoPaperHTML(c,p,v,m);
+}
+function renderFormTabsBlock(c,p,v,m,editable){
+  const tabs=formTabsList(c);
+  const active=state.flow.formTab||'workorder';
+  return '<div class="form-tabs no-print">'+tabs.map(t=>'<button class="form-tab'+(t.key===active?' active':'')+'" data-tab="'+t.key+'">'+esc(t.label)+'</button>').join('')+'</div>'+
+    tabs.map(t=>'<div class="paper" data-form="'+t.key+'"'+(editable?' contenteditable="true" spellcheck="false"':'')+' style="'+(t.key===active?'':'display:none')+'">'+formHTMLFor(t.key,c,p,v,m)+'</div>').join('');
+}
+function wireFormTabsBlock(){
+  $$('#sub-dispatch .form-tab').forEach(b=>b.addEventListener('click',()=>{state.flow.formTab=b.dataset.tab;renderDispatch();}));
+  $$('#sub-dispatch .paper[contenteditable]').forEach(paper=>paper.addEventListener('input',()=>{state.flow.formEdits[paper.dataset.form]=paper.innerHTML;}));
+}
 function renderDispatchStep3(){
   const c=byId[state.flow.complaintId];
   const p=state.flow.ranked.picks.find(x=>x.vendor_id===state.flow.vendorId);
-  const v=vById[p.vendor_id], r=costRange(c), veh=procurementVehicle(c.estimatedCost);
-  const auth=policyAuthority(c.estimatedCost, vEsbEligible(v));
+  const v=vById[p.vendor_id], r=costRange(c);
+  const m=dispatchDocMeta(c,v);
   const overRange=c.estimatedCost>r.high;
   const tr=v.track_record||{};
-  $('#sub-dispatch').innerHTML=stepsBar(3)+complaintHeader(c)+
+  $('#sub-dispatch').innerHTML=stepsBar(3)+
+  '<div class="toolbar no-print" style="margin-bottom:10px"><button class="btn" id="backTo2top">← Back to vendors</button></div>'+
+  complaintHeader(c)+
   '<div class="split"><div>'+
     '<div class="panel"><h3>Selected vendor</h3>'+
       '<div style="font-size:16px;font-weight:700">'+esc(v.name)+'</div>'+
@@ -868,11 +973,6 @@ function renderDispatchStep3(){
       '<div class="kv"><span>NDOT contract history</span><b>'+(tr.prior_ndot_contracts_count||0)+' contracts · '+money(tr.prior_ndot_contracts_value||0)+'</b></div>'+
       '<div class="kv"><span>Contact</span><b>'+esc((v.contact||{}).phone||'—')+' · '+esc((v.contact||{}).email||'—')+'</b></div>'+
     '</div>'+
-    '<div class="panel"><h3>Score breakdown — '+p.total+' / 100</h3>'+
-      Object.entries(p.components).map(([k,val])=>{const w=SCORING_WEIGHTS[k]||1;
-        return '<div class="comp-row"><span class="lbl">'+esc(k.replace(/_/g,' '))+'</span><span class="bar"><i style="width:'+Math.min(100,val/w*100)+'%"></i></span><span class="val">'+val+' / '+w+'</span></div>';}).join('')+
-      '<p class="mini-note" style="margin-top:8px">Weights per the production equity matrix (sum 100). Workload balance reflects dispatches recorded in this demo session; proximity decays quadratically from the work-order coordinates.</p>'+
-    '</div>'+
     ((tr.prior_ndot_contracts_count||0)===0?'<div class="callout amber"><b>Overlooked-but-qualified finding.</b> $0 in NDOT prime or sub awards on record for this certified, licensed firm. Annual potential at current NDOT work-order volume: <b>$540,000–$1,080,000</b> ($90K median work order × 6–12 orders/yr ESB capacity).</div>':'')+
   '</div><div>'+
     '<div class="panel"><h3>Est. work order</h3>'+
@@ -881,8 +981,8 @@ function renderDispatchStep3(){
       (overRange?'<div class="callout crit" style="margin-top:8px"><b>Over typical range.</b> Estimate exceeds the Q3 value for '+esc(typeLabel(c.subtype).toLowerCase())+' — flagged for budget review in In&nbsp;Progress.</div>':'')+
     '</div>'+
     '<div class="panel"><h3>Policy authority</h3>'+
-      '<div style="font-weight:700;font-size:13.5px">'+esc(auth)+'</div>'+
-      (veh?'<div class="mini-note" style="margin-top:4px">'+esc(veh.label)+' · '+esc(veh.detail)+'</div>':'')+
+      '<div class="policy-big">'+esc(m.auth)+'</div>'+
+      (m.veh?'<div style="font-size:13px;color:var(--gray-70);margin-top:6px"><b>'+esc(m.veh.label)+'</b> · '+esc(m.veh.detail)+'</div>':'')+
       '<p class="mini-note" style="margin-top:8px">'+esc(CITATION_LONG)+'</p>'+
     '</div>'+
     '<div class="panel"><h3>Docs ready</h3>'+
@@ -890,31 +990,25 @@ function renderDispatchStep3(){
       '<div class="check"><span class="ic">'+(vEsbActive(v)?'✓':'⚠')+'</span>'+(vEsbActive(v)?'Active GOED ESB cert on record ('+esc((v.lbe||{}).esb_number||'')+')':'GOED ESB cert NOT verified — confirm before award')+'</div>'+
       '<div class="check"><span class="ic">'+(c.estimatedCost<=POLICY.setAsideCeiling?'✓':'⚠')+'</span>Amount '+money(c.estimatedCost)+' '+(c.estimatedCost<=POLICY.setAsideCeiling?'confirmed ≤':'EXCEEDS')+' $500,000 ceiling</div>'+
       (c.estimatedCost>=POLICY.prevailingWageThreshold?'<div class="check"><span class="ic">⚠</span>≥ $250,000 — prevailing wage applies (NRS 338.013–338.090)</div>':'')+
-      (veh&&veh.quote?'<div class="check"><span class="ic">○</span>Three ESB quotes required (NRS 333.335) — form attached</div>':'')+
+      (m.veh&&m.veh.quote?'<div class="check"><span class="ic">○</span>Three ESB quotes required (NRS 333.335) — form attached</div>':'')+
       '<div class="check"><span class="ic">✓</span>Responsibility determination checklist</div>'+
       '<div class="check"><span class="ic">○</span>Contracting officer signature (pending)</div>'+
     '</div>'+
-    '<div class="toolbar no-print"><button class="btn" id="backTo2">← Vendors</button><button class="btn primary" id="toStep4">Prepare forms →</button></div>'+
-  '</div></div>';
-  $('#backTo2').addEventListener('click',()=>{state.flow.step=2;renderDispatch();});
-  $('#toStep4').addEventListener('click',()=>{state.flow.step=4;renderDispatch();});
-}
-function renderDispatchStep4(){
-  const c=byId[state.flow.complaintId];
-  const p=state.flow.ranked.picks.find(x=>x.vendor_id===state.flow.vendorId);
-  const v=vById[p.vendor_id], veh=procurementVehicle(c.estimatedCost);
-  const auth=policyAuthority(c.estimatedCost, vEsbEligible(v));
-  const wo='NDOT-WO-'+c.id.replace('NDOT-',''), memoRef='ESB-'+c.id.replace('NDOT-','');
-  const today=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  const req=SPECIALTY_TO_NSCB[c.subtype]||[];
-  $('#sub-dispatch').innerHTML=stepsBar(4)+
-  '<div class="toolbar no-print">'+
-    '<button class="btn" id="backTo3">← Summary</button>'+
-    '<button class="btn" id="printForms">Print / save PDF</button>'+
-    '<span class="count-note">2 forms attached'+(veh&&veh.quote?' · three-quote section included':'')+'</span>'+
-    '<button class="btn primary" id="confirmDispatch">Confirm dispatch to '+esc(v.name)+'</button>'+
+  '</div></div>'+
+  '<div class="panel"><h3>Outgoing package — preview &amp; edit</h3>'+
+    '<div class="edit-hint no-print">Click into a document to edit it before preparing forms — changes carry into Forms &amp; confirm.</div>'+
+    renderFormTabsBlock(c,p,v,m,true)+
   '</div>'+
-  '<div class="paper"><div class="letterhead"><div><b>Nevada Department of Transportation</b><span>State of Nevada · Public Works Dispatch</span></div><span>'+esc(wo)+'<br>Issued '+esc(today)+'</span></div>'+
+  '<div class="toolbar no-print"><button class="btn" id="backTo2">← Back to vendors</button><button class="btn primary" id="toStep4">Prepare forms →</button></div>';
+  const back2=()=>{state.flow.step=2;renderDispatch();};
+  $('#backTo2top').addEventListener('click',back2);
+  $('#backTo2').addEventListener('click',back2);
+  $('#toStep4').addEventListener('click',()=>{state.flow.step=4;renderDispatch();});
+  wireFormTabsBlock();
+}
+function woPaperHTML(c,p,v,m){
+  const req=SPECIALTY_TO_NSCB[c.subtype]||[];
+  return '<div class="letterhead"><div><b>Nevada Department of Transportation</b><span>State of Nevada · Public Works Dispatch</span></div><span>'+esc(m.wo)+'<br>Issued '+esc(m.today)+'</span></div>'+
     '<h2>Work Order</h2><div class="subtitle">NDOT work-order feed · '+esc(c.id)+'</div>'+
     '<div class="grid2">'+
       '<div class="f"><span>Work type</span><b>'+esc(typeLabel(c.subtype))+'</b></div>'+
@@ -924,12 +1018,12 @@ function renderDispatchStep4(){
       '<div class="f"><span>Opened</span><b>'+fmtDate(c.opened_on)+' ('+daysOpen(c)+' days outstanding)</b></div>'+
       '<div class="f"><span>Est. completion window</span><b>'+PRIORITY_DAYS[c.priority]+' days from dispatch</b></div>'+
       '<div class="f"><span>Estimated cost</span><b>'+money(c.estimatedCost)+'</b></div>'+
-      '<div class="f"><span>Procurement authority</span><b>'+esc(auth)+'</b></div>'+
+      '<div class="f"><span>Procurement authority</span><b>'+esc(m.auth)+'</b></div>'+
       '<div class="f"><span>Assigned contractor</span><b>'+esc(v.name)+'</b></div>'+
       '<div class="f"><span>NSCB license</span><b>'+(vLicNum(v)?'#'+esc(vLicNum(v)):'Not on file')+'</b></div>'+
-      '<div class="f"><span>Public Works Identifying No.</span><b class="blank" style="min-width:160px"></b><span style="font-size:11px;color:#888;margin-left:6px">(obtain from NV Labor Commissioner before mobilization · NRS 338.070)</span></div>'+
-      '<div class="f"><span>Notice of Award filed</span><b class="blank" style="min-width:90px"></b><span style="font-size:11px;color:#888;margin-left:6px">(file with Labor Commissioner within 5 days of award)</span></div>'+
-      (c.estimatedCost>=50000?'<div class="f"><span>Performance bond ref.</span><b class="blank" style="min-width:160px"></b><span style="font-size:11px;color:#888;margin-left:6px">(required ≥ $50,000 · NRS 338.155)</span></div>':'')+
+      '<div class="f fill"><span>Public Works Identifying No.</span><b class="blank" style="min-width:160px"></b><span class="f-note">(obtain from NV Labor Commissioner before mobilization · NRS 338.070)</span></div>'+
+      '<div class="f fill"><span>Notice of Award filed</span><b class="blank" style="min-width:90px"></b><span class="f-note">(file with Labor Commissioner within 5 days of award)</span></div>'+
+      (c.estimatedCost>=50000?'<div class="f fill"><span>Performance bond ref.</span><b class="blank" style="min-width:160px"></b><span class="f-note">(required ≥ $50,000 · NRS 338.155)</span></div>':'')+
     '</div>'+
     '<h4>Scope of work</h4>'+
     '<p>'+esc(c.description)+'. Work to be performed per NDOT standard specifications; contractor must hold NSCB classification '+esc(req.join(' or '))+' (NAC 624) for this work type. Traffic control, materials, and final inspection per NDOT district requirements.</p>'+
@@ -948,21 +1042,23 @@ function renderDispatchStep4(){
     :'')+
     '<p style="font-style:italic;margin-top:8px">Verify GOED ESB certification and NSCB license status before site mobilization. This work order is subject to Nevada public-works requirements under NRS Chapter 338.</p>'+
     '<div class="sig-row"><div class="sig">NDOT Dispatcher · Date</div><div class="sig">Resident Engineer · Date · Phone</div></div>'+
-    '<div class="foot">Generated by Munifi Nevada Dispatch · '+esc(today)+' · Ref '+esc(wo)+'</div>'+
-  '</div>'+
-  '<div class="paper"><div class="letterhead"><div><b>State of Nevada — Public Works Procurement</b><span>Governor’s Office of Economic Development · NDOT</span></div><span>Memo Ref '+esc(memoRef)+'<br>'+esc(today)+'</span></div>'+
+    '<div class="foot">Generated by Munifi Nevada Dispatch · '+esc(m.today)+' · Ref '+esc(m.wo)+'</div>';
+}
+function memoPaperHTML(c,p,v,m){
+  const req=SPECIALTY_TO_NSCB[c.subtype]||[];
+  return '<div class="letterhead"><div><b>State of Nevada — Public Works Procurement</b><span>Governor’s Office of Economic Development · NDOT</span></div><span>Memo Ref '+esc(m.memoRef)+'<br>'+esc(m.today)+'</span></div>'+
     '<h2>ESB Set-Aside Authorization</h2><div class="subtitle">Pursuant to NRS 338.0117 (ESB preference) and NRS 333.336 (5% bid preference) — contracts ≤ $500,000</div>'+
     '<h4>Section 1 — Procurement summary</h4>'+
     '<div class="grid2">'+
-      '<div class="f"><span>Work order #</span><b>'+esc(wo)+'</b></div>'+
+      '<div class="f"><span>Work order #</span><b>'+esc(m.wo)+'</b></div>'+
       '<div class="f"><span>Work type</span><b>'+esc(typeLabel(c.subtype))+'</b></div>'+
       '<div class="f"><span>Site</span><b>'+esc(c.location)+', '+esc(c.county)+' County</b></div>'+
       '<div class="f"><span>Estimated amount</span><b>'+money(c.estimatedCost)+'</b></div>'+
-      '<div class="f"><span>Procurement vehicle</span><b>'+esc(veh?veh.label:'Competitive bid')+'</b></div>'+
+      '<div class="f"><span>Procurement vehicle</span><b>'+esc(m.veh?m.veh.label:'Competitive bid')+'</b></div>'+
       '<div class="f"><span>Prevailing wage</span><b>'+(c.estimatedCost>=100000?'Applies (new construction ≥ $100,000 — NRS 338.013)':c.estimatedCost>=25000?'Applies (repair/maintenance ≥ $25,000 — NRS 338.013)':'Below $25,000 threshold — prevailing wage exempt')+'</b></div>'+
     '</div>'+
     '<h4>Section 2 — Policy authority</h4><p>'+esc(CITATION_LONG)+'</p>'+
-    (veh&&veh.quote?
+    (m.veh&&m.veh.quote?
     '<h4>Section 3 — Price quotes (NRS 333.335)</h4>'+
     '<p>Contracts ≤ $100,000: obtain three informal quotes from GOED ESB-certified firms.</p>'+
     [1,2,3].map(i=>'<div class="f"><span>Quote '+i+' — contractor</span><b class="blank"></b>&nbsp;&nbsp;<span style="min-width:60px">Amount</span><b class="blank" style="min-width:90px"></b></div>').join('')+
@@ -999,11 +1095,27 @@ function renderDispatchStep4(){
     '<h4>Section 6 — Authorization &amp; signature</h4>'+
     '<p>The undersigned determines the selected contractor responsible and this procurement compliant with NRS 338.0117, NRS 333.335–333.336, and NAC Chapter 624 licensing requirements.</p>'+
     '<div class="sig-row"><div class="sig">Authorizing Official · Date · Title</div><div class="sig">Contractor Representative · Date</div></div>'+
-    '<div class="foot">Generated by Munifi Nevada Dispatch · Retain in agency procurement file · Ref '+esc(memoRef)+'</div>'+
+    '<div class="foot">Generated by Munifi Nevada Dispatch · Retain in agency procurement file · Ref '+esc(m.memoRef)+'</div>';
+}
+function renderDispatchStep4(){
+  const c=byId[state.flow.complaintId];
+  const p=state.flow.ranked.picks.find(x=>x.vendor_id===state.flow.vendorId);
+  const v=vById[p.vendor_id];
+  const m=dispatchDocMeta(c,v);
+  $('#sub-dispatch').innerHTML=stepsBar(4)+
+  '<div class="toolbar no-print" style="margin-bottom:10px">'+
+    '<button class="btn" id="backTo3">← Back to summary</button>'+
+    '<span class="count-note">2 forms attached'+(m.veh&&m.veh.quote?' · three-quote section included':'')+'</span>'+
+  '</div>'+
+  renderFormTabsBlock(c,p,v,m,false)+
+  '<div class="toolbar no-print" style="margin-top:16px">'+
+    '<button class="btn" id="printForms">Print / save PDF</button>'+
+    '<button class="btn primary" id="confirmDispatch">Confirm dispatch to '+esc(v.name)+'</button>'+
   '</div>';
   $('#backTo3').addEventListener('click',()=>{state.flow.step=3;renderDispatch();});
   $('#printForms').addEventListener('click',()=>{document.body.classList.add('print-forms');window.print();setTimeout(()=>document.body.classList.remove('print-forms'),400);});
-  $('#confirmDispatch').addEventListener('click',()=>confirmDispatch(c,p,v,wo,memoRef,auth,veh));
+  $('#confirmDispatch').addEventListener('click',()=>confirmDispatch(c,p,v,m.wo,m.memoRef,m.auth,m.veh));
+  wireFormTabsBlock();
 }
 function confirmDispatch(c,p,v,wo,memoRef,auth,veh){
   if(recFor(c.id)){toast('Already dispatched — see In Progress');return;}
@@ -1023,7 +1135,7 @@ function confirmDispatch(c,p,v,wo,memoRef,auth,veh){
   audit('dispatch.workorder_issued', c.id, {wo_number:wo, estimate:c.estimatedCost});
   audit('dispatch.memo_issued', c.id, {memo_ref:memoRef, policy_authority:auth});
   audit('dispatch.initiated', c.id, {vendor_id:v.id, vendor_name:v.name, score:p.total, estimate:c.estimatedCost, policy_authority:auth, correlation_id:cid});
-  state.flow={step:1, complaintId:null, ranked:null, vendorId:null};
+  state.flow={step:1, complaintId:null, ranked:null, vendorId:null, formEdits:{}, formTab:'workorder'};
   updateCounts(); renderQuickLinks();
   toast('✓ Dispatched to '+v.name+' — '+c.id+' moved to In Progress');
   showComplaintsSub('inprogress');
@@ -1063,7 +1175,7 @@ function renderInProgress(){
      '<td class="num">'+moneyK(rec.work_order_estimate)+'</td>'+
      '<td class="num">'+fmtDate(due.toISOString())+'</td>'+
      '<td style="white-space:nowrap">'+(rec.approval==='pending'?'<button class="btn small" data-act="approve" data-id="'+esc(rec.complaint_id)+'">Approve</button> ':'')+
-     (next?'<button class="btn small" data-act="advance" data-id="'+esc(rec.complaint_id)+'">→ '+esc(LIFECYCLE_LABELS[next])+'</button>':'')+'</td></tr>';
+     (next?'<button class="btn small'+(next==='confirmed'?' primary':'')+'" data-act="advance" data-id="'+esc(rec.complaint_id)+'">'+(next==='confirmed'?'Dispatched to Vendor':'→ '+esc(LIFECYCLE_LABELS[next]))+'</button>':'')+'</td></tr>';
    }).join('')+'</tbody></table></div>'))+
   '<p class="data-note">Buckets are derived, not stored: Needs approval = contracting-officer signature pending · Over budget = estimate above the Q3 typical range for the work type · Overdue = past the '+'priority SLA (high 30d / medium 60d / low 120d) · On track = approved and inside SLA.</p>';
   $$('#sub-inprogress [data-b]').forEach(b=>b.addEventListener('click',()=>{ipBucket=b.dataset.b;renderInProgress();}));
@@ -1117,31 +1229,34 @@ function renderRequests(){
 
 /* ═══════════ COMPLAINT TYPES ═══════════ */
 function renderTypes(){
-  const types=Object.keys(SUBTYPE_LABELS);
+  const q=(state.typeQ||'').toLowerCase();
+  let types=Object.keys(SUBTYPE_LABELS);
+  if(q) types=types.filter(t=>SUBTYPE_LABELS[t].toLowerCase().includes(q)||(SPECIALTY_TO_NSCB[t]||[]).join(' ').toLowerCase().includes(q));
   $('#sub-types').innerHTML=
-  '<div class="banner info">Every work type in the NDOT feed routes to the <b>Nevada Department of Transportation (NDOT)</b> — the issuing agency on all 200 orders. Each type carries its NAC 624 license-class requirement and the count of pool vendors qualified to perform it.</div>'+
-  '<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">'+
+  '<div class="banner info">Every work type in the NDOT feed routes to the <b>Nevada Department of Transportation (NDOT)</b> — counts below are scoped to the '+CLARK_COMPLAINTS.length+' Clark County orders. Each type carries its NAC 624 license-class requirement and the count of pool vendors qualified to perform it.</div>'+
+  '<div class="toolbar"><input type="search" id="typeQ" placeholder="Search complaint types — name or NSCB class…" value="'+esc(state.typeQ||'')+'"><span class="count-note">'+types.length+' of '+Object.keys(SUBTYPE_LABELS).length+' types</span></div>'+
+  (types.length?'<div class="table-wrap"><table><thead><tr><th>Complaint type</th><th>NSCB classes</th><th>Open orders</th><th>Emergency</th><th>Urgent</th><th>Elevated</th><th>Standard</th><th>Qualified vendors</th><th>Typical order</th><th></th></tr></thead><tbody>'+
   types.map(t=>{
-    const open=COMPLAINTS.filter(c=>c.subtype===t&&complaintStatus(c)==='open');
-    const total=COMPLAINTS.filter(c=>c.subtype===t);
+    const open=CLARK_COMPLAINTS.filter(c=>c.subtype===t&&complaintStatus(c)==='open');
+    const sev={}; open.forEach(c=>sev[c.severity]=(sev[c.severity]||0)+1);
     const qual=VENDORS.filter(v=>{
       const specs=(v.specialties||[]).map(s=>s.toLowerCase());
       if(!specs.includes(t))return false;
       const cls=vClasses(v), req=SPECIALTY_TO_NSCB[t]||[];
       return !cls.length||req.some(x=>cls.includes(x));
     }).length;
-    const sev={}; total.forEach(c=>sev[c.severity]=(sev[c.severity]||0)+1);
     const r=COST_RANGES[t];
-    return '<div class="vendor-card" data-type="'+t+'"><h3>'+esc(SUBTYPE_LABELS[t])+'</h3><div class="cat">NDOT · classes '+esc((SPECIALTY_TO_NSCB[t]||[]).join(', '))+'</div>'+
-    '<div class="row"><span>Open work orders</span><b>'+open.length+'</b></div>'+
-    '<div class="row"><span>Qualified vendors</span><b>'+qual+' of 46</b></div>'+
-    '<div class="row"><span>Typical order</span><b>'+moneyK(r.low)+'–'+moneyK(r.high)+'</b></div>'+
-    '<div style="margin-top:9px">'+['emergency','urgent','elevated','standard'].filter(s=>sev[s]).map(s=>
-      '<div class="bar-top" style="font-size:11px;margin-bottom:2px"><span>'+s+'</span><span>'+sev[s]+'</span></div><div class="bar" style="height:5px;margin-bottom:5px"><i style="width:'+(sev[s]/total.length*100)+'%"></i></div>').join('')+'</div>'+
-    '<button class="btn small" style="margin-top:9px">View queue →</button></div>';
-  }).join('')+'</div>';
-  $$('#sub-types .vendor-card').forEach(card=>card.addEventListener('click',()=>{
-    state.dfilters={type:card.dataset.type,sev:'',county:'',district:'',days:''}; state.dq='';
+    return '<tr class="rowlink" data-type="'+t+'"><td style="font-weight:600;color:var(--black)">'+esc(SUBTYPE_LABELS[t])+'</td>'+
+    '<td class="num">'+esc((SPECIALTY_TO_NSCB[t]||[]).join(', '))+'</td>'+
+    '<td class="num">'+open.length+'</td>'+
+    '<td class="num">'+(sev.emergency||0)+'</td><td class="num">'+(sev.urgent||0)+'</td><td class="num">'+(sev.elevated||0)+'</td><td class="num">'+(sev.standard||0)+'</td>'+
+    '<td class="num">'+qual+' of '+VENDORS.length+'</td>'+
+    '<td class="num">'+moneyK(r.low)+'–'+moneyK(r.high)+'</td>'+
+    '<td><button class="btn small">View queue →</button></td></tr>';
+  }).join('')+'</tbody></table></div>':'<div class="empty">No complaint types match “'+esc(state.typeQ)+'”.</div>');
+  $('#typeQ').addEventListener('input',e=>{state.typeQ=e.target.value;renderTypes();const el=$('#typeQ');el.focus();el.setSelectionRange(el.value.length,el.value.length);});
+  $$('#sub-types tr.rowlink').forEach(row=>row.addEventListener('click',()=>{
+    state.dfilters={type:row.dataset.type,sev:'',city:'',days:''}; state.dq='';
     state.flow.step=1; showComplaintsSub('dispatch');
   }));
 }
@@ -1153,13 +1268,13 @@ function renderCompleted(){
   const last30=done.filter(r=>Date.now()-new Date(r.completed_at)<=30*86400000);
   const q=state.compQ.toLowerCase();
   let results=[];
-  if(q) results=COMPLAINTS.filter(c=>(c.id+' '+c.location+' '+c.description+' '+typeLabel(c.subtype)+' '+c.county+' '+c.district+' '+complaintStatus(c)).toLowerCase().includes(q)).slice(0,60);
+  if(q) results=CLARK_COMPLAINTS.filter(c=>(c.id+' '+c.location+' '+c.description+' '+typeLabel(c.subtype)+' '+c.city+' '+c.district+' '+complaintStatus(c)).toLowerCase().includes(q)).slice(0,60);
   $('#sub-completed').innerHTML=
   '<div class="stat-row">'+
     '<div class="stat"><div class="num">'+last30.length+'</div><div class="lbl">completed · last 30 days</div></div>'+
     '<div class="stat"><div class="num">'+done.length+'</div><div class="lbl">completed all-time (this demo)</div></div>'+
     '<div class="stat"><div class="num ink">'+moneyK(done.reduce((s,r)=>s+r.work_order_estimate,0))+'</div><div class="lbl">value completed</div></div>'+
-    '<div class="stat"><div class="num ink">'+COMPLAINTS.length+'</div><div class="lbl">records searchable</div></div>'+
+    '<div class="stat"><div class="num ink">'+CLARK_COMPLAINTS.length+'</div><div class="lbl">Clark County records searchable</div></div>'+
   '</div>'+
   (done.length===0?'<div class="banner info">All 200 NDOT work orders in the source feed are currently <b>open</b> — none arrive pre-completed, so this page starts empty and fills as dispatches complete in the demo.</div>':
   '<div class="table-wrap" style="margin-bottom:18px"><table><thead><tr><th>Work order</th><th>Type</th><th>Vendor</th><th>Completed</th><th>Value</th><th>SLA</th></tr></thead><tbody>'+
@@ -1169,14 +1284,14 @@ function renderCompleted(){
     return '<tr><td class="id">'+esc(r.complaint_id)+'</td><td>'+esc(typeLabel(r.subtype))+'</td><td>'+esc(r.vendor_name)+'</td><td class="num">'+fmtDate(r.completed_at)+'</td><td class="num">'+moneyK(r.work_order_estimate)+'</td><td><span class="status '+(met?'good':'crit')+'">'+(met?'Met':'Missed')+'</span></td></tr>';
   }).join('')+'</tbody></table></div>')+
   '<div class="panel"><h3>Search all past complaints</h3>'+
-  '<div class="toolbar"><input type="search" id="compQ" placeholder="Search all 200 records — ID, route, type, county, status…" value="'+esc(state.compQ)+'"></div>'+
-  (q?(results.length?'<div class="table-wrap"><table><thead><tr><th>ID</th><th>Type</th><th>Location</th><th>County</th><th>Status</th><th>Days out</th></tr></thead><tbody>'+
-    results.map(c=>'<tr><td class="id">'+esc(c.id)+'</td><td>'+esc(typeLabel(c.subtype))+'</td><td>'+esc(c.location)+'</td><td>'+esc(c.county)+'</td><td><span class="status '+(complaintStatus(c)==='open'?'open':complaintStatus(c)==='completed'?'closed':'progress')+'">'+esc(complaintStatus(c))+'</span></td><td class="num">'+daysOpen(c)+'d</td></tr>').join('')+
-    '</tbody></table></div>':'<div class="empty">No records match “'+esc(state.compQ)+'”.</div>'):'<p class="mini-note">Type to search across every record in the NDOT feed, whatever its status.</p>')+
+  '<div class="toolbar"><input type="search" id="compQ" placeholder="Search all '+CLARK_COMPLAINTS.length+' Clark County records — ID, route, type, city, status…" value="'+esc(state.compQ)+'"></div>'+
+  (q?(results.length?'<div class="table-wrap"><table><thead><tr><th>ID</th><th>Type</th><th>Location</th><th>City</th><th>Status</th><th>Days out</th></tr></thead><tbody>'+
+    results.map(c=>'<tr><td class="id">'+esc(c.id)+'</td><td>'+esc(typeLabel(c.subtype))+'</td><td>'+esc(c.location)+'</td><td>'+esc(c.city)+'</td><td><span class="status '+(complaintStatus(c)==='open'?'open':complaintStatus(c)==='completed'?'closed':'progress')+'">'+esc(complaintStatus(c))+'</span></td><td class="num">'+daysOpen(c)+'d</td></tr>').join('')+
+    '</tbody></table></div>':'<div class="empty">No records match “'+esc(state.compQ)+'”.</div>'):'<p class="mini-note">Type to search across every Clark County record in the NDOT feed, whatever its status.</p>')+
   '</div>'+
   '<div class="panel"><h3>Custom report</h3>'+
   '<div class="toolbar">'+
-    '<select id="repDim"><option value="subtype">By work type</option><option value="county">By county</option><option value="district">By NDOT district</option><option value="severity">By severity</option><option value="status">By status</option></select>'+
+    '<select id="repDim"><option value="subtype">By work type</option><option value="city">By city</option><option value="severity">By severity</option><option value="status">By status</option></select>'+
     '<select id="repMetric"><option value="count">Count of work orders</option><option value="value">Estimated value ($)</option></select>'+
     '<button class="btn primary" id="repRun">Generate report</button>'+
     (compReport?'<button class="btn" id="repCopy">Copy CSV</button>':'')+
@@ -1186,7 +1301,7 @@ function renderCompleted(){
   $('#repRun').addEventListener('click',()=>{
     const dim=$('#repDim').value, metric=$('#repMetric').value;
     const rows={};
-    COMPLAINTS.forEach(c=>{
+    CLARK_COMPLAINTS.forEach(c=>{
       const key=dim==='status'?complaintStatus(c):dim==='subtype'?typeLabel(c.subtype):c[dim];
       rows[key]=(rows[key]||0)+(metric==='count'?1:c.estimatedCost);
     });
@@ -1203,7 +1318,7 @@ function renderCompleted(){
 function renderReportRows(rep){
   const max=Math.max(...rep.rows.map(r=>r[1]));
   return rep.rows.map(([k,v])=>'<div class="bar-block"><div class="bar-top"><span>'+esc(k)+'</span><span>'+(rep.metric==='count'?v:moneyK(v))+'</span></div><div class="bar"><i style="width:'+(v/max*100)+'%"></i></div></div>').join('')+
-  '<p class="mini-note">'+rep.rows.length+' groups · '+(rep.metric==='count'?'record counts':'severity-base estimates')+' across all 200 NDOT records.</p>';
+  '<p class="mini-note">'+rep.rows.length+' groups · '+(rep.metric==='count'?'record counts':'severity-base estimates')+' across the Clark County NDOT records.</p>';
 }
 
 /* ═══════════ VENDORS — DIRECTORY ═══════════ */
@@ -1216,21 +1331,27 @@ function vendorMatches(v){
   if(f.spec&&!(v.specialties||[]).includes(f.spec)) return false;
   return true;
 }
-function vendorCardHTML(v){
+function vendorBadgesHTML(v){
   const badges=[];
   if(vEsbActive(v)) badges.push('<span class="badge green">ESB</span>');
   if((v.demographics||{}).dbe_certified) badges.push('<span class="badge blue">DBE</span>');
   if(((v.licensing||{}).nv_license_status||'')==='active') badges.push('<span class="badge green">NSCB Active</span>');
   if(!badges.length) badges.push('<span class="badge gray">Unverified</span>');
   const flags=vendorFlags(v);
-  return '<div class="vendor-card" data-vid="'+esc(v.id)+'"><h3>'+esc(v.name)+'</h3>'+
-  '<div class="cat">'+esc(((v.address||{}).city||'')+((v.address||{}).state?', '+(v.address||{}).state:'')||COUNTY_LABELS[v.county]||v.county)+'</div>'+
-  '<div class="badges">'+badges.join('')+(flags.length?'<span class="badge amber">'+flags.length+' flag'+(flags.length>1?'s':'')+'</span>':'')+'</div>'+
-  '<div class="row"><span>License</span><b>'+(vLicNum(v)?'NSCB #'+esc(vLicNum(v)):'Not on file')+'</b></div>'+
-  '<div class="row"><span>Expires</span><b>'+esc((v.licensing||{}).nv_license_expires||'—')+'</b></div>'+
-  '<div class="row"><span>NDOT history</span><b>'+((v.track_record||{}).prior_ndot_contracts_count||0)+' contracts</b></div>'+
-  '<div class="mini-note" style="margin-top:8px">'+esc((v.specialties||[]).slice(0,3).map(typeLabel).join(' · '))+'</div></div>';
+  if(flags.length) badges.push('<span class="badge amber">'+flags.length+' flag'+(flags.length>1?'s':'')+'</span>');
+  return badges.join('');
 }
+function vendorRowHTML(v){
+  return '<tr class="rowlink" data-vid="'+esc(v.id)+'">'+
+  '<td style="font-weight:600;color:var(--black)">'+esc(v.name)+'</td>'+
+  '<td>'+esc(((v.address||{}).city||'—')+((v.address||{}).state?', '+(v.address||{}).state:''))+'</td>'+
+  '<td>'+vendorBadgesHTML(v)+'</td>'+
+  '<td class="num">'+(vLicNum(v)?'#'+esc(vLicNum(v)):'Not on file')+'</td>'+
+  '<td class="num">'+esc((v.licensing||{}).nv_license_expires||'—')+'</td>'+
+  '<td class="num">'+((v.track_record||{}).prior_ndot_contracts_count||0)+' contracts</td>'+
+  '<td class="mini-note">'+esc((v.specialties||[]).slice(0,3).map(typeLabel).join(' · ')||'—')+'</td></tr>';
+}
+const VENDOR_TABLE_HEAD='<thead><tr><th>Vendor</th><th>City</th><th>Certifications</th><th>NSCB license</th><th>Expires</th><th>NDOT history</th><th>Specialties</th></tr></thead>';
 function renderDirectory(){
   const list=VENDORS.filter(vendorMatches).sort((a,b)=>a.name.localeCompare(b.name));
   const f=state.vfilters;
@@ -1251,7 +1372,7 @@ function renderDirectory(){
     '<button class="btn" id="vfReset">Reset</button>'+
     '<span class="count-note">'+list.length+' shown</span>'+
   '</div>'+
-  (list.length?'<div class="card-grid">'+list.map(vendorCardHTML).join('')+'</div>':'<div class="empty">No vendors match your filters.</div>')+
+  (list.length?'<div class="table-wrap"><table>'+VENDOR_TABLE_HEAD+'<tbody>'+list.map(vendorRowHTML).join('')+'</tbody></table></div>':'<div class="empty">No vendors match your filters.</div>')+
   '<p class="data-note">Source: NDOT NUCP 2025 registry (baked-vendors-v2) — real NSCB license numbers, GOED ESB numbers, and USDOT DBE flags. 46 firms; a formal request for the full GOED ESB directory (~990 statewide firms) is pending.</p>';
   $('#vq').addEventListener('input',e=>{state.vq=e.target.value;renderDirectory();const el=$('#vq');el.focus();el.setSelectionRange(el.value.length,el.value.length);});
   [['vfCounty','county'],['vfEsb','esb'],['vfSpec','spec']].forEach(([id,k])=>$('#'+id).addEventListener('change',e=>{state.vfilters[k]=e.target.value;renderDirectory();}));
@@ -1314,7 +1435,7 @@ function renderClasses(){
     '<input type="search" id="classQ" placeholder="Search vendors within classes…" value="'+esc(state.classQ||'')+'">'+
     '<span class="count-note">'+groups.length+' groups</span></div>'+
   groups.map(g=>'<div class="group-head"><h3>'+esc(g.label)+'</h3><span>'+g.vendors.length+' vendor'+(g.vendors.length===1?'':'s')+' · '+esc(g.sub)+'</span></div>'+
-    '<div class="card-grid">'+g.vendors.map(vendorCardHTML).join('')+'</div>').join('')||'<div class="empty">No vendors match.</div>';
+    '<div class="table-wrap" style="margin-bottom:6px"><table>'+VENDOR_TABLE_HEAD+'<tbody>'+g.vendors.map(vendorRowHTML).join('')+'</tbody></table></div>').join('')||'<div class="empty">No vendors match.</div>';
   $('#cbSpec').addEventListener('click',()=>{state.classBy='spec';renderClasses();});
   $('#cbClass').addEventListener('click',()=>{state.classBy='class';renderClasses();});
   $('#classQ').addEventListener('input',e=>{state.classQ=e.target.value;renderClasses();const el=$('#classQ');el.focus();el.setSelectionRange(el.value.length,el.value.length);});
@@ -1384,180 +1505,64 @@ function renderVendorCompliance(){
 /* ═══════════ MAP — real Nevada/Clark County boundaries (US Census TIGER cartographic
    boundaries via us-atlas), continuous pan + zoom over one fixed projection ═══════════ */
 const NV_GEO = {"nevada":[[36.9713,-117.1674],[37.8965,-118.4273],[38.9995,-119.9994],[39.3165,-120.0065],[40.0716,-119.9958],[41.9951,-119.9994],[42.0019,-114.8057],[41.9933,-114.0411],[38.5726,-114.0519],[36.1938,-114.0483],[36.1809,-114.0663],[36.0237,-114.1524],[36.0143,-114.2385],[36.0581,-114.3139],[36.0821,-114.3067],[36.1431,-114.3714],[36.1457,-114.418],[36.1294,-114.5042],[36.1509,-114.5113],[36.1517,-114.5724],[36.1303,-114.6154],[36.1423,-114.6334],[36.1174,-114.6657],[36.0907,-114.7554],[36.022,-114.7303],[35.9851,-114.7446],[35.9017,-114.7016],[35.8751,-114.6657],[35.8545,-114.698],[35.8064,-114.7123],[35.7557,-114.6944],[35.7119,-114.7052],[35.6853,-114.68],[35.6518,-114.6908],[35.6191,-114.6585],[35.5306,-114.6585],[35.4997,-114.68],[35.4499,-114.6657],[35.4095,-114.6262],[35.3537,-114.6047],[35.2008,-114.5724],[35.1389,-114.5724],[35.102,-114.6477],[35.0831,-114.6118],[35.0015,-114.6334],[35.9645,-115.8466],[36.9713,-117.1674]],"clark":[[36.8424,-115.8968],[36.8416,-115.7425],[36.8527,-115.7425],[36.8536,-114.7626],[36.8441,-114.7626],[36.8433,-114.0519],[36.6251,-114.0519],[36.3914,-114.0447],[36.1938,-114.0483],[36.1809,-114.0663],[36.0237,-114.1524],[36.0143,-114.2385],[36.0581,-114.3139],[36.0821,-114.3067],[36.1431,-114.3714],[36.1457,-114.418],[36.1294,-114.5042],[36.1509,-114.5113],[36.1517,-114.5724],[36.1303,-114.6154],[36.1423,-114.6334],[36.1174,-114.6657],[36.0907,-114.7554],[36.022,-114.7303],[35.9851,-114.7446],[35.9017,-114.7016],[35.8751,-114.6657],[35.8545,-114.698],[35.8064,-114.7123],[35.7557,-114.6944],[35.7119,-114.7052],[35.6853,-114.68],[35.6518,-114.6908],[35.6191,-114.6585],[35.5306,-114.6585],[35.4997,-114.68],[35.4499,-114.6657],[35.4095,-114.6262],[35.3537,-114.6047],[35.2008,-114.5724],[35.1389,-114.5724],[35.102,-114.6477],[35.0831,-114.6118],[35.0015,-114.6334],[35.6251,-115.4122],[35.9645,-115.8466],[36.1706,-115.8466],[36.1723,-115.8968],[36.8424,-115.8968]],"otherCounties":[[[38.4738,-117.6914],[38.0013,-117.1638],[36.9713,-117.1674],[37.4652,-117.8314],[37.8965,-118.4273],[37.8939,-118.3519],[38.4738,-117.6914]],[[38.6774,-114.9995],[38.6774,-114.0483],[36.8433,-114.0519],[36.8441,-114.7626],[36.8536,-114.7626],[36.8527,-115.7425],[36.8416,-115.7425],[36.8424,-115.8968],[38.0503,-115.8932],[38.0511,-114.9995],[38.6774,-114.9995]],[[38.4145,-119.1559],[38.4145,-118.9082],[38.765,-118.9082],[38.8518,-118.901],[38.8509,-119.0159],[38.9437,-119.0159],[39.0725,-118.9298],[39.0734,-117.8637],[38.9995,-118.1975],[38.9188,-118.1975],[38.4738,-117.6914],[37.8939,-118.3519],[37.8965,-118.4273],[38.4145,-119.1559]],[[41.0003,-116.5859],[41.0003,-116.1588],[40.6661,-116.1588],[40.1275,-116.0009],[40.1275,-115.8358],[40.0527,-115.825],[40.002,-115.8322],[39.911,-115.8035],[39.8543,-115.7963],[39.8156,-115.8142],[39.7641,-115.8107],[39.728,-115.8322],[39.588,-115.8142],[39.5699,-115.8322],[39.5089,-115.843],[39.472,-115.8681],[39.4583,-115.9076],[39.1619,-115.9076],[39.1619,-116.6003],[39.3973,-116.5931],[40.0742,-116.6003],[40.3199,-116.5931],[40.9461,-116.5967],[41.0003,-116.5859]],[[41.9942,-119.3246],[41.9994,-117.0167],[40.6429,-117.0203],[40.642,-117.2464],[40.5261,-117.3002],[40.6764,-117.3002],[40.6841,-117.6448],[40.8577,-117.6448],[40.8559,-118.7862],[40.9607,-118.7862],[40.9607,-119.3282],[41.2348,-119.3318],[41.2348,-119.3066],[41.4143,-119.303],[41.4143,-119.3246],[41.9942,-119.3246]],[[39.3165,-120.0065],[40.0716,-119.9958],[41.9951,-119.9994],[41.9942,-119.3246],[41.4143,-119.3246],[41.4143,-119.303],[41.2348,-119.3066],[41.2348,-119.3318],[40.9607,-119.3282],[40.9607,-119.3102],[40.5183,-119.3138],[40.5175,-119.3389],[39.9986,-119.3389],[39.9995,-119.2241],[39.8998,-119.2277],[39.8998,-119.2097],[39.8096,-119.2097],[39.7881,-119.1702],[39.6807,-119.1702],[39.6507,-119.1882],[39.649,-119.26],[39.6215,-119.2851],[39.5871,-119.3712],[39.5845,-119.4681],[39.5656,-119.4717],[39.5656,-119.5328],[39.5476,-119.583],[39.5115,-119.6225],[39.5167,-119.6943],[39.4471,-119.6979],[39.4471,-119.6548],[39.4041,-119.6584],[39.3895,-119.6871],[39.332,-119.6584],[39.332,-119.6763],[39.2813,-119.6763],[39.2512,-119.7122],[39.2443,-119.7517],[39.2151,-119.7696],[39.2083,-119.8271],[39.1653,-119.8809],[39.1653,-120.003],[39.3165,-120.0065]],[[39.1129,-120.003],[39.1138,-119.7625],[39.0846,-119.7517],[39.0837,-119.3102],[38.9909,-119.3102],[38.9832,-119.4],[38.9548,-119.4215],[38.8234,-119.4215],[38.8088,-119.4035],[38.7332,-119.4071],[38.7289,-119.3497],[38.6482,-119.3461],[38.6482,-119.3282],[38.5348,-119.3282],[38.9995,-119.9994],[39.1129,-120.003]],[[40.9607,-119.3102],[40.9607,-118.7862],[40.8559,-118.7862],[40.8577,-117.6448],[40.6841,-117.6448],[40.6764,-117.3002],[40.5261,-117.3002],[40.0012,-117.5407],[39.9986,-119.3389],[40.5175,-119.3389],[40.5183,-119.3138],[40.9607,-119.3102]],[[40.0012,-117.5407],[40.642,-117.2464],[40.6429,-117.0203],[41.0003,-117.0167],[41.0003,-116.5859],[40.9461,-116.5967],[40.3199,-116.5931],[40.0742,-116.6003],[39.3973,-116.5931],[39.1619,-116.6003],[39.1636,-117.3325],[39.0932,-117.774],[39.1456,-117.8063],[39.2134,-117.7202],[39.2504,-117.7238],[39.3526,-117.7632],[39.3861,-117.7453],[39.3861,-117.695],[39.4239,-117.6735],[39.4265,-117.6448],[39.4677,-117.6556],[39.5029,-117.5874],[39.5175,-117.5909],[39.5459,-117.4869],[39.5983,-117.4833],[39.6326,-117.4617],[39.6447,-117.4869],[39.6756,-117.4653],[39.7486,-117.494],[39.8268,-117.4869],[39.8869,-117.4617],[39.9221,-117.4689],[40.0012,-117.5407]],[[39.6215,-119.2851],[39.3371,-119.4789],[39.2667,-119.6476],[39.2512,-119.7122],[39.2813,-119.6763],[39.332,-119.6763],[39.332,-119.6584],[39.3895,-119.6871],[39.4041,-119.6584],[39.4471,-119.6548],[39.4471,-119.6979],[39.5167,-119.6943],[39.5115,-119.6225],[39.5476,-119.583],[39.5656,-119.5328],[39.5656,-119.4717],[39.5845,-119.4681],[39.5871,-119.3712],[39.6215,-119.2851]],[[39.1653,-120.003],[39.1653,-119.8809],[39.2083,-119.8271],[39.2151,-119.7696],[39.2443,-119.7517],[39.2512,-119.7122],[39.2091,-119.6835],[39.1954,-119.6476],[39.1945,-119.5615],[39.1447,-119.5722],[39.0854,-119.5507],[39.0846,-119.7517],[39.1138,-119.7625],[39.1129,-120.003],[39.1653,-120.003]],[[40.1275,-115.8358],[40.1172,-114.0483],[38.6774,-114.0483],[38.6774,-114.9995],[39.1619,-115.9076],[39.4583,-115.9076],[39.472,-115.8681],[39.5089,-115.843],[39.5699,-115.8322],[39.588,-115.8142],[39.728,-115.8322],[39.7641,-115.8107],[39.8156,-115.8142],[39.8543,-115.7963],[39.911,-115.8035],[40.002,-115.8322],[40.0527,-115.825],[40.1275,-115.8358]],[[41.9994,-117.0167],[41.9959,-115.039],[42.0019,-114.8057],[41.9942,-114.5975],[41.9933,-114.0411],[40.1172,-114.0483],[40.1275,-116.0009],[40.6661,-116.1588],[41.0003,-116.1588],[41.0003,-117.0167],[41.9994,-117.0167]],[[39.0734,-117.8637],[39.0932,-117.774],[39.1636,-117.3325],[39.1619,-115.9076],[38.6774,-114.9995],[38.0511,-114.9995],[38.0503,-115.8932],[36.1723,-115.8968],[36.1706,-115.8466],[35.9645,-115.8466],[36.9713,-117.1674],[38.0013,-117.1638],[38.9188,-118.1975],[38.9995,-118.1975],[39.0734,-117.8637]],[[39.2512,-119.7122],[39.2667,-119.6476],[39.3371,-119.4789],[39.6215,-119.2851],[39.649,-119.26],[39.655,-119.1631],[39.7228,-119.0769],[39.6369,-119.0769],[39.6369,-119.0877],[39.5184,-119.0913],[39.5184,-119.1164],[39.3887,-119.12],[39.3878,-119.0985],[39.3156,-119.0267],[39.2856,-118.9656],[39.2426,-118.9298],[39.228,-118.8903],[39.1559,-118.8293],[39.1413,-118.7934],[39.1121,-118.7934],[39.1121,-118.7539],[39.0743,-118.7539],[39.0725,-118.9298],[38.9437,-119.0159],[38.8509,-119.0159],[38.8518,-118.901],[38.765,-118.9082],[38.4145,-118.9082],[38.4145,-119.1559],[38.5348,-119.3282],[38.6482,-119.3282],[38.6482,-119.3461],[38.7289,-119.3497],[38.7332,-119.4071],[38.8088,-119.4035],[38.8234,-119.4215],[38.9548,-119.4215],[38.9832,-119.4],[38.9909,-119.3102],[39.0837,-119.3102],[39.0854,-119.5507],[39.1447,-119.5722],[39.1945,-119.5615],[39.1954,-119.6476],[39.2091,-119.6835],[39.2512,-119.7122]],[[39.9995,-119.2241],[40.0012,-117.5407],[39.9221,-117.4689],[39.8869,-117.4617],[39.8268,-117.4869],[39.7486,-117.494],[39.6756,-117.4653],[39.6447,-117.4869],[39.6326,-117.4617],[39.5983,-117.4833],[39.5459,-117.4869],[39.5175,-117.5909],[39.5029,-117.5874],[39.4677,-117.6556],[39.4265,-117.6448],[39.4239,-117.6735],[39.3861,-117.695],[39.3861,-117.7453],[39.3526,-117.7632],[39.2504,-117.7238],[39.2134,-117.7202],[39.1456,-117.8063],[39.0932,-117.774],[39.0734,-117.8637],[39.0743,-118.7539],[39.1121,-118.7539],[39.1121,-118.7934],[39.1413,-118.7934],[39.1559,-118.8293],[39.228,-118.8903],[39.2426,-118.9298],[39.2856,-118.9656],[39.3156,-119.0267],[39.3878,-119.0985],[39.3887,-119.12],[39.5184,-119.1164],[39.5184,-119.0913],[39.6369,-119.0877],[39.6369,-119.0769],[39.7228,-119.0769],[39.655,-119.1631],[39.6507,-119.1882],[39.6807,-119.1702],[39.7881,-119.1702],[39.8096,-119.2097],[39.8998,-119.2097],[39.8998,-119.2277],[39.9995,-119.2241]]]};
-const NV_CITIES=[['Las Vegas',36.1699,-115.1398],['Henderson',36.0395,-114.9817],['N. Las Vegas',36.1989,-115.1175],['Boulder City',35.9789,-114.8342],['Mesquite',36.8055,-114.0672],['Pahrump',36.2083,-115.9839],['Reno',39.5296,-119.8138],['Sparks',39.5349,-119.7527],['Carson City',39.1638,-119.7674],['Elko',40.8324,-115.7631],['Ely',39.2472,-114.8886],['Tonopah',38.0672,-117.2301]];
-
-function bboxOfRing(ring){
-  let minLat=Infinity,maxLat=-Infinity,minLng=Infinity,maxLng=-Infinity;
-  ring.forEach(([la,lo])=>{if(la<minLat)minLat=la;if(la>maxLat)maxLat=la;if(lo<minLng)minLng=lo;if(lo>maxLng)maxLng=lo;});
-  return {minLat,maxLat,minLng,maxLng};
-}
-function padBBox(b,frac){
-  const padLat=(b.maxLat-b.minLat)*frac, padLng=(b.maxLng-b.minLng)*frac;
-  return {minLat:b.minLat-padLat,maxLat:b.maxLat+padLat,minLng:b.minLng-padLng,maxLng:b.maxLng+padLng};
-}
-const NV_BBOX=padBBox(bboxOfRing(NV_GEO.nevada),0.025);
-const WORLD_H=760;
-const _midLatRad=(NV_BBOX.minLat+NV_BBOX.maxLat)/2*Math.PI/180;
-const _latSpan=NV_BBOX.maxLat-NV_BBOX.minLat, _lngSpan=NV_BBOX.maxLng-NV_BBOX.minLng;
-// WORLD_W/H is the geographically-accurate (portrait) extent of Nevada in SVG user
-// units. The map PANEL's on-screen shape is intentionally a fixed landscape aspect
-// (typical dashboard card), independent of that — fitViewBox pads whichever axis is
-// short so any bounding box displays inside that fixed-shape window without distortion.
-const WORLD_W=Math.round(WORLD_H*(_lngSpan*Math.cos(_midLatRad))/_latSpan);
-const CONTAINER_ASPECT=1.5;
-const geoX=lng=>(lng-NV_BBOX.minLng)/_lngSpan*WORLD_W;
-const geoY=lat=>(NV_BBOX.maxLat-lat)/_latSpan*WORLD_H;
-const ringToPath=ring=>'M'+ring.map(([la,lo])=>geoX(lo).toFixed(1)+','+geoY(la).toFixed(1)).join('L')+'Z';
-function bboxUserOfRing(ring){
-  let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
-  ring.forEach(([la,lo])=>{const x=geoX(lo),y=geoY(la);if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;});
-  return {minX,minY,maxX,maxY};
-}
-function fitViewBox(bboxUser,padFrac){
-  let w=Math.max(1,(bboxUser.maxX-bboxUser.minX))*(1+padFrac), h=Math.max(1,(bboxUser.maxY-bboxUser.minY))*(1+padFrac);
-  if(w/h<CONTAINER_ASPECT) w=h*CONTAINER_ASPECT; else h=w/CONTAINER_ASPECT;
-  const cx=(bboxUser.minX+bboxUser.maxX)/2, cy=(bboxUser.minY+bboxUser.maxY)/2;
-  return {x:cx-w/2, y:cy-h/2, w, h};
-}
-const CLARK_BBOX_USER=bboxUserOfRing(NV_GEO.clark);
-const FULL_BBOX_USER={minX:0,minY:0,maxX:WORLD_W,maxY:WORLD_H};
-const CLARK_VIEW=fitViewBox(CLARK_BBOX_USER,0.28);
-const STATE_VIEW=fitViewBox(FULL_BBOX_USER,0.04);
-const MAX_VB_W=STATE_VIEW.w*1.15, MIN_VB_W=MAX_VB_W/16;
-function clampCamera(cam){
-  let w=Math.max(MIN_VB_W,Math.min(MAX_VB_W,cam.w)), h=w/CONTAINER_ASPECT;
-  const cx=cam.x+cam.w/2, cy=cam.y+cam.h/2;
-  let x=cx-w/2, y=cy-h/2;
-  const slackX=w*0.7, slackY=h*0.7;
-  x=Math.max(-slackX,Math.min(WORLD_W-w+slackX,x));
-  y=Math.max(-slackY,Math.min(WORLD_H-h+slackY,y));
-  return {x,y,w,h};
-}
+const CLARK_BOUNDS=(()=>{let minLat=1/0,maxLat=-1/0,minLng=1/0,maxLng=-1/0;NV_GEO.clark.forEach(([la,lo])=>{if(la<minLat)minLat=la;if(la>maxLat)maxLat=la;if(lo<minLng)minLng=lo;if(lo>maxLng)maxLng=lo;});return {minLat,maxLat,minLng,maxLng};})();
 function mapClusters(){
   const groups={};
-  COMPLAINTS.forEach(c=>{
+  CLARK_COMPLAINTS.forEach(c=>{
     const k=c.lat.toFixed(4)+','+c.lng.toFixed(4);
     (groups[k]=groups[k]||{key:k,lat:c.lat,lng:c.lng,location:c.location,items:[]}).items.push(c);
   });
   return Object.values(groups);
 }
 const MAP_CLUSTERS=mapClusters();
-let mapInteract=null; // {svg, dragging, moved, ...} — rebuilt each renderMap()
+let leafletMap=null;
+function clusterState(g){
+  if(g.items.some(c=>complaintStatus(c)==='open')) return 'open';
+  if(g.items.some(c=>complaintStatus(c)==='dispatched')) return 'dispatched';
+  return 'completed';
+}
 function renderMap(){
-  if(!state.mapCamera) state.mapCamera=CLARK_VIEW;
+  if(leafletMap){try{leafletMap.remove();}catch(e){}leafletMap=null;}
   const activeRecs=journal.filter(r=>r.currentStep!=='completed');
   const vendorPins={};
-  activeRecs.forEach(r=>{const c=byId[r.complaint_id],v=vById[r.vendor_id];if(c&&v&&(v.address||{}).lat){vendorPins[v.id]=vendorPins[v.id]||{v,links:[]};vendorPins[v.id].links.push(c);}});
-  const clColor=g=>{
-    if(g.items.some(c=>complaintStatus(c)==='open')) return 'var(--orange)';
-    if(g.items.some(c=>complaintStatus(c)==='dispatched')) return '#111111';
-    return 'var(--gray-30)';
-  };
+  activeRecs.forEach(r=>{const c=byId[r.complaint_id],v=vById[r.vendor_id];if(c&&v&&(v.address||{}).lat&&c.county==='Clark'){vendorPins[v.id]=vendorPins[v.id]||{v,links:[]};vendorPins[v.id].links.push(c);}});
   $('#mapBody').innerHTML=
-  '<div class="toolbar"><span class="count-note" id="mapViewCount" style="margin-left:0"></span>'+
-  '<span class="count-note">'+COMPLAINTS.length+' total · 20 corridor locations · '+Object.keys(vendorPins).length+' vendors on active dispatches</span></div>'+
+  '<div class="toolbar"><span class="count-note" style="margin-left:0">'+CLARK_COMPLAINTS.length+' Clark County work orders · '+MAP_CLUSTERS.length+' corridor locations · '+Object.keys(vendorPins).length+' vendors on active dispatches</span></div>'+
   '<div class="map-layout"><div class="map-wrap">'+
-  '<svg id="mapSvg" viewBox="0 0 '+WORLD_W+' '+WORLD_H+'" role="img" aria-label="Map of Nevada NDOT work orders" style="cursor:grab">'+
-    '<rect x="-2000" y="-2000" width="'+(WORLD_W+4000)+'" height="'+(WORLD_H+4000)+'" fill="#F7F8FA"/>'+
-    NV_GEO.otherCounties.map(r=>'<path d="'+ringToPath(r)+'" fill="none" stroke="var(--gray-15)" stroke-width="1" vector-effect="non-scaling-stroke"/>').join('')+
-    '<path d="'+ringToPath(NV_GEO.nevada)+'" fill="#EDEAE3" stroke="var(--gray-30)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>'+
-    '<path d="'+ringToPath(NV_GEO.clark)+'" fill="var(--orange-06)" stroke="var(--orange)" stroke-width="2" vector-effect="non-scaling-stroke"/>'+
-    NV_CITIES.map(([n,la,lo])=>'<g class="map-city"><circle cx="'+geoX(lo).toFixed(1)+'" cy="'+geoY(la).toFixed(1)+'" r="3" fill="var(--gray-50)"/><text class="map-citylabel" x="'+(geoX(lo)+7).toFixed(1)+'" y="'+(geoY(la)-6).toFixed(1)+'" font-size="12" fill="var(--gray-70)" font-family="inherit" font-weight="500">'+esc(n)+'</text></g>').join('')+
-    Object.values(vendorPins).map(({v,links})=>
-      links.map(c=>'<line x1="'+geoX(v.address.lng).toFixed(1)+'" y1="'+geoY(v.address.lat).toFixed(1)+'" x2="'+geoX(c.lng).toFixed(1)+'" y2="'+geoY(c.lat).toFixed(1)+'" stroke="var(--good)" stroke-width="1.2" stroke-dasharray="4 3" opacity=".8" vector-effect="non-scaling-stroke"/>').join('')+
-      '<g class="map-vendor"><rect data-cx="'+geoX(v.address.lng).toFixed(1)+'" data-cy="'+geoY(v.address.lat).toFixed(1)+'" x="'+(geoX(v.address.lng)-5).toFixed(1)+'" y="'+(geoY(v.address.lat)-5).toFixed(1)+'" width="10" height="10" fill="var(--good)" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke"/><text class="map-citylabel" x="'+(geoX(v.address.lng)+8).toFixed(1)+'" y="'+(geoY(v.address.lat)+4).toFixed(1)+'" font-size="11" fill="var(--good)" font-family="inherit" font-weight="600">'+esc(v.name.split(',')[0].split(' ').slice(0,2).join(' '))+'</text></g>').join('')+
-    MAP_CLUSTERS.map(g=>{
-      const n=g.items.length, r=n>1?Math.min(16,7+Math.sqrt(n)*1.8):5.5;
-      const sel=state.mapSel===g.key;
-      return '<g class="map-dot" data-key="'+esc(g.key)+'" data-r="'+r+'"><circle cx="'+geoX(g.lng).toFixed(1)+'" cy="'+geoY(g.lat).toFixed(1)+'" r="'+r.toFixed(1)+'" fill="'+clColor(g)+'" stroke="'+(sel?'var(--black)':'#fff')+'" stroke-width="'+(sel?2.5:1.5)+'" opacity=".92" vector-effect="non-scaling-stroke"/>'+
-      (n>1?'<text class="map-countlabel" x="'+geoX(g.lng).toFixed(1)+'" y="'+(geoY(g.lat)+3.6).toFixed(1)+'" font-size="10.5" font-weight="700" fill="#fff" text-anchor="middle" font-family="inherit">'+n+'</text>':'')+'</g>';
-    }).join('')+
-  '</svg>'+
-  '<div class="map-controls no-print">'+
-    '<button id="mzIn" title="Zoom in">+</button><button id="mzOut" title="Zoom out">−</button>'+
-    '<div class="map-controls-div"></div>'+
-    '<button id="mzClark" title="Fit to Clark County">CC</button><button id="mzState" title="Fit to Nevada">NV</button>'+
-  '</div>'+
+  '<div id="leafletMap"></div>'+
   '<div class="map-legend"><div><span class="pin-dot" style="background:var(--orange)"></span>Open orders (number = count at location)</div><div><span class="pin-dot" style="background:#111"></span>All dispatched · in progress</div><div><span class="pin-dot" style="background:var(--gray-30)"></span>All completed</div><div><span class="pin-sq" style="background:var(--good)"></span>Vendor on active dispatch</div></div>'+
-  '<div class="map-hint">Scroll to zoom · drag to pan</div>'+
   '</div><div id="mapPanel">'+mapPanelHTML()+'</div></div>'+
-  '<p class="data-note">All '+COMPLAINTS.length+' work orders plot at the exact coordinates recorded in the NDOT feed, across 20 corridor locations ('+COMPLAINTS.filter(c=>c.county==='Clark').length+' orders in Clark County). County boundaries are US Census TIGER cartographic boundaries (via us-atlas). Vendors appear only while they hold an active dispatch, per dispatch policy.</p>';
-  wireMapInteraction();
-  $('#mzIn').addEventListener('click',()=>zoomCameraBy(1/1.6));
-  $('#mzOut').addEventListener('click',()=>zoomCameraBy(1.6));
-  $('#mzClark').addEventListener('click',()=>{state.mapCamera=clampCamera(CLARK_VIEW);applyCamera();});
-  $('#mzState').addEventListener('click',()=>{state.mapCamera=clampCamera(STATE_VIEW);applyCamera();});
-  applyCamera();
-  bindMapPanel();
-}
-function zoomCameraBy(factor){
-  const cam=state.mapCamera, w=cam.w*factor, h=w/CONTAINER_ASPECT;
-  const cx=cam.x+cam.w/2, cy=cam.y+cam.h/2;
-  state.mapCamera=clampCamera({x:cx-w/2,y:cy-h/2,w,h});
-  applyCamera();
-}
-function applyCamera(){
-  const svg=$('#mapSvg'); if(!svg) return;
-  const cam=state.mapCamera;
-  svg.setAttribute('viewBox',cam.x.toFixed(1)+' '+cam.y.toFixed(1)+' '+cam.w.toFixed(1)+' '+cam.h.toFixed(1));
-  const rect=svg.getBoundingClientRect();
-  const unitsPerPx=rect.width?cam.w/rect.width:cam.w/700;
-  // Marker sizes are authored as desired on-screen pixel sizes (data-r, and the
-  // constants below); converting by unitsPerPx keeps them a near-constant screen
-  // size across zoom instead of blowing up as the viewBox shrinks.
-  $$('#mapSvg .map-dot circle').forEach(c=>c.setAttribute('r',(parseFloat(c.parentElement.dataset.r)*unitsPerPx).toFixed(2)));
-  $$('#mapSvg .map-city circle').forEach(c=>c.setAttribute('r',(4.5*unitsPerPx).toFixed(2)));
-  $$('#mapSvg .map-vendor rect').forEach(r=>{const s=11*unitsPerPx;r.setAttribute('width',s.toFixed(2));r.setAttribute('height',s.toFixed(2));r.setAttribute('x',(parseFloat(r.dataset.cx)-s/2).toFixed(2));r.setAttribute('y',(parseFloat(r.dataset.cy)-s/2).toFixed(2));});
-  $$('#mapSvg .map-citylabel').forEach(t=>t.setAttribute('font-size',(12.5*unitsPerPx).toFixed(2)));
-  $$('#mapSvg .map-countlabel').forEach(t=>t.setAttribute('font-size',(11*unitsPerPx).toFixed(2)));
-  const inView=MAP_CLUSTERS.filter(g=>{const x=geoX(g.lng),y=geoY(g.lat);return x>=cam.x&&x<=cam.x+cam.w&&y>=cam.y&&y<=cam.y+cam.h;});
-  const nOrders=inView.reduce((s,g)=>s+g.items.length,0);
-  const cv=$('#mapViewCount'); if(cv) cv.textContent=nOrders+' work orders in current view ('+inView.length+' locations)';
-}
-function wireMapInteraction(){
-  const svg=$('#mapSvg'); if(!svg) return;
-  const st={dragging:false,moved:false,startClientX:0,startClientY:0,startCam:null};
-  mapInteract=st;
-  svg.addEventListener('wheel',e=>{
-    e.preventDefault();
-    const rect=svg.getBoundingClientRect();
-    const px=(e.clientX-rect.left)/rect.width, py=(e.clientY-rect.top)/rect.height;
-    const cam=state.mapCamera;
-    const userX=cam.x+px*cam.w, userY=cam.y+py*cam.h;
-    const factor=e.deltaY>0?1.18:1/1.18;
-    let w=cam.w*factor, h=w/CONTAINER_ASPECT;
-    w=Math.max(MIN_VB_W,Math.min(MAX_VB_W,w)); h=w/CONTAINER_ASPECT;
-    const newCam=clampCamera({x:userX-px*w, y:userY-py*h, w, h});
-    state.mapCamera=newCam; applyCamera();
-  },{passive:false});
-  svg.addEventListener('pointerdown',e=>{
-    // Record which dot (if any) was under the pointer BEFORE capturing it — pointer
-    // capture retargets subsequent events (including the eventual click) to `svg`,
-    // so a per-dot click listener would never fire. Selection is resolved by hand
-    // in endDrag() instead, using this remembered target.
-    st.downDot=e.target.closest?e.target.closest('.map-dot'):null;
-    st.dragging=true; st.moved=false; st.startClientX=e.clientX; st.startClientY=e.clientY; st.startCam={...state.mapCamera};
-    svg.setPointerCapture(e.pointerId); svg.style.cursor='grabbing';
+  '<p class="data-note">All '+CLARK_COMPLAINTS.length+' Clark County work orders plot at the exact coordinates recorded in the NDOT feed, across '+MAP_CLUSTERS.length+' corridor locations. Street basemap © OpenStreetMap contributors; the Clark County boundary (dashed) is the US Census TIGER cartographic boundary via us-atlas. The map is limited to Clark County. Vendors appear only while they hold an active dispatch, per dispatch policy.</p>';
+  const bounds=L.latLngBounds([CLARK_BOUNDS.minLat,CLARK_BOUNDS.minLng],[CLARK_BOUNDS.maxLat,CLARK_BOUNDS.maxLng]);
+  leafletMap=L.map('leafletMap',{maxBounds:bounds.pad(0.3),maxBoundsViscosity:1.0,minZoom:8,maxZoom:17,zoomSnap:0.5});
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:19}).addTo(leafletMap);
+  L.polygon(NV_GEO.clark,{color:'#B8621F',weight:2.5,fill:false,dashArray:'6 4'}).addTo(leafletMap);
+  leafletMap.fitBounds(bounds.pad(0.02));
+  Object.values(vendorPins).forEach(({v,links})=>{
+    links.forEach(c=>L.polyline([[v.address.lat,v.address.lng],[c.lat,c.lng]],{color:'#2E7D4F',weight:1.5,dashArray:'5 4',opacity:.85}).addTo(leafletMap));
+    L.marker([v.address.lat,v.address.lng],{icon:L.divIcon({className:'lf-vendor',html:'<div class="lf-vendor-inner"></div>',iconSize:[13,13]})}).addTo(leafletMap)
+      .bindTooltip(esc(v.name.split(',')[0]),{permanent:true,direction:'right',offset:[9,0],className:'lf-vendor-label'});
   });
-  svg.addEventListener('pointermove',e=>{
-    if(!st.dragging) return;
-    const rect=svg.getBoundingClientRect();
-    const dxPx=e.clientX-st.startClientX, dyPx=e.clientY-st.startClientY;
-    if(Math.abs(dxPx)>3||Math.abs(dyPx)>3) st.moved=true;
-    if(!st.moved) return;
-    const cam=st.startCam;
-    const dx=dxPx*(cam.w/rect.width), dy=dyPx*(cam.h/rect.height);
-    state.mapCamera=clampCamera({x:cam.x-dx, y:cam.y-dy, w:cam.w, h:cam.h});
-    applyCamera();
-  });
-  const endDrag=e=>{
-    if(!st.dragging) return;
-    st.dragging=false; svg.style.cursor='grab';
-    try{svg.releasePointerCapture(e.pointerId);}catch(err){}
-    if(!st.moved&&st.downDot){ state.mapSel=st.downDot.dataset.key; state.mapSelId=null; renderMap(); }
+  const dotMarkers={}, clusterByKey={};
+  const dotIcon=(g,sel)=>{
+    const n=g.items.length, s=n>1?Math.min(36,22+Math.sqrt(n)*2.5):15;
+    const st=clusterState(g);
+    return L.divIcon({className:'lf-dot',html:'<div class="lf-dot-inner'+(st!=='open'?' '+st:'')+(sel?' sel':'')+'">'+(n>1?n:'')+'</div>',iconSize:[s,s]});
   };
-  svg.addEventListener('pointerup',endDrag);
-  svg.addEventListener('pointercancel',endDrag);
+  MAP_CLUSTERS.forEach(g=>{
+    clusterByKey[g.key]=g;
+    const mk=L.marker([g.lat,g.lng],{icon:dotIcon(g,state.mapSel===g.key)}).addTo(leafletMap);
+    mk.bindTooltip(esc(g.location),{direction:'top',offset:[0,-10]});
+    mk.on('click',()=>{
+      const prev=state.mapSel;
+      state.mapSel=g.key; state.mapSelId=null;
+      if(prev&&prev!==g.key&&dotMarkers[prev]) dotMarkers[prev].setIcon(dotIcon(clusterByKey[prev],false));
+      mk.setIcon(dotIcon(g,true));
+      const pnl=$('#mapPanel'); pnl.innerHTML=mapPanelHTML(); bindMapPanel();
+    });
+    dotMarkers[g.key]=mk;
+  });
+  bindMapPanel();
 }
 function mapPanelHTML(){
   if(state.mapSelId&&byId[state.mapSelId]) return mapDetailHTML(byId[state.mapSelId]);
@@ -1617,12 +1622,28 @@ function renderAudit(){
   '</div>'+
   '<div class="banner '+(chainOK===false?'warn':'good')+'">'+(chainOK===false?'❌ Chain does not verify — events were modified outside the app.':'✅ Hash chain verified ('+auditLog.length+' events). Every action links to the previous event’s SHA-256 — tampering breaks the chain.')+'</div>'+
   '<div class="split"><div>'+
-  '<div class="panel"><h3>Search past dispatches &amp; events</h3>'+
+  '<div class="panel"><h3>Audit trail — grouped by case number</h3>'+
   '<div class="toolbar"><input type="search" id="auditQ" placeholder="Search events — vendor, work order, event type…" value="'+esc(state.auditQ)+'">'+
   '<button class="btn" id="auditCsv">Copy events CSV</button></div>'+
-  (evs.length?'<div class="table-wrap"><table><thead><tr><th>#</th><th>Event</th><th>Case</th><th>When</th><th>Detail</th><th>Hash</th></tr></thead><tbody>'+
-  evs.slice(0,80).map(ev=>'<tr><td class="num">'+ev.seq+'</td><td style="font-weight:600;color:var(--black)">'+esc(ev.event_type)+'</td><td class="id">'+esc(ev.complaint_id||'—')+'</td><td class="num">'+fmtDateTime(ev.timestamp)+'</td><td class="mini-note" style="max-width:260px">'+esc(summarizePayload(ev))+'</td><td class="num" title="'+esc(ev.hash)+'">'+esc((ev.hash||'').slice(0,10))+'…</td></tr>').join('')+
-  '</tbody></table></div>'+(evs.length>80?'<p class="mini-note" style="margin-top:6px">Showing latest 80 of '+evs.length+'.</p>':'')
+  (evs.length?(function(){
+    const groups={}, order=[];
+    evs.forEach(ev=>{
+      const k=ev.complaint_id||'General (no case)';
+      if(!groups[k]){groups[k]=[];order.push(k);}
+      groups[k].push(ev);
+    });
+    return order.map(k=>{
+      const list=groups[k];
+      const rec=k.startsWith('NDOT')?recFor(k):null;
+      return '<details class="why" open style="border:1px solid var(--gray-08);border-radius:12px;padding:10px 14px;margin-bottom:10px">'+
+      '<summary><span style="color:var(--orange);font-weight:700">'+esc(k)+'</span> · '+list.length+' event'+(list.length===1?'':'s')+
+      (rec?' · '+esc(rec.vendor_name)+' · '+esc(rec.policy_authority):'')+
+      ' · latest '+fmtDateTime(list[0].timestamp)+'</summary>'+
+      '<div class="table-wrap" style="margin-top:8px;border:none"><table style="min-width:520px"><thead><tr><th>#</th><th>Event</th><th>When</th><th>Detail</th><th>Hash</th></tr></thead><tbody>'+
+      list.map(ev=>'<tr><td class="num">'+ev.seq+'</td><td style="font-weight:600;color:var(--black)">'+esc(ev.event_type)+'</td><td class="num">'+fmtDateTime(ev.timestamp)+'</td><td class="mini-note" style="max-width:260px">'+esc(summarizePayload(ev))+'</td><td class="num" title="'+esc(ev.hash)+'">'+esc((ev.hash||'').slice(0,10))+'…</td></tr>').join('')+
+      '</tbody></table></div></details>';
+    }).join('');
+  })()
   :'<div class="empty"><b>No audit events yet.</b><br>Every dispatch, approval, status change, follow-up, and report generated in this demo lands here as a hash-chained event. Run a dispatch to start the chain.</div>')+
   '</div></div><div>'+
   '<div class="panel"><h3>Custom report — dispatches</h3>'+
@@ -1681,41 +1702,78 @@ $('#resetDemo').addEventListener('click',()=>{
 $('#modalBack').addEventListener('click',e=>{if(e.target.id==='modalBack')closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
-// ── Home search bar — Enter to navigate ──────────────────────────────────────
-$('#chatInput').addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  const q = e.target.value.trim().toLowerCase();
-  if (!q) return;
-  e.target.value = '';
-
-  if (/vendor|firm|contractor|directory|nscb|esb|license/.test(q)) {
-    showPage('vendors'); showVendorsSub('directory');
-  } else if (/flag|expir|compli|missing|warning/.test(q)) {
-    showPage('vendors'); showVendorsSub('flagged');
-  } else if (/audit|trail|chain|log|hash/.test(q)) {
-    showPage('audit');
-  } else if (/map|county|location|clark|washoe|elko/.test(q)) {
-    showPage('map');
-  } else if (/emergency|urgent/.test(q)) {
-    state.dfilters.sev = 'emergency'; goDispatch();
-  } else if (/dispatch|work order|complaint|queue|inprogress|in.progress/.test(q)) {
-    goDispatch();
-  } else if (/complet/.test(q)) {
-    showPage('complaints'); showComplaintsSub('completed');
+// ── Home search bar — typeahead suggestions that narrow as you type ──────────
+const SUGGEST_INDEX=(()=>{
+  const ix=[];
+  const add=(label,sec,kw,go)=>ix.push({label,sec,kw:(label+' '+kw).toLowerCase(),go});
+  add('Open the Clark County dispatch queue','Dispatch','dispatch queue complaints work orders clark',goDispatch);
+  add('Dispatch an emergency work order','Dispatch','emergency urgent severity',()=>{state.dfilters.sev='emergency';goDispatch();});
+  [...new Set(CLARK_COMPLAINTS.map(c=>c.city))].sort().forEach(ct=>
+    add('Queue — '+ct,'Dispatch','city '+ct,()=>{state.dfilters={type:'',sev:'',city:ct,days:''};goDispatch();}));
+  Object.keys(SUBTYPE_LABELS).forEach(t=>
+    add('Queue — '+SUBTYPE_LABELS[t],'Dispatch','type '+SUBTYPE_LABELS[t]+' '+(SPECIALTY_TO_NSCB[t]||[]).join(' '),()=>{state.dfilters={type:t,sev:'',city:'',days:''};goDispatch();}));
+  add('In Progress work orders','Track','in progress approval budget sla',()=>{showPage('complaints');showComplaintsSub('inprogress');});
+  add('Completed work orders','Track','completed history report',()=>{showPage('complaints');showComplaintsSub('completed');});
+  add('Requests & follow-ups','Track','requests protest review warranty payment dispute follow up',()=>{showPage('complaints');showComplaintsSub('requests');});
+  add('Complaint types','Track','types categories breakdown',()=>{showPage('complaints');showComplaintsSub('types');});
+  add('Vendor directory','Vendors','vendors firms contractors directory nscb esb dbe',()=>{showPage('vendors');showVendorsSub('directory');});
+  add('Vendor classes (NSCB / NAC 624)','Vendors','classes specialty classification nac 624',()=>{showPage('vendors');showVendorsSub('classes');});
+  add('Flagged vendors — expiring licenses','Vendors','flags expiring licenses missing contact warnings',()=>{showPage('vendors');showVendorsSub('flagged');});
+  add('Vendor compliance & policy thresholds','Vendors','compliance policy thresholds nrs 338 333 prevailing wage',()=>{showPage('vendors');showVendorsSub('vcompliance');});
+  add('Open the Clark County map','Map','map streets locations corridors',()=>showPage('map'));
+  add('Compliance — audit trail by case','Compliance','audit trail chain log hash case events',()=>showPage('audit'));
+  VENDORS.forEach(v=>add(v.name,'Vendor','vendor '+((v.address||{}).city||''),()=>openVendorModal(v.id)));
+  [...new Set(CLARK_COMPLAINTS.map(c=>c.location))].sort().forEach(loc=>{
+    const g=MAP_CLUSTERS.find(x=>x.location===loc);
+    add(loc,'Map','corridor location map',()=>{if(g){state.mapSel=g.key;state.mapSelId=null;}showPage('map');});
+  });
+  return ix;
+})();
+const chatInput=$('#chatInput'), chatDrop=$('#chatDrop');
+let chatMatches=[], chatSelIdx=0;
+function chatFilter(q){
+  q=q.trim().toLowerCase();
+  if(!q) return SUGGEST_INDEX.slice(0,8);
+  return SUGGEST_INDEX.filter(o=>o.kw.includes(q)).slice(0,8);
+}
+function renderChatDrop(){
+  if(!chatMatches.length){
+    chatDrop.innerHTML='<div class="chat-none">Out of scope for the basic functions — press Enter to search the Clark County work-order queue instead.</div>';
   } else {
-    // Default: go to complaints with the query pre-filled in the search box
-    goDispatch();
-    setTimeout(() => {
-      const dq = document.getElementById('dq');
-      if (dq) { dq.value = e.target.value || q; dq.dispatchEvent(new Event('input')); }
-    }, 50);
+    chatDrop.innerHTML=chatMatches.map((o,i)=>'<button class="chat-opt'+(i===chatSelIdx?' sel':'')+'" data-i="'+i+'"><span>'+esc(o.label)+'</span><span class="sec">'+esc(o.sec)+'</span></button>').join('');
+    $$('#chatDrop .chat-opt').forEach(b=>b.addEventListener('click',()=>runChatOption(+b.dataset.i)));
   }
+  chatDrop.classList.add('open');
+}
+function closeChatDrop(){chatDrop.classList.remove('open');}
+function runChatOption(i){
+  const o=chatMatches[i]; if(!o) return;
+  chatInput.value=''; closeChatDrop(); o.go();
+}
+chatInput.addEventListener('input',()=>{chatMatches=chatFilter(chatInput.value);chatSelIdx=0;renderChatDrop();});
+chatInput.addEventListener('focus',()=>{chatMatches=chatFilter(chatInput.value);chatSelIdx=0;renderChatDrop();});
+document.addEventListener('click',e=>{if(!chatDrop.contains(e.target)&&e.target!==chatInput&&!e.target.closest('.chat-input'))closeChatDrop();});
+chatInput.addEventListener('keydown', e => {
+  if(e.key==='ArrowDown'){e.preventDefault();if(chatMatches.length){chatSelIdx=(chatSelIdx+1)%chatMatches.length;renderChatDrop();}return;}
+  if(e.key==='ArrowUp'){e.preventDefault();if(chatMatches.length){chatSelIdx=(chatSelIdx-1+chatMatches.length)%chatMatches.length;renderChatDrop();}return;}
+  if(e.key==='Escape'){closeChatDrop();return;}
+  if(e.key!=='Enter') return;
+  const q=chatInput.value.trim();
+  if(chatMatches.length){runChatOption(chatSelIdx);return;}
+  if(!q) return;
+  // Out of suggestion scope — fall back to a free-text search of the dispatch queue
+  chatInput.value=''; closeChatDrop();
+  goDispatch();
+  setTimeout(()=>{
+    const dq=document.getElementById('dq');
+    if(dq){dq.value=q;dq.dispatchEvent(new Event('input'));}
+  },50);
 });
 let resizeRaf=null;
 window.addEventListener('resize',()=>{
-  if(state.page!=='map') return;
+  if(state.page!=='map'||!leafletMap) return;
   cancelAnimationFrame(resizeRaf);
-  resizeRaf=requestAnimationFrame(applyCamera);
+  resizeRaf=requestAnimationFrame(()=>leafletMap.invalidateSize());
 });
 updateCounts(); renderHome();
 </script>
